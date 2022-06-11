@@ -1,0 +1,156 @@
+{
+  "type": "page",
+  "title": "Login",
+  "body": [
+    {
+      "type": "grid",
+      "columns": [
+        {
+          "body": [
+            {
+              "type": "tpl",
+              "tpl": "ChatSpace",
+              "inline": false,
+              "id": "u:cae88c02c8c4",
+              "style": {
+                "fontSize": "35px",
+                "fontWeight": "bold",
+                "textAlign": "center"
+              }
+            },
+            {
+              "type": "tpl",
+              "tpl": "<p>专注于灵魂深处的交流 &mdash;&mdash; IceClean 倪浩楠</p>",
+              "inline": false,
+              "id": "u:da012a8e7556",
+              "style": {
+                "fontSize": "15px",
+                "textAlign": "center",
+                "color": "#9b9b9b"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "grid",
+      "id": "u:53c5a4264448",
+      "columns": [
+        {
+          "body": [
+            {
+              "type": "service",
+              "body": [
+                {
+                  "type": "control",
+                  "data": {
+                    "userName": "IceClean",
+                    "userPass": "aaaaaa"
+                  },
+                  "body": [
+                    {
+                      "type": "input-text",
+                      "placeholder": "请输入用户名",
+                      "name": "userName",
+                      "id": "u:725341b8d07c",
+                      "className": "m-sm userName",
+                      "size": "lg",
+                      "required": true
+                    },
+                    {
+                      "type": "input-password",
+                      "name": "userPass",
+                      "id": "u:ec58b825cc90",
+                      "placeholder": "请输入密码",
+                      "className": "m-sm userPass",
+                      "size": "lg",
+                      "required": true
+                    },
+                    {
+                      "type": "container",
+                      "body": [
+                        {
+                          "type": "grid",
+                          "columns": [
+                            {
+                              "body": [
+                              ]
+                            },
+                            {
+                              "body": [
+                                {
+                                  "type": "button",
+                                  "label": "登录",
+                                  "id": "login",
+                                  "name": "login",
+                                  "className": "m-sm login"
+                                }
+                              ],
+                              "md": "auto"
+                            }
+                          ],
+                          "id": "u:63992278c434"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "id": "loginForm"
+            }
+          ],
+          "valign": "middle",
+          "md": "auto"
+        }
+      ],
+      "align": "center",
+      "className": "m-t-sm"
+    }
+  ],
+  "messages": {
+  },
+  "style": {
+    "marginTop": "",
+    "paddingTop": "10em",
+    "backgroundColor": "#212222"
+  },
+  "regions": [
+    "body"
+  ],
+  "className": "",
+  "cssVars": {
+    "--ListItem--strip-bg": "#00000000",
+    "--ListItem-borderWidth": "0",
+    "--Page-body-padding": "0",
+    "--Tabs--vertical-onActive-container-bg": "#444749",
+    "--borderWidth": "0",
+    "--Tabs--vertical-onActive-bg": "#555860",
+    "--Tabs--vertical-onActive-color": "#FFF689",
+    "--Tabs--vertical-onActive-border": "#FFF689",
+    "--primary": "#FFF689",
+    "--text-color": "#d1dae4",
+    "--Form-input-color": "#d1dae4",
+    "--List-bg": "",
+    "--gap-base": "",
+    "--ListMenu-item--onHover-bg": "#535966",
+    "--Tabs-content-bg": "#222526",
+    "--Form-item-gap": "",
+    "--Form-input-bg": "#222526",
+    "--Form-input-onFocused-bg": "#222526",
+    "--Form-select-menu-onActive-color": "#FFF689",
+    "--Form-input-onHover-borderColor": "#FFF689",
+    "--Form-input-onFocused-borderColor": "#FFF689",
+    "--primary-onHover": "#FFF689",
+    "--primary-onActive": "#FFF689",
+    "--Form-input-borderColor": "#d1dae4",
+    "--text-primary": "#d1dae4",
+    "--Button--default-bg": "#212222",
+    "--Button--default-onHover-color": "#FFF689",
+    "--Button--default-onHover-borderColor": "#FFF689",
+    "--Button--default-onHover-bg": "#212222",
+    "--Button--default-color": "#d1dae4"
+  },
+  "redirect": "./chatspace.html",
+  "id": "loginPage"
+}

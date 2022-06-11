@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Chat Space</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <link rel="stylesheet" href="../sdk/sdk.css" />
+    <link rel="stylesheet" href="../sdk/helper.css" />
+    <link rel="stylesheet" href="../sdk/iconfont.css" />
+    <script src="../js/jquery.js"></script>
+    <style>
+        html, body, .app-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <style>
+        ::-webkit-scrollbar {
+            background-color: #28292a;
+            color: #999389;
+            width: 8px;
+        }
+        ::-webkit-scrollbar-corner {
+            background-color: #212222;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #46494b;
+        }
+        div[style="display: grid; gap: 0px; width: auto; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; grid-template-rows: 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem;"]{
+            grid-template-rows: 4em 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr!important;
+            height: calc(100vh - 55px);
+        }
+        div[style="display: grid; gap: 0px; width: auto; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; grid-template-rows: 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem 3.125rem;"]{
+            grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr!important;
+            height: 100%;
+        }
+        .cxd-TextareaControl-input{
+            height:100%;
+        }
+        div[style="grid-area: 2 / 5 / 14 / 13; place-self: start stretch;"]{
+            height:100%;
+        }
+        div[style="grid-area: 9 / 1 / 11 / 13; place-self: stretch;"] div{
+            height:100%;
+        }
+        .textarea-container div {
+            height: 100%;
+        }
+        .cxd-TextareaControl-input{
+            height:100%!important;
+        }
+        .my-class textarea{
+            height:100%!important;
+        }
+        textarea {
+            color: #d1dae4;
+        }
+        .imageUpload {
+            position: relative;
+            opacity: 0.5;
+        }
+        .imageUpload:hover {
+            position: relative;
+            cursor: pointer;
+            opacity: 0.9;
+        }
+
+        .chatGrid div .cxd-Form-item :hover + .imageUpload {
+            opacity: 0.9;
+        }
+
+        .chatGrid div .cxd-Form-item {
+            position: absolute;
+            width: 36px;
+            height: 38px;
+        }
+        .chatGrid div .cxd-Form-item .cxd-Form-label {
+            display: none;
+        }
+        .chatGrid div .cxd-Form-item .cxd-ImageControl .cxd-ImageControl-dropzone input{
+            display: none;
+        }
+        .chatGrid div .cxd-Form-item .cxd-ImageControl .cxd-ImageControl-dropzone label {
+            height: 36px;
+            width: 38px;
+            padding: 0;
+            position: absolute;
+            top: 0;
+            opacity: 0;
+            font-size: 0;
+        }
+
+    </style>
+</head>
+<body>
+<div id="root" class="../sdk/app-wrapper"></div>
+
+<script src="../sdk/sdk.js"></script>
+<script src="../js/controlCenter.js"></script>
+
+<script src="../js/constant/componentConst.js"></script>
+<script src="../js/constant/wsType.js"></script>
+
+<script src="../js/model/message.js"></script>
+<script src="../js/model/wsMessage.js"></script>
+<script src="../js/model/userOnline.js"></script>
+
+<script src="../js/handler/messageHandler.js"></script>
+<script src="../js/handler/messageListHandler.js"></script>
+<script src="../js/handler/websocketHandler.js"></script>
+<script src="../js/handler/addressHandler.js    "></script>
+
+<script type="text/javascript">
+    // 读取用于渲染界面的 JSON 文件
+    function readTextFile(file, callback) {
+        let rawFile = new XMLHttpRequest();
+        rawFile.overrideMimeType("application/json");
+        rawFile.open("GET", file, true);
+        rawFile.onreadystatechange = function() {
+            if (rawFile.readyState === 4 && rawFile.status == "200") {
+                callback(rawFile.responseText);
+            }
+        }
+        rawFile.send(null);
+    }
+
+    // 将配置文件渲染为页面
+    let amisScoped;
+    let user;
+
+    /** 首先渲染登录界面 */
+    login()
+    function login() {
+        let amis = amisRequire('amis/embed');
+        // 通过替换下面这个配置来生成不同页面
+        readTextFile("../json/login.json", function(text){
+            let amisJSON = JSON.parse(text);
+            let amisScopeX = amis.embed('#root', amisJSON);
+            setTimeout(() => {
+                // 获取 scope 并绑定登录逻辑
+                amisScoped = amisScopeX;
+                // 获取到登录按钮，在确认时尝试登录
+                $(".login").bind("click", tryLogin)
+                document.onkeydown= (event) => {
+                    let keyCode = event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode);
+                    if (keyCode === 13) {
+                        tryLogin()
+                    }
+                };
+            }, 0);
+        });
+    }
+
+    function tryLogin() {
+        let loginData = amisScoped.getComponentById("loginForm")._reactInternals.memoizedProps.data;
+        $.post(HOST + "/space/user/login", {
+                userName: loginData.userName,
+                userPass: loginData.userPass
+            }, (data) => {
+                if (data.data.success) {
+                    // 登录成功时，保存用户信息，并切换页面
+                    user = data.data.user;
+                    amisScoped.unmount();
+                    document.onkeydown = null;
+                    chat();
+                }
+            }
+        )
+    }
+
+    /** 渲染聊天界面 */
+    function chat() {
+        let amis = amisRequire('amis/embed');
+        readTextFile("../json/chatspace.json",async function(text){
+            let amisJSON = JSON.parse(text);
+            let amisScopeX = await amis.embed('#root', amisJSON);
+            setTimeout(() => {
+                // 获取 scope 并绑定处理方法
+                amisScoped = amisScopeX
+                // 保存用户信息
+                amisScoped.getComponentById("chatPage").setData({"user": user})
+                // 绑定聊天逻辑
+                bindChat()
+            }, 0);
+        });
+    }
+
+    /** 具体聊天逻辑 */
+    function bindChat() {
+        // 获取 amis 控件
+        let chatPage = amisScoped.getComponentById("chatPage")
+        let chatListService = amisScoped.getComponentById("chatListService")
+        let chatName = amisScoped.getComponentById("chatName")
+        let chatService = amisScoped.getComponentById("chatService")
+
+        // 注册一个控制中心，管理各个控件资源
+        let controlCenter = new ControlCenter(chatPage)
+        controlCenter.setChatComponent(chatListService, chatName, chatService)
+
+        // 新建一个消息列表处理器，处理消息列表
+        let messageListHandler = new MessageListHandler(user, controlCenter)
+
+        // 新建一个消息处理器，处理聊天消息
+        let messageInput = $(".cxd-TextareaControl-input")
+        let messageOutput = document.querySelector(`.messageOutput`)
+        let messageHandler = new MessageHandler(user, messageInput, messageOutput, controlCenter)
+        messageHandler.bindButton($(".imageUpload"), $(".messageSend"))
+
+        // 新建一个 websocket 处理器，管理上边两个处理器
+        let websocketHandler = new WebsocketHandler(user, messageListHandler, messageHandler, controlCenter)
+
+        // 新建一个通讯录处理器
+        let addressHandler = new AddressHandler(user, controlCenter)
+
+        // 给消息列表处理器和消息处理器配置 websocket 处理器
+        messageHandler.setWsHandler(websocketHandler)
+
+        // 给控制中心绑定各个处理器
+        controlCenter.setChatHandler(messageListHandler, messageHandler, websocketHandler)
+        controlCenter.setAddressHandler(addressHandler)
+
+        // 一次性，监听选项卡选中通讯录
+        let tabList = amisScoped.getComponentById("tabList")
+        $(".cxd-Tabs-links").bind("click", () => {
+            sc(this, () => {
+                if (tabList._reactInternals.memoizedState.activeKey === 1) {
+                    let groupService = amisScoped.getComponentById("groupService")
+                    let friendService = amisScoped.getComponentById("friendService")
+                    controlCenter.setAddressComponent(groupService, friendService)
+                    addressHandler.start(addressHandler);
+                    $(".cxd-Tabs-links")[0].onclick = null
+                }
+            })
+        })
+    }
+
+</script>
+</body>
+</html>

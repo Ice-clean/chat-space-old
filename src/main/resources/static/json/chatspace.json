@@ -1,0 +1,1218 @@
+{
+  "type": "page",
+  "style": {
+    "height": "100%",
+    "backgroundColor": "",
+    "backgroundImage": "../img/aaa",
+    "fontSize": "",
+    "color": ""
+  },
+  "className": "h-screen",
+  "id": "chatPage",
+  "title": "ChatSpace",
+  "body": [
+    {
+      "type": "tabs",
+      "id": "tabList",
+      "tabs": [
+        {
+          "title": "消息",
+          "body": [
+            {
+              "type": "container",
+              "body": [
+                {
+                  "type": "grid-2d",
+                  "gap": 0,
+                  "grids": [
+                    {
+                      "x": 1,
+                      "y": 1,
+                      "h": 1,
+                      "w": 12,
+                      "type": "grid-2d",
+                      "gap": 0,
+                      "grids": [
+                        {
+                          "x": 1,
+                          "y": 1,
+                          "h": 1,
+                          "w": 4,
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "service",
+                              "body": [
+                                {
+                                  "type": "input-group",
+                                  "name": "input-group",
+                                  "body": [
+                                    {
+                                      "type": "input-text",
+                                      "name": "input-group",
+                                      "placeholder": "输入搜索内容",
+                                      "className": ""
+                                    },
+                                    {
+                                      "type": "button",
+                                      "label": "搜索",
+                                      "level": "link",
+                                      "block": true,
+                                      "className": "bg-dark"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "id": "searchService"
+                            }
+                          ],
+                          "id": "u:dd139501de80",
+                          "style": {
+                            "height": "4em",
+                            "paddingLeft": "1em",
+                            "borderStyle": "none",
+                            "borderWidth": "1px",
+                            "marginTop": "",
+                            "paddingTop": "0.5em",
+                            "paddingRight": "0.5em",
+                            "backgroundColor": "",
+                            "border-bottom": "1px solid #58595a"
+                          }
+                        },
+                        {
+                          "type": "container",
+                          "x": 5,
+                          "y": 1,
+                          "h": 1,
+                          "w": 8,
+                          "body": [
+                            {
+                              "type": "service",
+                              "body": [
+                                {
+                                  "type": "tpl",
+                                  "tpl": "$name",
+                                  "inline": false,
+                                  "style": {
+                                    "fontSize": "18px"
+                                  }
+                                }
+                              ],
+                              "id": "chatName",
+                              "name": "chatName",
+                              "className": "chatName"
+                            }
+                          ],
+                          "style": {
+                            "paddingLeft": "1em",
+                            "borderStyle": "none",
+                            "borderWidth": "1px",
+                            "marginTop": "",
+                            "paddingTop": "1em",
+                            "backgroundColor": "",
+                            "border-bottom": "1px solid #58595a",
+                            "height": "4em",
+                            "border-left": "1px solid #58595a"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "container",
+                      "id": "u:e1ea5904887f",
+                      "x": 1,
+                      "y": 2,
+                      "h": 12,
+                      "w": 4,
+                      "style": {
+                        "height": "100%",
+                        "marginTop": "",
+                        "paddingRight": "",
+                        "marginRight": "-0.05em",
+                        "paddingTop": "",
+                        "opacity": 1,
+                        "marginBottom": "",
+                        "marginLeft": "",
+                        "paddingBottom": "",
+                        "backgroundColor": "",
+                        "border-right": "1px solid #58595a"
+                      },
+                      "body": [
+                        {
+                          "body": [
+                            {
+                              "type": "list",
+                              "className": "messageList",
+                              "source": "$messageList",
+                              "listItem": {
+                                "body": [
+                                  {
+                                    "type": "container",
+                                    "body": [
+                                      {
+                                        "type": "grid",
+                                        "columns": [
+                                          {
+                                            "md": "auto",
+                                            "body": [
+                                              {
+                                                "type": "avatar",
+                                                "id": "u:4eec8ab4c519",
+                                                "width": 40,
+                                                "height": 40,
+                                                "src": "$avatar",
+                                                "thumbMode": "cover",
+                                                "className": "r r-2x",
+                                                "badge": {
+                                                  "mode": "text",
+                                                  "text": 10,
+                                                  "style": {
+                                                    "background": "#BB2000",
+                                                    "fontSize": "5px"
+                                                  }
+                                                },
+                                                "shape": "square",
+                                                "size": 40,
+                                                "style": {
+                                                },
+                                                "text": ""
+                                              }
+                                            ],
+                                            "shape": "circle",
+                                            "size": 40,
+                                            "columnClassName": "p-sm"
+                                          },
+                                          {
+                                            "body": [
+                                              {
+                                                "type": "tpl",
+                                                "tpl": "$name",
+                                                "inline": true,
+                                                "id": "u:54c4a5c94d53",
+                                                "wrapperComponent": "div",
+                                                "style": {
+                                                  "fontSize": "15px",
+                                                  "fontWeight": "bold"
+                                                }
+                                              },
+                                              {
+                                                "type": "tpl",
+                                                "tpl": "$content",
+                                                "inline": true,
+                                                "id": "u:ddccd99b2cc3",
+                                                "style": {
+                                                  "fontSize": "9px",
+                                                  "paddingTop": "",
+                                                  "color": "#9b9b9b"
+                                                }
+                                              }
+                                            ],
+                                            "md": "",
+                                            "valign": "middle"
+                                          },
+                                          {
+                                            "body": [
+                                              {
+                                                "type": "mapping",
+                                                "className": {
+                                                  "text-success": "online == 1",
+                                                  "text-danger": "online == 0",
+                                                  "text-warning": "online == -1"
+                                                },
+                                                "label": "状态展示",
+                                                "map": {
+                                                  "0": {
+                                                    "type": "tpl",
+                                                    "tpl": "离线",
+                                                    "inline": false,
+                                                    "style": {
+                                                      "text-align": "right"
+                                                    }
+                                                  },
+                                                  "1": {
+                                                    "type": "tpl",
+                                                    "tpl": "在线",
+                                                    "inline": false,
+                                                    "style": {
+                                                      "text-align": "right"
+                                                    }
+                                                  },
+                                                  "-1": {
+                                                    "type": "tpl",
+                                                    "tpl": "$onlineRecord",
+                                                    "inline": false,
+                                                    "style": {
+                                                      "text-align": "right"
+                                                    }
+                                                  }
+                                                },
+                                                "name": "online"
+                                              },
+                                              {
+                                                "type": "tpl",
+                                                "tpl": "$sendTime",
+                                                "inline": false,
+                                                "id": "u:bc0661d32688",
+                                                "align": "right",
+                                                "style": {
+                                                  "color": "#9b9b9b",
+                                                  "text-align": "right"
+                                                },
+                                                "className": "r"
+                                              }
+                                            ],
+                                            "md": "auto",
+                                            "valign": "middle"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "id": "u:15efbcc31e55",
+                                    "style": {
+                                    },
+                                    "className": "p-l p-r-sm"
+                                  }
+                                ],
+                                "actions": [
+                                ],
+                                "avatarClassName": "thumb-sm avatar m-r"
+                              },
+                              "showHeader": true,
+                              "showFooter": true,
+                              "itemAction": {
+                                "type": "action",
+                                "actionType": "reload",
+                                "target": "chatListService?type=${type}&receiveId=$receiveId&name=${name}"
+                              }
+                            }
+                          ],
+                          "type": "service",
+                          "className": "overflow-y-auto m-t-sm",
+                          "id": "chatListService"
+                        }
+                      ],
+                      "className": "overflow-y-auto h-full"
+                    },
+                    {
+                      "x": 5,
+                      "y": 2,
+                      "h": 12,
+                      "w": 8,
+                      "type": "grid-2d",
+                      "id": "u:e1ea5904887f",
+                      "valign": "top",
+                      "style": {
+                        "paddingTop": "1em",
+                        "paddingRight": "",
+                        "paddingBottom": "1em",
+                        "paddingLeft": "1em",
+                        "height": "100%"
+                      },
+                      "grids": [
+                        {
+                          "x": 1,
+                          "y": 1,
+                          "h": 8,
+                          "w": 12,
+                          "body": [
+                            {
+                              "type": "service",
+                              "name": "chatService",
+                              "body": [
+                                {
+                                  "type": "list",
+                                  "source": "$historyList",
+                                  "listItem": {
+                                    "body": [
+                                      {
+                                        "type": "container",
+                                        "body": [
+                                          {
+                                            "type": "mapping",
+                                            "label": "聊天框位置",
+                                            "map": {
+                                              "true": {
+                                                "type": "grid",
+                                                "id": "u:f66c07aafb19",
+                                                "columns": [
+                                                  {
+                                                    "body": [
+                                                      {
+                                                        "type": "tpl",
+                                                        "tpl": "$sender.userName",
+                                                        "inline": true,
+                                                        "id": "u:54c4a5c94d53",
+                                                        "wrapperComponent": "div",
+                                                        "style": {
+                                                          "fontSize": "15px",
+                                                          "fontWeight": "bold",
+                                                          "text-align": "right"
+                                                        }
+                                                      },
+                                                      {
+                                                        "type": "tpl",
+                                                        "tpl": "$content",
+                                                        "inline": true,
+                                                        "id": "u:ddccd99b2cc3",
+                                                        "style": {
+                                                          "fontSize": "12px",
+                                                          "borderStyle": "none",
+                                                          "backgroundColor": "#36393a",
+                                                          "borderRadius": "5px",
+                                                          "fontWeight": "normal"
+                                                        },
+                                                        "className": "p-sm"
+                                                      }
+                                                    ],
+                                                    "md": "auto",
+                                                    "valign": "middle"
+                                                  },
+                                                  {
+                                                    "body": [
+                                                      {
+                                                        "type": "avatar",
+                                                        "id": "u:4eec8ab4c519",
+                                                        "width": 40,
+                                                        "height": 40,
+                                                        "src": "$sender.userAvatar",
+                                                        "thumbMode": "cover",
+                                                        "shape": "square",
+                                                        "className": "r r-2x"
+                                                      }
+                                                    ],
+                                                    "md": "auto"
+                                                  }
+                                                ],
+                                                "align": "right"
+                                              },
+                                              "false": {
+                                                "type": "grid",
+                                                "id": "u:f66c07aafb19",
+                                                "columns": [
+                                                  {
+                                                    "body": [
+                                                      {
+                                                        "type": "avatar",
+                                                        "id": "u:4eec8ab4c519",
+                                                        "width": 40,
+                                                        "height": 40,
+                                                        "src": "$sender.userAvatar",
+                                                        "thumbMode": "cover",
+                                                        "shape": "square",
+                                                        "className": "r r-2x"
+                                                      }
+                                                    ],
+                                                    "md": "auto"
+                                                  },
+                                                  {
+                                                    "body": [
+                                                      {
+                                                        "type": "tpl",
+                                                        "tpl": "$sender.userName",
+                                                        "inline": true,
+                                                        "id": "u:54c4a5c94d53",
+                                                        "wrapperComponent": "div",
+                                                        "style": {
+                                                          "fontSize": "15px",
+                                                          "fontWeight": "bold"
+                                                        }
+                                                      },
+                                                      {
+                                                        "type": "tpl",
+                                                        "tpl": "$content",
+                                                        "inline": true,
+                                                        "id": "u:ddccd99b2cc3",
+                                                        "style": {
+                                                          "fontSize": "12px",
+                                                          "borderStyle": "none",
+                                                          "backgroundColor": "#36393a",
+                                                          "borderRadius": "5px",
+                                                          "fontWeight": "normal"
+                                                        },
+                                                        "className": "p-sm"
+                                                      }
+                                                    ],
+                                                    "md": "auto",
+                                                    "valign": "middle"
+                                                  }
+                                                ],
+                                                "align": "left"
+                                              }
+                                            },
+                                            "name": "self"
+                                          }
+                                        ],
+                                        "style": {
+                                        },
+                                        "className": "p-l-sm p-r-sm p-xs"
+                                      }
+                                    ],
+                                    "valign": "top",
+                                    "md": ""
+                                  },
+                                  "className": "chatList"
+                                },
+                                {
+                                  "type": "tpl",
+                                  "tpl": "$content"
+                                }
+                              ],
+                              "id": "chatService",
+                              "silentPolling": "true"
+                            }
+                          ],
+                          "type": "container",
+                          "className": "overflow-y-auto m-t-sm m-l-xs m-r-xs messageOutput",
+                          "style": {
+                            "height": "100%",
+                            "marginBottom": "1em"
+                          },
+                          "id": "messageOutput"
+                        },
+                        {
+                          "x": 1,
+                          "y": 9,
+                          "h": 3,
+                          "w": 12,
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "textarea",
+                              "name": "messageInput",
+                              "id": "messageInput",
+                              "className": "h-full p messageInput",
+                              "labelClassName": "",
+                              "maxRows": "6",
+                              "minRows": "6",
+                              "inputClassName": "",
+                              "style": {
+                                "color": "#FF0000"
+                              },
+                              "validateOnChange": false
+                            }
+                          ],
+                          "style": {
+                            "paddingLeft": "",
+                            "height": "100%",
+                            "border-top": "1px solid #58595a"
+                          },
+                          "className": "h-full textarea-container m-t"
+                        },
+                        {
+                          "x": 1,
+                          "y": 12,
+                          "h": 1,
+                          "w": 12,
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "grid",
+                              "style": {
+                                "height": "100%"
+                              },
+                              "columns": [
+                                {
+                                  "body": [
+                                    {
+                                      "type": "image",
+                                      "id": "imageUpload",
+                                      "width": 28,
+                                      "height": 28,
+                                      "src": "../icon/imageUpload.png",
+                                      "className": "imageUpload"
+                                    },
+                                    {
+                                      "type": "input-image",
+                                      "label": "图片上传",
+                                      "name": "image",
+                                      "imageClassName": "r w-full",
+                                      "id": "u:0b12a1c003b2"
+                                    }
+                                  ],
+                                  "md": "auto",
+                                  "valign": "middle"
+                                },
+                                {
+                                  "body": [
+                                  ],
+                                  "valign": "middle",
+                                  "md": "auto"
+                                },
+                                {
+                                  "body": [
+                                  ]
+                                },
+                                {
+                                  "body": [
+                                  ]
+                                },
+                                {
+                                  "body": [
+                                    {
+                                      "type": "button",
+                                      "className": "messageSend",
+                                      "label": "发送"
+                                    }
+                                  ],
+                                  "valign": "right",
+                                  "md": "auto"
+                                }
+                              ],
+                              "id": "u:42d9097a25e9",
+                              "valign": "top",
+                              "align": "left",
+                              "gap": "xs",
+                              "subFormMode": "",
+                              "className": "chatGrid"
+                            }
+                          ],
+                          "style": {
+                          },
+                          "className": "p-r p-l p-t-sm"
+                        }
+                      ]
+                    }
+                  ],
+                  "className": "h-full my-class",
+                  "style": {
+                    "grid-template-rows": "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;",
+                    "height": "100%"
+                  }
+                }
+              ],
+              "className": "h-full"
+            }
+          ]
+        },
+        {
+          "title": "通讯录",
+          "body": [
+            {
+              "type": "container",
+              "body": [
+                {
+                  "type": "grid-2d",
+                  "gap": 0,
+                  "grids": [
+                    {
+                      "x": 1,
+                      "y": 1,
+                      "h": 1,
+                      "w": 12,
+                      "type": "grid-2d",
+                      "gap": 0,
+                      "grids": [
+                        {
+                          "x": 1,
+                          "y": 1,
+                          "h": 1,
+                          "w": 4,
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "service",
+                              "body": [
+                                {
+                                  "type": "input-group",
+                                  "name": "input-group",
+                                  "body": [
+                                    {
+                                      "type": "input-text",
+                                      "name": "input-group",
+                                      "placeholder": "输入搜索内容",
+                                      "className": ""
+                                    },
+                                    {
+                                      "type": "button",
+                                      "label": "搜索",
+                                      "level": "link",
+                                      "block": true,
+                                      "className": "bg-dark"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "id": "searchService"
+                            }
+                          ],
+                          "id": "u:dd139501de80",
+                          "style": {
+                            "height": "4em",
+                            "paddingLeft": "1em",
+                            "borderStyle": "none",
+                            "borderWidth": "1px",
+                            "marginTop": "",
+                            "paddingTop": "0.5em",
+                            "paddingRight": "0.5em",
+                            "backgroundColor": "",
+                            "border-bottom": "1px solid #58595a"
+                          }
+                        },
+                        {
+                          "type": "container",
+                          "x": 5,
+                          "y": 1,
+                          "h": 1,
+                          "w": 8,
+                          "body": [
+                            {
+                              "type": "service",
+                              "body": [
+                                {
+                                  "type": "tpl",
+                                  "tpl": "$itemName",
+                                  "inline": false,
+                                  "style": {
+                                    "fontSize": "18px"
+                                  }
+                                }
+                              ],
+                              "id": "itemName",
+                              "name": "itemName",
+                              "className": "itemName"
+                            }
+                          ],
+                          "style": {
+                            "paddingLeft": "1em",
+                            "borderStyle": "none",
+                            "borderWidth": "1px",
+                            "marginTop": "",
+                            "paddingTop": "1em",
+                            "backgroundColor": "",
+                            "border-bottom": "1px solid #58595a",
+                            "height": "4em",
+                            "border-left": "1px solid #58595a"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "container",
+                      "id": "u:e1ea5904887f",
+                      "x": 1,
+                      "y": 2,
+                      "h": 12,
+                      "w": 4,
+                      "style": {
+                        "height": "100%",
+                        "marginTop": "",
+                        "paddingRight": "",
+                        "marginRight": "-0.05em",
+                        "paddingTop": "",
+                        "opacity": 1,
+                        "marginBottom": "",
+                        "marginLeft": "",
+                        "paddingBottom": "",
+                        "backgroundColor": "",
+                        "border-right": "1px solid #58595a"
+                      },
+                      "body": [
+                        {
+                          "type": "service",
+                          "body": [
+                            {
+                              "type": "list",
+                              "className": "",
+                              "source": "$funcList",
+                              "listItem": {
+                                "body": [
+                                  {
+                                    "type": "container",
+                                    "body": [
+                                      {
+                                        "type": "grid",
+                                        "columns": [
+                                          {
+                                            "md": "auto",
+                                            "body": [
+                                              {
+                                                "type": "image",
+                                                "id": "u:4eec8ab4c519",
+                                                "width": 35,
+                                                "height": 35,
+                                                "src": "$image",
+                                                "thumbMode": "cover",
+                                                "className": "r r-2x",
+                                                "imageMode": "original",
+                                                "shape": "square",
+                                                "size": 40,
+                                                "style": {
+                                                }
+                                              }
+                                            ],
+                                            "shape": "circle",
+                                            "size": 40,
+                                            "columnClassName": "p-sm"
+                                          },
+                                          {
+                                            "body": [
+                                              {
+                                                "type": "tpl",
+                                                "tpl": "$title",
+                                                "inline": true,
+                                                "id": "u:54c4a5c94d53",
+                                                "wrapperComponent": "div",
+                                                "style": {
+                                                  "fontSize": "15px",
+                                                  "fontWeight": "bold"
+                                                }
+                                              }
+                                            ],
+                                            "md": "",
+                                            "valign": "middle",
+                                            "shape": "circle",
+                                            "size": 40
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "style": {
+                                    },
+                                    "className": "p-l-sm"
+                                  }
+                                ],
+                                "actions": [
+                                ]
+                              },
+                              "showHeader": true,
+                              "showFooter": true,
+                              "itemAction": {
+                                "type": "action",
+                                "actionType": "reload"
+                              }
+                            }
+                          ],
+                          "id": "funcService",
+                          "data": {
+                            "funcList": [
+                              {
+                                "image": "../icon/newFriend.png",
+                                "title": "新的朋友"
+                              },
+                              {
+                                "image": "../icon/newGroup.png",
+                                "title": "新的群组"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "collapse",
+                          "style": {
+                            "backgroundColor": "#323333"
+                          },
+                          "header": "群聊",
+                          "body": [
+                            {
+                              "type": "service",
+                              "body": [
+                                {
+                                  "type": "list",
+                                  "className": "groupList",
+                                  "source": "$groupList",
+                                  "listItem": {
+                                    "body": [
+                                      {
+                                        "type": "container",
+                                        "body": [
+                                          {
+                                            "type": "grid",
+                                            "columns": [
+                                              {
+                                                "md": "auto",
+                                                "body": [
+                                                  {
+                                                    "type": "avatar",
+                                                    "id": "u:4eec8ab4c519",
+                                                    "width": 35,
+                                                    "height": 35,
+                                                    "src": "$avatar",
+                                                    "thumbMode": "cover",
+                                                    "className": "r r-2x",
+                                                    "shape": "square",
+                                                    "size": 40,
+                                                    "style": {
+                                                    }
+                                                  }
+                                                ],
+                                                "columnClassName": "p-sm"
+                                              },
+                                              {
+                                                "body": [
+                                                  {
+                                                    "type": "tpl",
+                                                    "tpl": "$name",
+                                                    "inline": true,
+                                                    "id": "u:54c4a5c94d53",
+                                                    "wrapperComponent": "div",
+                                                    "style": {
+                                                      "fontSize": "15px",
+                                                      "fontWeight": "bold"
+                                                    }
+                                                  }
+                                                ],
+                                                "md": "",
+                                                "valign": "middle"
+                                              },
+                                              {
+                                                "body": [
+                                                  {
+                                                    "type": "tpl",
+                                                    "tpl": "$onlineNum / $number",
+                                                    "inline": false,
+                                                    "style": {
+                                                      "text-align": "right"
+                                                    }
+                                                  }
+                                                ],
+                                                "md": "auto",
+                                                "valign": "middle"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "style": {
+                                        },
+                                        "className": "p-l-sm p-r-sm"
+                                      }
+                                    ],
+                                    "actions": [
+                                    ]
+                                  },
+                                  "showHeader": true,
+                                  "showFooter": true,
+                                  "itemAction": {
+                                    "type": "action",
+                                    "actionType": "reload"
+                                  }
+                                }
+                              ],
+                              "id": "groupService"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "collapse",
+                          "style": {
+                            "backgroundColor": "#323333"
+                          },
+                          "header": "好友",
+                          "body": [
+                            {
+                              "type": "service",
+                              "body": [
+                                {
+                                  "type": "list",
+                                  "className": "friendList",
+                                  "source": "$friendList",
+                                  "listItem": {
+                                    "body": [
+                                      {
+                                        "type": "container",
+                                        "body": [
+                                          {
+                                            "type": "grid",
+                                            "columns": [
+                                              {
+                                                "md": "auto",
+                                                "body": [
+                                                  {
+                                                    "type": "avatar",
+                                                    "id": "u:4eec8ab4c519",
+                                                    "width": 35,
+                                                    "height": 35,
+                                                    "src": "$userAvatar",
+                                                    "thumbMode": "cover",
+                                                    "className": "r r-2x",
+                                                    "shape": "square",
+                                                    "size": 40,
+                                                    "style": {
+                                                    }
+                                                  }
+                                                ],
+                                                "shape": "circle",
+                                                "size": 40,
+                                                "columnClassName": "p-sm"
+                                              },
+                                              {
+                                                "body": [
+                                                  {
+                                                    "type": "tpl",
+                                                    "tpl": "$userNick",
+                                                    "inline": true,
+                                                    "id": "u:54c4a5c94d53",
+                                                    "wrapperComponent": "div",
+                                                    "style": {
+                                                      "fontSize": "15px",
+                                                      "fontWeight": "bold"
+                                                    }
+                                                  }
+                                                ],
+                                                "md": "",
+                                                "valign": "middle"
+                                              },
+                                              {
+                                                "body": [
+                                                  {
+                                                    "type": "mapping",
+                                                    "className": {
+                                                      "text-success": "online == 1",
+                                                      "text-danger": "online == 0",
+                                                      "text-warning": "online == -1"
+                                                    },
+                                                    "label": "状态展示",
+                                                    "map": {
+                                                      "0": {
+                                                        "type": "tpl",
+                                                        "tpl": "离线",
+                                                        "inline": false,
+                                                        "style": {
+                                                          "text-align": "right"
+                                                        }
+                                                      },
+                                                      "1": {
+                                                        "type": "tpl",
+                                                        "tpl": "在线",
+                                                        "inline": false,
+                                                        "style": {
+                                                          "text-align": "right"
+                                                        }
+                                                      }
+                                                    },
+                                                    "name": "online"
+                                                  }
+                                                ],
+                                                "md": "auto",
+                                                "valign": "middle"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "style": {
+                                        },
+                                        "className": "p-l-sm p-r-sm"
+                                      }
+                                    ],
+                                    "actions": [
+                                    ]
+                                  },
+                                  "showHeader": true,
+                                  "showFooter": true,
+                                  "itemAction": {
+                                    "type": "action",
+                                    "actionType": "reload"
+                                  }
+                                }
+                              ],
+                              "id": "friendService"
+                            }
+                          ]
+                        }
+                      ],
+                      "className": "overflow-y-auto h-full"
+                    },
+                    {
+                      "x": 5,
+                      "y": 2,
+                      "h": 12,
+                      "w": 8,
+                      "type": "container",
+                      "id": "u:e1ea5904887f",
+                      "body": [
+                      ],
+                      "style": {
+                        "height": "100%",
+                        "marginTop": "",
+                        "paddingRight": "",
+                        "marginRight": "-0.05em",
+                        "paddingTop": "",
+                        "opacity": 1,
+                        "marginBottom": "",
+                        "marginLeft": "",
+                        "paddingBottom": "",
+                        "backgroundColor": "",
+                        "border-right": "1px solid #58595a"
+                      },
+                      "className": "h-full"
+                    }
+                  ],
+                  "className": "h-full my-class",
+                  "style": {
+                    "grid-template-rows": "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;",
+                    "height": "100%"
+                  }
+                }
+              ],
+              "className": "h-full"
+            }
+          ]
+        },
+        {
+          "title": "设置",
+          "body": [
+            {
+              "type": "tpl",
+              "tpl": "内容",
+              "inline": false
+            }
+          ]
+        }
+      ],
+      "tabsMode": "vertical",
+      "contentClassName": "h-full",
+      "subFormMode": "",
+      "className": "h-full"
+    }
+  ],
+  "cssVars": {
+    "--ListItem--strip-bg": "#00000000",
+    "--ListItem-borderWidth": "0",
+    "--Page-body-padding": "0",
+    "--Tabs--vertical-onActive-container-bg": "#444749",
+    "--borderWidth": "0",
+    "--Tabs--vertical-onActive-bg": "#555860",
+    "--Tabs--vertical-onActive-color": "#FFF689",
+    "--Tabs--vertical-onActive-border": "#FFF689",
+    "--primary": "#FFF689",
+    "--text-color": "#d1dae4",
+    "--Form-input-color": "#d1dae4",
+    "--List-bg": "",
+    "--gap-base": "",
+    "--ListMenu-item--onHover-bg": "#333638",
+    "--Tabs-content-bg": "#212222",
+    "--Form-item-gap": "",
+    "--Form-input-bg": "#212222",
+    "--Form-input-onFocused-bg": "#212222",
+    "--Form-select-menu-onActive-color": "#FFF689",
+    "--Form-input-onHover-borderColor": "#00000000",
+    "--Form-input-onFocused-borderColor": "#00000000",
+    "--primary-onHover": "#FFF689",
+    "--primary-onActive": "#FFF689",
+    "--Form-input-borderColor": "#00000000",
+    "--text-primary": "#d1dae4",
+    "--Spinner-overlay-bg": "#00000000",
+    "--Spinner-bg": "",
+    "--Button--default-bg": "#212222",
+    "--Button--default-onHover-color": "#FFF689",
+    "--Button--default-onHover-borderColor": "#FFF689",
+    "--Button--default-onHover-bg": "#212222",
+    "--Button--default-color": "#d1dae4",
+    "--Collapse-header-padding": "5px",
+    "--Collapse-header-bg": "#323333",
+    "--text--loud-color": "#d1dae4",
+    "--Collapse-header-onHover-bg": "#323232",
+    "--Collapse-border": "",
+    "--Collapse-content-padding": "",
+    "--ListItem-paddingY": "0",
+    "--ListMenu-item--onHover-color": "#FFF689"
+  },
+  "toolbar": [
+    {
+      "type": "container",
+      "body": [
+        {
+          "type": "grid",
+          "columns": [
+            {
+              "body": [
+                {
+                  "type": "tpl",
+                  "tpl": "ChatSpace",
+                  "inline": false,
+                  "id": "u:5f7719e2e429",
+                  "style": {
+                    "fontSize": "20px",
+                    "fontWeight": "normal",
+                    "boxShadow": "",
+                    "backgroundColor": "",
+                    "color": "#d1dae4",
+                    "textAlign": "left"
+                  },
+                  "className": "m-l-sm"
+                }
+              ],
+              "md": "",
+              "valign": "middle"
+            },
+            {
+              "body": [
+                {
+                  "type": "grid",
+                  "columns": [
+                    {
+                      "body": [
+                      ]
+                    },
+                    {
+                      "body": [
+                      ]
+                    },
+                    {
+                      "body": [
+                      ]
+                    },
+                    {
+                      "body": [
+                        {
+                          "type": "tpl",
+                          "tpl": "<p>$user.userName</p>",
+                          "inline": false,
+                          "id": "userName",
+                          "style": {
+                            "textAlign": "right",
+                            "fontWeight": "bold",
+                            "fontSize": "15px",
+                            "color": "#d1dae4"
+                          }
+                        }
+                      ],
+                      "valign": "middle",
+                      "md": ""
+                    },
+                    {
+                      "body": [
+                        {
+                          "type": "avatar",
+                          "id": "userAvatar",
+                          "width": 35,
+                          "height": 35,
+                          "src": "$user.userAvatar",
+                          "showDimensions": false,
+                          "className": "r r-2x",
+                          "thumbMode": "cover",
+                          "shape": "square"
+                        }
+                      ],
+                      "valign": "middle",
+                      "md": "auto",
+                      "columnClassName": "p-r",
+                      "shape": "circle",
+                      "size": 40
+                    }
+                  ],
+                  "id": "u:5725f0f3d7d8"
+                }
+              ]
+            }
+          ],
+          "id": "u:b73efc5e7c20",
+          "subFormMode": ""
+        }
+      ],
+      "id": "u:74a9d9d952b4",
+      "style": {
+        "border-buttom": "1px solid #e8e9eb",
+        "marginBottom": "",
+        "background-color": "#3c3f41"
+      }
+    }
+  ],
+  "messages": {
+  },
+  "toolbarClassName": "bg-light",
+  "headerClassName": "",
+  "regions": [
+    "body",
+    "toolbar"
+  ]
+}
