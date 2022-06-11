@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.iceclean.chatspace.VO.UserVO;
-import top.iceclean.chatspace.constant.ReceiveType;
+import top.iceclean.chatspace.constant.SessionType;
 import top.iceclean.chatspace.constant.RedisKey;
 import top.iceclean.chatspace.constant.ResponseStatusEnum;
 import top.iceclean.chatspace.mapper.UserMapper;
@@ -77,18 +77,5 @@ public class UserServiceImpl implements UserService {
         for (Integer groupKey : groupKeyList) {
             groupService.setOnlineNum(groupKey, online ? 1 : -1);
         }
-    }
-
-    @Override
-    public List<Integer> getUserIdByReceiveId(int type, int receiveId) {
-        // 判断接收域为朋友类型还是群聊类型
-        if (type == ReceiveType.FRIEND.value()) {
-            return friendService.getUserIdByFriendId(receiveId);
-        } else if (type == ReceiveType.GROUP.value()) {
-            return groupService.getUserIdByGroupId(receiveId);
-        }
-
-        // 类型错误返回空集合
-        return new ArrayList<>(0);
     }
 }

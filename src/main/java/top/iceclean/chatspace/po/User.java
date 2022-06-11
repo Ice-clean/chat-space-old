@@ -17,9 +17,11 @@ public class User {
     @TableId(value = "user_id", type = IdType.AUTO)
     private Integer userId;
     private String userName;
-    private String userNick;
     private String userPass;
-    private String userAvatar;
+    private String nickName;
+    private String avatar;
+    private String freezeTime;
+    private String deleteTime;
     private String createTime;
     @TableField(update = "now()")
     private String updateTime;

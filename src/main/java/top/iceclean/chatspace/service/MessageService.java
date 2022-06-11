@@ -12,31 +12,29 @@ import top.iceclean.chatspace.po.Response;
 public interface MessageService {
 
     /**
-     * 获取消息列表
+     * 获取会话消息列表
      * @param userId 用户 ID
-     * @return 消息列表
+     * @return 会话列表
      */
-    Response getMessageList(int userId);
+    Response getSessionMessageList(int userId);
 
     /**
      * 获取用户在某个接收域的历史消息
      * @param userId 用户 ID
-     * @param type 类型
-     * @param receiveId 接收域 ID
+     * @param sessionId 会话 ID
      * @param page 聊天记录的页数
      * @return 历史消息列表
      */
-    Response getChatHistory(int userId, int type, int receiveId, int page);
+    Response getChatHistory(int userId, int sessionId, int page);
 
     /**
      * 将消息对象转化成消息响应对象
      * @param message 消息对象
      * @param userId 当前用户 ID
-     * @param shortTime 是否需要缩短时间格式（消息列表需要）
-     * @param info 是否有额外信息（消息列表需要）
+     * @param info 是否需要详细信息（会话消息列表需要）
      * @return 消息响应对象
      */
-    MessageVO toMessageVO(Message message, int userId, boolean shortTime, boolean info);
+    MessageVO toMessageVO(Message message, int userId, boolean info);
 
     /**
      * 将消息接收对象持久化，并返回消息实体
@@ -44,4 +42,11 @@ public interface MessageService {
      * @return 对应的消息实体
      */
     Message saveMessage(MessageDTO messageDTO);
+
+    /**
+     * 获取指定会话最后一条消息的 ID
+     * @param sessionId 会话 ID
+     * @return 最后一条消息 ID
+     */
+    int getLastMsgId(int sessionId);
 }

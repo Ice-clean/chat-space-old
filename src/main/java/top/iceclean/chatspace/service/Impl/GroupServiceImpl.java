@@ -40,19 +40,27 @@ public class GroupServiceImpl implements GroupService {
         // 先获取所有群聊主键
         List<Integer> groupKeyList = getGroupKeyList(userId);
         // 再拿到所有群聊并转化成响应对象
-        List<GroupVO> groupList = groupKeyList.stream().map(groupId -> toGroupVO(getGroupById(groupId))).collect(Collectors.toList());
+        List<GroupVO> groupList = groupKeyList.stream().map(groupId -> getGroupVO(groupId, userId)).collect(Collectors.toList());
         return new Response(ResponseStatusEnum.OK).addData("groupList", groupList);
+    }
+
+    @Override
+    public UserGroup getUserGroup(int userId, int groupId) {
+        return userGroupMapper.selectOne(new LambdaQueryWrapper<UserGroup>()
+                .isNull(UserGroup::getDeleteTime)
+                .eq(UserGroup::getUserId, userId).eq(UserGroup::getGroupId, groupId));
     }
 
     @Override
     public List<Integer> getGroupKeyList(int userId) {
         return userGroupMapper.selectList(new LambdaQueryWrapper<UserGroup>()
-                .eq(UserGroup::getUserId, userId))
+                .select(UserGroup::getGroupId)
+                .eq(UserGroup::getUserId, userId).isNull(UserGroup::getDeleteTime))
                 .stream().map(UserGroup::getGroupId).collect(Collectors.toList());
     }
 
     @Override
-    public List<Integer> getUserIdByGroupId(int groupId) {
+    public List<Integer> getGroupUserId(int groupId) {
         // 将所有的群聊映射记录查询出来，再过滤出用户 ID 集合
         return userGroupMapper.selectList(new LambdaQueryWrapper<UserGroup>()
                 .eq(UserGroup::getGroupId, groupId).isNull(UserGroup::getDeleteTime))
@@ -65,8 +73,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public GroupVO toGroupVO(Group group) {
-        return new GroupVO(group, getOnlineNum(group.getGroupId()));
+    public GroupVO getGroupVO(int groupId, int userId) {
+        // 获取群聊对象
+        Group group = getGroupById(groupId);
+        // 找到用户群聊记录
+        UserGroup userGroup = getUserGroup(userId, group.getGroupId());
+        return new GroupVO(group, userGroup, getOnlineNum(group.getGroupId()));
     }
 
     @Override

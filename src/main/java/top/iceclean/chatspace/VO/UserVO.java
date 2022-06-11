@@ -15,17 +15,17 @@ public class UserVO {
     /** 用户名 */
     private String userName;
     /** 用户昵称 */
-    private String userNick;
+    private String nickName;
     /** 用户头像 */
-    private String userAvatar;
+    private String avatar;
     /** 用户是否在线 */
     private Boolean online;
 
-    public UserVO(User user, Boolean online) {
+    public UserVO(User user, boolean online) {
         this.userId = user.getUserId();
         this.userName = user.getUserName();
-        this.userNick = user.getUserNick();
-        this.userAvatar = user.getUserAvatar();
+        this.nickName = user.getNickName();
+        this.avatar = user.getAvatar();
         this.online = online;
     }
 }

@@ -13,10 +13,12 @@ import lombok.Data;
 @Data
 @TableName("t_user_group")
 public class UserGroup {
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-    private Integer groupId;
+    @TableId(value = "map_id", type = IdType.AUTO)
+    private Integer mapId;
     private Integer userId;
+    private Integer groupId;
+    private Integer lastMsgId;
+    private String markName;
     private String deleteTime;
     private String createTime;
 }

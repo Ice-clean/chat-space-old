@@ -6,10 +6,8 @@ import org.springframework.stereotype.Component;
 import top.iceclean.chatspace.VO.MessageVO;
 import top.iceclean.chatspace.VO.UserOnlineVO;
 import top.iceclean.chatspace.po.Message;
-import top.iceclean.chatspace.service.FriendService;
-import top.iceclean.chatspace.service.GroupService;
-import top.iceclean.chatspace.service.MessageService;
-import top.iceclean.chatspace.service.UserService;
+import top.iceclean.chatspace.po.Session;
+import top.iceclean.chatspace.service.*;
 
 import java.util.HashSet;
 import java.util.List;
@@ -43,6 +41,7 @@ public class DataGenerator {
     private static FriendService friendService;
     private static GroupService groupService;
     private static MessageService messageService;
+    private static SessionService sessionService;
 
     /** 注入用户服务 */
     @Autowired
@@ -68,6 +67,12 @@ public class DataGenerator {
         DataGenerator.messageService = messageService;
     }
 
+    /** 注入会话服务 */
+    @Autowired
+    public void setSessionService(SessionService sessionService) {
+        DataGenerator.sessionService = sessionService;
+    }
+
     /** 聊天消息生成器 */
     @AllArgsConstructor
     static class ChatMessage implements Generator {
@@ -76,13 +81,13 @@ public class DataGenerator {
 
         @Override
         public Set<Integer> target() {
-            // 消息接收域的所有用户 ID，就是目标通知用户 ID
-            return new HashSet<>(userService.getUserIdByReceiveId(message.getType(), message.getReceiveId()));
+            // 会话中的所有用户 ID，就是目标通知用户 ID
+            return new HashSet<>(sessionService.getSessionUserId(message.getSessionId()));
         }
 
         @Override
         public MessageVO exec(int toUserId) {
-            return messageService.toMessageVO(message, toUserId, true, true);
+            return messageService.toMessageVO(message, toUserId, true);
         }
     }
 
@@ -112,7 +117,7 @@ public class DataGenerator {
             Set<Integer>  targetUserIdSet = new HashSet<>(friendService.getFriendIdList(userId));
             // 然后找到所有和该用户在同一个群聊中的用户 ID
             for (Integer groupKey : groupKeyList) {
-                targetUserIdSet.addAll(groupService.getUserIdByGroupId(groupKey));
+                targetUserIdSet.addAll(groupService.getGroupUserId(groupKey));
             }
             // 最后除去本身，即使所有需要通知的对象
             targetUserIdSet.remove(userId);

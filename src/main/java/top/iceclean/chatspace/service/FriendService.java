@@ -1,5 +1,7 @@
 package top.iceclean.chatspace.service;
 
+import top.iceclean.chatspace.VO.FriendVO;
+import top.iceclean.chatspace.po.Friend;
 import top.iceclean.chatspace.po.Response;
 import top.iceclean.chatspace.po.User;
 
@@ -18,6 +20,22 @@ public interface FriendService {
      * @return 好友列表
      */
     Response getFriendList(int userId);
+
+    /**
+     * 获取用户指定好友 ID 的好友记录
+     * @param userId 用户 ID
+     * @param friendId 好友 ID
+     * @return 好友记录
+     */
+    Friend getUserFriend(int userId, int friendId);
+
+    /**
+     * 通过好友 ID 获取有当前用户特征的响应对象
+     * @param friendId 好友 ID
+     * @param userId 当前用户 ID
+     * @return 好友响应对象
+     */
+    FriendVO getFriendVO(int friendId, int userId);
 
     /**
      * 获取用户的好友主键列表
@@ -45,13 +63,5 @@ public interface FriendService {
      * @param friendId 好友 ID
      * @return 用户 ID 集合
      */
-    List<Integer> getUserIdByFriendId(int friendId);
-
-    /**
-     * 获取指定用户指定好友 ID 的用户ID
-     * @param userId 用户 ID
-     * @param friendId 朋友 ID
-     * @return 朋友用户 ID
-     */
-    Integer getFriendUserId(int userId, int friendId);
+    List<Integer> getFriendUserId(int friendId);
 }

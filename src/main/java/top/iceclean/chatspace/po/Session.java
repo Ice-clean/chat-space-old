@@ -7,19 +7,19 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
+ * 会话类
  * @author : Ice'Clean
- * @date : 2022-05-25
+ * @date : 2022-06-11
  */
 @Data
-@TableName("t_friend")
-public class Friend {
-    @TableId(value = "map_id", type = IdType.AUTO)
-    private Integer mapId;
-    private Integer friendId;
-    private Integer userId;
-    private Integer toUserId;
-    private Integer lastMsgId;
-    private String markName;
-    private String createTime;
+@TableName("t_session")
+public class Session {
+    @TableId(value = "session_id", type = IdType.AUTO)
+    private Integer sessionId;
+    private Integer type;
+    private Integer targetId;
     private String deleteTime;
+    private String createTime;
+    @TableField(update = "now()")
+    private String updateTime;
 }

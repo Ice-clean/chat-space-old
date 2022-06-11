@@ -47,12 +47,4 @@ public interface UserService {
      * @param online 是否在线
      */
     void setOnline(int userId, boolean online);
-
-    /**
-     * 获取指定类型接收域的所有用户 ID
-     * @param type 接收域类型
-     * @param receiveId 接收域 ID
-     * @return 用户 ID 集合
-     */
-    List<Integer> getUserIdByReceiveId(int type, int receiveId);
 }

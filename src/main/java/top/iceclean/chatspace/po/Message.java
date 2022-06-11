@@ -13,23 +13,23 @@ import top.iceclean.chatspace.DTO.MessageDTO;
  * @date : 2022-05-25
  */
 @Data
-@TableName("t_message")
+@TableName("t_session_message")
 @NoArgsConstructor
 public class Message {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    private Integer type;
+    private Integer sessionId;
+    private Integer msgId;
     private Integer senderId;
-    private Integer receiveId;
+    private Integer type;
     private String content;
-    private Boolean isRead;
     private String createTime;
 
     /** 通过消息响应对象构建消息实体 */
     public Message(MessageDTO messageDTO) {
-        this.type = messageDTO.getType();
+        this.sessionId = messageDTO.getSessionId();
         this.senderId = messageDTO.getSenderId();
-        this.receiveId = messageDTO.getReceiveId();
+        this.type = messageDTO.getType();
         this.content = messageDTO.getContent();
     }
 }

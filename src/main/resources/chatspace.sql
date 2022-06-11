@@ -7,8 +7,10 @@ create table t_user (
     sex         varchar(10)              comment '用户性别',
     nick_name   varchar(20)              comment '用户昵称',
     avatar      varchar(20)              comment '用户头像',
-    create_time timestamp default CURRENT_TIMESTAMP not null comment '账号创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP  not null comment '修改时间'
+    freeze_time timestamp null default null         comment '用户冻结的时间',
+    delete_time timestamp null default null         comment '用户注销的时间',
+    create_time timestamp default CURRENT_TIMESTAMP comment '账号创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '修改时间'
 );
 
 -- 好友表
@@ -19,9 +21,12 @@ create table t_friend (
     to_user_id  int                      comment '好友用户 ID',
     last_msg_id int                      comment '最后一次阅读的消息 ID',
     mark_name   varchar(20)              comment '好友备注',
-    delete_time timestamp                comment '取消好友的时间',
-    create_time timestamp default CURRENT_TIMESTAMP not null comment '成为好友的时间'
+    delete_time timestamp null default null         comment '取消好友的时间',
+    create_time timestamp default CURRENT_TIMESTAMP comment '成为好友的时间'
 );
+
+-- 好友表索引
+create index user_id_index on t_friend (user_id);
 
 -- 群聊表
 create table t_group (
@@ -30,8 +35,8 @@ create table t_group (
     group_name  varchar(20)              comment '群聊名称',
     avatar      varchar(20)              comment '群聊头像',
     number      int                      comment '群聊人数',
-    delete_time timestamp                comment '删除群聊时间',
-    create_time timestamp default CURRENT_TIMESTAMP not null comment '群聊创建时间',
+    delete_time timestamp null default null         comment '删除群聊时间',
+    create_time timestamp default CURRENT_TIMESTAMP comment '群聊创建时间',
     update_time timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP  not null comment '修改时间'
 );
 
@@ -41,19 +46,27 @@ create table t_user_group (
     user_id     int                      comment '用户 ID',
     group_id    int                      comment '群聊 ID',
     last_msg_id int                      comment '最后一条阅读的消息 ID',
-    delete_time timestamp                comment '用户退群时间',
-    create_time timestamp default CURRENT_TIMESTAMP not null comment '用户进群时间'
+    mark_name   varchar(20)              comment '用户群聊备注',
+    delete_time timestamp null default null         comment '用户退群时间',
+    create_time timestamp default CURRENT_TIMESTAMP comment '用户进群时间'
 );
+
+-- 用户群聊表索引
+create index user_id_index on t_user_group (user_id);
+create index group_id_index on t_user_group (group_id);
 
 -- 会话表
 create table t_session (
     session_id  int       auto_increment comment '会话 ID' primary key,
     type        int                      comment '会话类型（0-私聊，1-群聊）',
     target_id   int                      comment '目标 ID（好友/群聊主键）',
-    delete_time timestamp                comment '会话删除时间（群主解散群或私聊一方删除好友）',
-    create_time timestamp default CURRENT_TIMESTAMP not null comment '会话创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP  not null comment '会话更新时间'
+    delete_time timestamp null default null         comment '会话删除时间（群主解散群或私聊一方删除好友）',
+    create_time timestamp default CURRENT_TIMESTAMP comment '会话创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '会话更新时间'
 );
+
+-- 会话表索引
+create index target_id_index on t_session (target_id);
 
 -- 会话聊天记录表
 create table t_session_message (
@@ -62,9 +75,12 @@ create table t_session_message (
     msg_id      int                      comment '会话内消息 ID',
     sender_id   int                      comment '消息发送者 ID',
     type        int                      comment '消息类型（0-文本，1-图片，2-视频）',
-    content     int                      comment '消息内容',
-    create_time timestamp default CURRENT_TIMESTAMP not null comment '消息发送时间'
+    content     varchar(255)             comment '消息内容',
+    create_time timestamp default CURRENT_TIMESTAMP comment '消息发送时间'
 );
+
+-- 会话聊天记录表索引
+create index session_id_index on t_session_message (session_id);
 
 -- 日志头表
 create table t_log_head(

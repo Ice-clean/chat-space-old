@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import top.iceclean.chatspace.VO.FriendVO;
 import top.iceclean.chatspace.VO.UserVO;
 import top.iceclean.chatspace.constant.ResponseStatusEnum;
 import top.iceclean.chatspace.mapper.FriendMapper;
@@ -36,48 +37,61 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public Response getFriendList(int userId) {
-        // 先拿到好友 ID 列表
-        List<Integer> friendKeyList = getFriendIdList(userId);
-        // 拿到所有好友的用户响应对象
-        List<UserVO> friendList = friendKeyList.stream().map(friendId -> userService.toUserVO(userService.getUserById(friendId))).collect(Collectors.toList());
+        // 获取好友用户 ID 列表
+        List<Integer> friendIdList = getFriendIdList(userId);
+        // 然后拿到所有好友的用户响应对象并返回
+        List<UserVO> friendList = friendIdList.stream()
+                .map(friendId -> userService.toUserVO(userService.getUserById(friendId)))
+                .collect(Collectors.toList());
         return new Response(ResponseStatusEnum.OK).addData("friendList", friendList);
+    }
+
+    @Override
+    public Friend getUserFriend(int userId, int friendId) {
+        return friendMapper.selectOne(new LambdaQueryWrapper<Friend>()
+                .isNull(Friend::getDeleteTime)
+                .eq(Friend::getUserId, userId).eq(Friend::getFriendId, friendId));
+    }
+
+    @Override
+    public FriendVO getFriendVO(int friendId, int userId) {
+        // 获取用户好友记录
+        Friend friend = getUserFriend(userId, friendId);
+        // 获取好友用户对象
+        User friendUser = userService.getUserById(friend.getToUserId());
+        return new FriendVO(userService.toUserVO(friendUser), friend);
     }
 
     @Override
     public List<Integer> getFriendKeyList(int userId) {
         return friendMapper.selectList(new LambdaQueryWrapper<Friend>()
-                .eq(Friend::getSenderId, userId).or().eq(Friend::getReceiveId, userId)
-                .select(Friend::getFriendId))
+                .select(Friend::getFriendId)
+                .eq(Friend::getUserId, userId).isNull(Friend::getDeleteTime))
                 .stream().map(Friend::getFriendId).collect(Collectors.toList());
     }
 
     @Override
     public Map<Integer, Integer> getFriendKeyMap(int userId) {
+        // 拿到好友主键 ID 和好友用户 ID，将好友用户 ID 映射到好友主键 ID
         return friendMapper.selectList(new LambdaQueryWrapper<Friend>()
-                .eq(Friend::getSenderId, userId).or().eq(Friend::getReceiveId, userId)
-                .select(Friend::getFriendId, Friend::getSenderId, Friend::getReceiveId))
-                .stream().collect(Collectors.toMap(f -> f.getSenderId() == userId ? f.getReceiveId() : f.getSenderId(), Friend::getFriendId));
+                .select(Friend::getFriendId, Friend::getToUserId)
+                .eq(Friend::getUserId, userId).isNull(Friend::getDeleteTime))
+                .stream().collect(Collectors.toMap(Friend::getToUserId, Friend::getFriendId));
     }
 
     @Override
     public List<Integer> getFriendIdList(int userId) {
         return friendMapper.selectList(new LambdaQueryWrapper<Friend>()
-                .eq(Friend::getSenderId, userId).or().eq(Friend::getReceiveId, userId)
-                .select(Friend::getSenderId, Friend::getReceiveId))
-                .stream().map(f -> f.getSenderId() == userId ? f.getReceiveId() : f.getSenderId()).collect(Collectors.toList());
+                .select(Friend::getToUserId)
+                .eq(Friend::getUserId, userId).isNull(Friend::getDeleteTime))
+                .stream().map(Friend::getToUserId).collect(Collectors.toList());
     }
 
     @Override
-    public List<Integer> getUserIdByFriendId(int friendId) {
+    public List<Integer> getFriendUserId(int friendId) {
         // 找到对应的朋友记录，将发送方和接收方 ID 放入集合中即可
         Friend friend = friendMapper.selectOne(new LambdaQueryWrapper<Friend>()
                 .eq(Friend::getFriendId, friendId).isNull(Friend::getDeleteTime));
-        return Arrays.asList(friend.getSenderId(), friend.getReceiveId());
-    }
-
-    @Override
-    public Integer getFriendUserId(int userId, int friendId) {
-        Friend friend = friendMapper.selectById(friendId);
-        return friend.getSenderId() == userId ? friend.getReceiveId() : friend.getSenderId();
+        return Arrays.asList(friend.getUserId(), friend.getToUserId());
     }
 }

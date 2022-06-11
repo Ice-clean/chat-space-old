@@ -11,14 +11,14 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class MessageDTO {
-    /** 消息类型 */
-    private Integer type;
+    /** 消息所属会话 */
+    private Integer sessionId;
 
     /** 消息发送者 ID */
     private Integer senderId;
 
-    /** 消息接收方 ID */
-    private Integer receiveId;
+    /** 消息类型 */
+    private Integer type;
 
     /** 消息主体内容 */
     private String content;

@@ -17,10 +17,10 @@ public class Group {
     @TableId(value = "group_id", type = IdType.AUTO)
     private Integer groupId;
     private Integer creatorId;
-    private String name;
+    private String groupName;
     private String avatar;
-    private String notice;
-    private String number;
+    private Integer number;
+    private String deleteTime;
     private String createTime;
     @TableField(update = "now()")
     private String updateTime;

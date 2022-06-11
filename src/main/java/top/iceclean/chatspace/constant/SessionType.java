@@ -5,13 +5,13 @@ package top.iceclean.chatspace.constant;
  * @author : Ice'Clean
  * @date : 2022-05-29
  */
-public enum ReceiveType {
+public enum SessionType {
     /** 好友 */
     FRIEND(0),
     GROUP(1);
 
     private final int value;
-    ReceiveType(int value) {
+    SessionType(int value) {
         this.value = value;
     }
 
