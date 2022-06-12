@@ -39,4 +39,11 @@ public interface SessionService {
      * @return 用户 ID 集合
      */
     List<Integer> getSessionUserId(int sessionId);
+
+    /**
+     * 更新用户在会话中最后一条消息的 ID 为最新的
+     * @param sessionId 会话 ID
+     * @param userId 用户 ID
+     */
+    void updateLastMsgId(int sessionId, int userId);
 }

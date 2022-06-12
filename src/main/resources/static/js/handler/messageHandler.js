@@ -43,10 +43,9 @@ class MessageHandler {
 
     /** 初始化聊天消息 */
     initChatMessage() {
-        $.get(HOST + "/space/chat/list/history", {
+        $.get(HOST + "/space/session/history", {
                 userId: user.userId,
-                type: this.#cc.getData(CHAT_SERVICE, "type"),
-                receiveId: this.#cc.getData(CHAT_SERVICE, "receiveId"),
+                sessionId: this.#cc.getData(CHAT_SERVICE, "sessionId"),
                 page: 1
             }, (data) => {
                 // 将历史聊天记录设置到聊天服务中
@@ -73,8 +72,12 @@ class MessageHandler {
                 let textareaData = this.#cc.getData(CHAT_PAGE, "messageInput") + "\n"
                 this.#cc.setData(CHAT_PAGE, "messageInput", textareaData)
             } else if (keyCode === 13) {
-                // 从上下文对象中，获取消息类型，发送者和接收者，发送条消息
-                this.#wsHandler.sendMessage(SEND_MESSAGE, new Message(this.#cc.getData(CHAT_SERVICE), this.#readMessage()));
+                // 获取消息发送者、消息所属会话
+                let userId = this.#cc.getData(CHAT_PAGE, "user").userId
+                let sessionId = this.#cc.getData(CHAT_SERVICE, "sessionId")
+                // 文本框发送的消息为文本消息 type 为 0，同时从文本框中获取内容并清空
+                this.#wsHandler.sendMessage(SEND_MESSAGE,
+                    new Message(userId, sessionId, 0, this.#readMessage()));
                 // 禁止回车的默认换行
                 event.preventDefault();
             }
@@ -84,9 +87,7 @@ class MessageHandler {
     /** 监听按钮（上传图片、发送按钮） */
     #bindOnclick() {
         this.#imageUpload.bind("click", () => {
-            $(".imageInput").click();
-            console.log($(".imageInput"))
-            this.#messageSend.click();
+
         })
         this.#messageSend.bind("click", () => {
         })
@@ -98,10 +99,9 @@ class MessageHandler {
             //获取距离页面顶部的距离
             if (this.#messageOutput.scrollTop === 0) {
                 // 到达顶部后，再请求一次数据
-                $.get(HOST + "/space/chat/list/history", {
+                $.get(HOST + "/space/session/history", {
                         userId: user.userId,
-                        type: this.#cc.getData(CHAT_SERVICE, "type"),
-                        receiveId: this.#cc.getData(CHAT_SERVICE, "receiveId"),
+                        sessionId: this.#cc.getData(CHAT_SERVICE, "sessionId"),
                         page: ++this.#page
                     }, (data) => {
                         let list = data.data.historyList

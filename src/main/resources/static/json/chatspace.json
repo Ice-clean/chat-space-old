@@ -160,16 +160,17 @@
                                                 "id": "u:4eec8ab4c519",
                                                 "width": 40,
                                                 "height": 40,
-                                                "src": "$avatar",
+                                                "src": "$session.avatar",
                                                 "thumbMode": "cover",
                                                 "className": "r r-2x",
                                                 "badge": {
                                                   "mode": "text",
-                                                  "text": 10,
+                                                  "text": "$session.badgeNum",
                                                   "style": {
-                                                    "background": "#BB2000",
+                                                    "background": "#c12222",
                                                     "fontSize": "5px"
-                                                  }
+                                                  },
+                                                  "visibleOn": "this.session.badgeNum > 0"
                                                 },
                                                 "shape": "square",
                                                 "size": 40,
@@ -186,7 +187,7 @@
                                             "body": [
                                               {
                                                 "type": "tpl",
-                                                "tpl": "$name",
+                                                "tpl": "$session.name",
                                                 "inline": true,
                                                 "id": "u:54c4a5c94d53",
                                                 "wrapperComponent": "div",
@@ -214,39 +215,45 @@
                                             "body": [
                                               {
                                                 "type": "mapping",
-                                                "className": {
-                                                  "text-success": "online == 1",
-                                                  "text-danger": "online == 0",
-                                                  "text-warning": "online == -1"
-                                                },
-                                                "label": "状态展示",
                                                 "map": {
                                                   "0": {
-                                                    "type": "tpl",
-                                                    "tpl": "离线",
-                                                    "inline": false,
-                                                    "style": {
-                                                      "text-align": "right"
-                                                    }
+                                                    "type": "mapping",
+                                                    "className": {
+                                                      "text-success": "session.online == 1",
+                                                      "text-danger": "session.online == 0"
+                                                    },
+                                                    "label": "状态展示",
+                                                    "map": {
+                                                      "0": {
+                                                        "type": "tpl",
+                                                        "tpl": "离线",
+                                                        "inline": false,
+                                                        "style": {
+                                                          "text-align": "right"
+                                                        }
+                                                      },
+                                                      "1": {
+                                                        "type": "tpl",
+                                                        "tpl": "在线",
+                                                        "inline": false,
+                                                        "style": {
+                                                          "text-align": "right"
+                                                        }
+                                                      }
+                                                    },
+                                                    "name": "session.online"
                                                   },
                                                   "1": {
                                                     "type": "tpl",
-                                                    "tpl": "在线",
+                                                    "tpl": "$session.online / $session.number",
                                                     "inline": false,
                                                     "style": {
                                                       "text-align": "right"
-                                                    }
-                                                  },
-                                                  "-1": {
-                                                    "type": "tpl",
-                                                    "tpl": "$onlineRecord",
-                                                    "inline": false,
-                                                    "style": {
-                                                      "text-align": "right"
-                                                    }
+                                                    },
+                                                    "className": "text-success"
                                                   }
                                                 },
-                                                "name": "online"
+                                                "name": "session.type"
                                               },
                                               {
                                                 "type": "tpl",
@@ -282,8 +289,9 @@
                               "itemAction": {
                                 "type": "action",
                                 "actionType": "reload",
-                                "target": "chatListService?type=${type}&receiveId=$receiveId&name=${name}"
-                              }
+                                "target": "chatListService?sessionId=${session.sessionId}&name=${session.name}&aaa=1&activeKey=${activeKey}"
+                              },
+                              "id": "messageList"
                             }
                           ],
                           "type": "service",
@@ -339,9 +347,8 @@
                                                     "body": [
                                                       {
                                                         "type": "tpl",
-                                                        "tpl": "$sender.userName",
+                                                        "tpl": "$sender.nickName",
                                                         "inline": true,
-                                                        "id": "u:54c4a5c94d53",
                                                         "wrapperComponent": "div",
                                                         "style": {
                                                           "fontSize": "15px",
@@ -374,7 +381,7 @@
                                                         "id": "u:4eec8ab4c519",
                                                         "width": 40,
                                                         "height": 40,
-                                                        "src": "$sender.userAvatar",
+                                                        "src": "$sender.avatar",
                                                         "thumbMode": "cover",
                                                         "shape": "square",
                                                         "className": "r r-2x"
@@ -396,7 +403,7 @@
                                                         "id": "u:4eec8ab4c519",
                                                         "width": 40,
                                                         "height": 40,
-                                                        "src": "$sender.userAvatar",
+                                                        "src": "$sender.avatar",
                                                         "thumbMode": "cover",
                                                         "shape": "square",
                                                         "className": "r r-2x"
@@ -408,9 +415,8 @@
                                                     "body": [
                                                       {
                                                         "type": "tpl",
-                                                        "tpl": "$sender.userName",
+                                                        "tpl": "$sender.nickName",
                                                         "inline": true,
-                                                        "id": "u:54c4a5c94d53",
                                                         "wrapperComponent": "div",
                                                         "style": {
                                                           "fontSize": "15px",
@@ -1176,7 +1182,7 @@
                           "id": "userAvatar",
                           "width": 35,
                           "height": 35,
-                          "src": "$user.userAvatar",
+                          "src": "$user.avatar",
                           "showDimensions": false,
                           "className": "r r-2x",
                           "thumbMode": "cover",

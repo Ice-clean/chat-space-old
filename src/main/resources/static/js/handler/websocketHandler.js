@@ -29,6 +29,7 @@ class WebsocketHandler {
         // 消息分发
         this.#ws.onmessage = (event) => {
             // 解析收到的消息
+            console.log(event.data)
             let message = JSON.parse(event.data);
             console.log(message)
             switch (message.wsType) {
@@ -39,7 +40,7 @@ class WebsocketHandler {
 
         // 断线重连
         this.#ws.onclose = (event) => {
-            this.#connectWebsocket()
+            scTime(this, this.#connectWebsocket, 100)
         }
     }
 
@@ -66,9 +67,9 @@ class WebsocketHandler {
         // 获取当前聊天数据
         let data = this.#cc.getData(CHAT_SERVICE)
         // 判断是否在当前窗口
-        if (data.type === msg.type && data.receiveId === msg.receiveId) {
+        if (data.sessionId === msg.session.sessionId) {
             // 在的话则添加消息，非用户本身的群聊消息需要将前面的昵称提示去掉
-            if (!msg.self && msg.type === 1) msg.content = msg.content.split("：")[1]
+            // if (!msg.self && msg.session.type === 1) msg.content = msg.content.split("：")[1]
             this.#messageHandler.appendMessage(msg);
         }
     }

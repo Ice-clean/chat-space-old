@@ -252,4 +252,69 @@ public class RedisCache {
         Object execute = redisTemplate.execute((RedisCallback) con -> con.bitCount(key.getBytes()));
         return execute == null ? 0 : (long) execute;
     }
+
+
+    /**
+     * 向 Set 中批量添加元素
+     * @param key     键
+     * @param dataSet 要添加的元素集合
+     */
+    public <T> void setAddAll(final String key, final Set<T> dataSet) {
+        BoundSetOperations<String, T> setOperation = redisTemplate.boundSetOps(key);
+        for (T t : dataSet) {
+            setOperation.add(t);
+        }
+    }
+
+    /**
+     * 向 Set 中添加一个值
+     * @param key 键
+     * @param data 值
+     */
+    public <T> void setAdd(final String key, final T data) {
+        redisTemplate.boundSetOps(key).add(data);
+    }
+
+    /**
+     * 获取 Set 所有成员
+     * @param key 键
+     * @return Set 成员集合
+     */
+    public <T> Set<T> getMembers(final String key) {
+        return redisTemplate.opsForSet().members(key);
+    }
+
+    /**
+     * 批量移除 Set 中的元素
+     * @param key 键
+     * @param dataSet 要移除的元素集合
+     */
+    public <T> void setRemoveAll(final String key, final Set<T> dataSet) {
+        redisTemplate.opsForSet().remove(key, dataSet.toArray());
+    }
+
+    /**
+     * 移除 Set 中指定元素
+     * @param key 键
+     * @param data 值
+     */
+    public <T> void setRemove(final String key, T data) {
+        redisTemplate.opsForSet().remove(key, data);
+    }
+
+    /**
+     * 删除任意一个键的全部数据
+     * @param key 键
+     */
+    public void del(final String key) {
+        redisTemplate.delete(key);
+    }
+
+    /**
+     * 删除任意一个键的全部数据
+     * @param keys 键集合
+     */
+    public void del(final Collection<String> keys) {
+        redisTemplate.delete(keys);
+    }
 }

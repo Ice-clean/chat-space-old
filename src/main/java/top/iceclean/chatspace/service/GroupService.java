@@ -58,6 +58,13 @@ public interface GroupService {
     List<Integer> getGroupKeyList(int userId);
 
     /**
+     * 设置群聊在线人数
+     * @param groupId 群聊 ID
+     * @param change 在线人数改变数量
+     */
+    void setOnlineNum(int groupId, int change);
+
+    /**
      * 获取群聊在线人数
      * @param groupId 群聊 ID
      * @return 在线人数
@@ -65,9 +72,10 @@ public interface GroupService {
     int getOnlineNum(int groupId);
 
     /**
-     * 设置群聊在线人数
+     * 更新用户在群聊会话中最后一条消息的 ID 为最新的
      * @param groupId 群聊 ID
-     * @param change 在线人数改变数量
+     * @param userId 用户 ID
+     * @param latestMsgId 最新消息 ID
      */
-    void setOnlineNum(int groupId, int change);
+    void updateLastMsgId(int groupId, int userId, int latestMsgId);
 }

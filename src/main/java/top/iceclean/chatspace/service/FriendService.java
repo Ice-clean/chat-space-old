@@ -38,6 +38,13 @@ public interface FriendService {
     FriendVO getFriendVO(int friendId, int userId);
 
     /**
+     * 通过好友 ID 获取好友双方的用户 ID
+     * @param friendId 好友 ID
+     * @return 用户 ID 集合
+     */
+    List<Integer> getFriendUserId(int friendId);
+
+    /**
      * 获取用户的好友主键列表
      * @param userId 用户 ID
      * @return 好友主键列表
@@ -59,9 +66,10 @@ public interface FriendService {
     List<Integer> getFriendIdList(int userId);
 
     /**
-     * 通过好友 ID 获取好友双方的用户 ID
+     * 更新用户在好友会话中最后一条消息的 ID 为最新的
      * @param friendId 好友 ID
-     * @return 用户 ID 集合
+     * @param userId 用户 ID
+     * @param latestMsgId 最新消息 ID
      */
-    List<Integer> getFriendUserId(int friendId);
+    void updateLastMsgId(int friendId, int userId, int latestMsgId);
 }

@@ -1,18 +1,14 @@
 /** 聊天消息类 */
 class Message {
-    /** 消息类型 */
-    type
-    /** 消息发送者 ID */
-    senderId
-    /** 消息接收方 ID */
-    receiveId
-    /** 消息主体内容 */
-    content
+    /** 消息所属会话 ID、消息发送者 ID */
+    sessionId; senderId
+    /** 消息类型和主体内容 */
+    type; content
 
-    constructor(pageData, content) {
-        this.type = pageData.type;
-        this.senderId = pageData.user.userId;
-        this.receiveId = pageData.receiveId;
+    constructor(userId, sessionId, type, content) {
+        this.sessionId = sessionId;
+        this.senderId = userId;
+        this.type = type
         this.content = content;
     }
 }

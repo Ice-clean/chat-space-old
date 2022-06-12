@@ -38,7 +38,7 @@ public class SessionController {
      * @param page 聊天记录的页数
      * @return 历史消息列表
      */
-    @GetMapping("/list/history")
+    @GetMapping("/history")
     public Object getChatHistory(int userId, int sessionId, int page) {
         return messageService.getChatHistory(userId, sessionId, page);
     }

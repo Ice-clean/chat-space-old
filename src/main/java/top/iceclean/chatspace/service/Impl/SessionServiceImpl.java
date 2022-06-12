@@ -97,4 +97,16 @@ public class SessionServiceImpl implements SessionService {
         // 最后返回，类型错误即为空集合
         return userIdList;
     }
+
+    @Override
+    public void updateLastMsgId(int sessionId, int userId) {
+        // 获取会话，根据类型获取具体映射和最新的消息 ID
+        Session session = sessionMapper.selectById(sessionId);
+        int lastMsgId = messageService.getLastMsgId(sessionId);
+        if (session.getType() == SessionType.FRIEND.value()) {
+            friendService.updateLastMsgId(session.getTargetId(), userId, lastMsgId);
+        } else if (session.getType() == SessionType.GROUP.value()) {
+            groupService.updateLastMsgId(session.getTargetId(), userId, lastMsgId);
+        }
+    }
 }

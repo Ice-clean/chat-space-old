@@ -15,6 +15,10 @@ const sc = (th, callback, ...param) => {
     setTimeout(() => callback.call(th, param), 0)
 }
 
+const scTime = (th, callback, time, ...param) => {
+    setTimeout(() => callback.call(th, param), time)
+}
+
 /** 滚动条到最后 */
 const scrollBottom = (component) => {
     return () => setTimeout(() => component.scrollTop = component.scrollHeight, 0);

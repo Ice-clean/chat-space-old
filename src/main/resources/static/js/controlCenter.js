@@ -43,16 +43,26 @@ class ControlCenter {
         this.#addressHandler = addressHandler
     }
 
-    /** 更改聊天项，在点击消息列表时调用，同步数据 */S
+    /** 更改聊天项，在点击消息列表时调用，同步数据 */
     changeChatItem() {
         // 首先获取 chatListService 中的数据
         let data = this.getData(CHAT_LIST_SERVICE)
         // 分别往 chatPage、chatName 和 chatService 注入初始数据
         this.setData(CHAT_NAME, "name", data.name)
-        this.setData(CHAT_SERVICE, "type", data.type)
-        this.setData(CHAT_SERVICE, "receiveId", data.receiveId)
+        this.setData(CHAT_SERVICE, "sessionId", data.sessionId)
         // 更新聊天消息
         sc(this.#messageHandler, this.#messageHandler.initChatMessage)
+
+        // 将未读消息数置为 0
+        for (let i = 0; i < data.messageList.length; i++) {
+            let item = data.messageList[i]
+            if (item.session.sessionId === data.sessionId) {
+                item.session.badgeNum = 0
+                break;
+            }
+        }
+        // 更新消息列表
+        this.setData(CHAT_LIST_SERVICE, "messageList", [...data.messageList])
     }
 
     /** 获取指定控件指定键的值 */

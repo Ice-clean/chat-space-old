@@ -12,6 +12,7 @@ import top.iceclean.chatspace.po.Friend;
 import top.iceclean.chatspace.po.Response;
 import top.iceclean.chatspace.po.User;
 import top.iceclean.chatspace.service.FriendService;
+import top.iceclean.chatspace.service.MessageService;
 import top.iceclean.chatspace.service.UserService;
 import top.iceclean.logtrace.annotation.EnableLogTrace;
 import top.iceclean.logtrace.bean.Logger;
@@ -63,6 +64,15 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
+    public List<Integer> getFriendUserId(int friendId) {
+        // 找到对应的朋友记录，将发送方和接收方 ID 放入集合中即可
+        Friend friend = friendMapper.selectOne(new LambdaQueryWrapper<Friend>()
+                .isNull(Friend::getDeleteTime)
+                .eq(Friend::getFriendId, friendId).last("limit 1"));
+        return Arrays.asList(friend.getUserId(), friend.getToUserId());
+    }
+
+    @Override
     public List<Integer> getFriendKeyList(int userId) {
         return friendMapper.selectList(new LambdaQueryWrapper<Friend>()
                 .select(Friend::getFriendId)
@@ -88,10 +98,10 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public List<Integer> getFriendUserId(int friendId) {
-        // 找到对应的朋友记录，将发送方和接收方 ID 放入集合中即可
-        Friend friend = friendMapper.selectOne(new LambdaQueryWrapper<Friend>()
-                .eq(Friend::getFriendId, friendId).isNull(Friend::getDeleteTime));
-        return Arrays.asList(friend.getUserId(), friend.getToUserId());
+    public void updateLastMsgId(int friendId, int userId, int latestMsgId) {
+        // 先获得好友映射，更新完最新消息 ID 再持久化
+        Friend friend = getUserFriend(userId, friendId);
+        friend.setLastMsgId(latestMsgId);
+        friendMapper.updateById(friend);
     }
 }

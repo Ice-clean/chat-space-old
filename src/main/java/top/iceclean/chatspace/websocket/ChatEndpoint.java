@@ -1,6 +1,7 @@
 package top.iceclean.chatspace.websocket;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.iceclean.chatspace.DTO.WsMessageDTO;
@@ -12,6 +13,8 @@ import top.iceclean.chatspace.service.FriendService;
 import top.iceclean.chatspace.service.GroupService;
 import top.iceclean.chatspace.service.MessageService;
 import top.iceclean.chatspace.service.UserService;
+import top.iceclean.logtrace.annotation.EnableLogTrace;
+import top.iceclean.logtrace.bean.Logger;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -29,6 +32,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 @Component
 @ServerEndpoint("/ws/chat/{userId}")
+@Slf4j
 public class ChatEndpoint {
     /** 存放所有用户信息 */
     private static final ConcurrentMap<Integer, ChatEndpoint> USER_MAP = new ConcurrentHashMap<>();
@@ -55,7 +59,7 @@ public class ChatEndpoint {
 
     @OnOpen
     public void onOpen(@PathParam("userId") Integer userId, Session session) {
-        System.out.println("新用户连接：" + userId);
+        log.info("新用户连接：" + userId);
 
         // 查询并记录用户具体信息
         this.user = userService.getUserById(userId);
@@ -71,7 +75,7 @@ public class ChatEndpoint {
         // 转化为 ws 消息对象
         WsMessageDTO wsMessageDTO = JSONObject.parseObject(msg, WsMessageDTO.class);
         String wsContent = wsMessageDTO.getWsContent().toString();
-
+        System.out.println("收到消息：" + wsContent);
         // 对不同消息类型作出不同处理
         switch (wsMessageDTO.getWsType()) {
             case SEND_MESSAGE: sendMessageHandle(wsContent); break;
@@ -143,6 +147,7 @@ public class ChatEndpoint {
      * @return json 格式的消息实体
      */
     private static String getMessage(WsType wsType, Object wsContent) {
+        System.out.println(JSONObject.toJSONString(new WsMessageDTO(wsType, wsContent)));
         return JSONObject.toJSONString(new WsMessageDTO(wsType, wsContent));
     }
 }

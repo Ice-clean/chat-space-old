@@ -15,7 +15,7 @@ class MessageListHandler {
 
     /** 初始化消息列表 */
     #initChatList() {
-        $.get(HOST + "/space/chat/list/message", {userId: user.userId},
+        $.get(HOST + "/space/session/list", {userId: user.userId},
             (data) => {
                 // 将消息列表设置到消息列表服务中
                 let messageList = data.data.messageList
@@ -23,9 +23,8 @@ class MessageListHandler {
 
                 // 将消息列表第一列信息设置到消息列表服务中（默认显示第一列消息，至少也会显示自己的聊天框）
                 let firstChat = messageList[0]
-                this.#cc.setData(CHAT_LIST_SERVICE, "type", firstChat.type)
-                this.#cc.setData(CHAT_LIST_SERVICE, "receiveId", firstChat.receiveId)
-                this.#cc.setData(CHAT_LIST_SERVICE, "name", firstChat.name)
+                this.#cc.setData(CHAT_LIST_SERVICE, "sessionId", firstChat.session.sessionId)
+                this.#cc.setData(CHAT_LIST_SERVICE, "name", firstChat.session.name)
 
                 // 然后触发聊天项数据更新
                 sc(this.#cc, this.#cc.changeChatItem)
@@ -71,7 +70,7 @@ class MessageListHandler {
         for (let i = 0; i < data.length; i++) {
             let item = data[i]
             // 找到该条消息，删除原消息并将最新消息插入到第一位
-            if (item.type === message.type && item.receiveId === message.receiveId) {
+            if (item.session.sessionId === message.session.sessionId) {
                 data.splice(i, 1)
                 data.unshift(message)
             }

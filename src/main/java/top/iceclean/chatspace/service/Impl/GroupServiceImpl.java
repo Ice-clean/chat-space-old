@@ -45,31 +45,15 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public Group getGroupById(int groupId) {
+        return groupMapper.selectById(groupId);
+    }
+
+    @Override
     public UserGroup getUserGroup(int userId, int groupId) {
         return userGroupMapper.selectOne(new LambdaQueryWrapper<UserGroup>()
                 .isNull(UserGroup::getDeleteTime)
                 .eq(UserGroup::getUserId, userId).eq(UserGroup::getGroupId, groupId));
-    }
-
-    @Override
-    public List<Integer> getGroupKeyList(int userId) {
-        return userGroupMapper.selectList(new LambdaQueryWrapper<UserGroup>()
-                .select(UserGroup::getGroupId)
-                .eq(UserGroup::getUserId, userId).isNull(UserGroup::getDeleteTime))
-                .stream().map(UserGroup::getGroupId).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Integer> getGroupUserId(int groupId) {
-        // 将所有的群聊映射记录查询出来，再过滤出用户 ID 集合
-        return userGroupMapper.selectList(new LambdaQueryWrapper<UserGroup>()
-                .eq(UserGroup::getGroupId, groupId).isNull(UserGroup::getDeleteTime))
-                .stream().map(UserGroup::getUserId).collect(Collectors.toList());
-    }
-
-    @Override
-    public Group getGroupById(int groupId) {
-        return groupMapper.selectById(groupId);
     }
 
     @Override
@@ -79,6 +63,23 @@ public class GroupServiceImpl implements GroupService {
         // 找到用户群聊记录
         UserGroup userGroup = getUserGroup(userId, group.getGroupId());
         return new GroupVO(group, userGroup, getOnlineNum(group.getGroupId()));
+    }
+
+    @Override
+    public List<Integer> getGroupUserId(int groupId) {
+        // 将所有的群聊映射记录查询出来，再过滤出用户 ID 集合
+        return userGroupMapper.selectList(new LambdaQueryWrapper<UserGroup>()
+                .select(UserGroup::getUserId)
+                .eq(UserGroup::getGroupId, groupId).isNull(UserGroup::getDeleteTime))
+                .stream().map(UserGroup::getUserId).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Integer> getGroupKeyList(int userId) {
+        return userGroupMapper.selectList(new LambdaQueryWrapper<UserGroup>()
+                .select(UserGroup::getGroupId)
+                .eq(UserGroup::getUserId, userId).isNull(UserGroup::getDeleteTime))
+                .stream().map(UserGroup::getGroupId).collect(Collectors.toList());
     }
 
     @Override
@@ -94,5 +95,13 @@ public class GroupServiceImpl implements GroupService {
     public int getOnlineNum(int groupId) {
         Object online = redisCache.hashGet(RedisKey.GROUP_ONLINE_HASH, "" + groupId);
         return online == null ? 0 : Integer.parseInt(online.toString());
+    }
+
+    @Override
+    public void updateLastMsgId(int groupId, int userId, int latestMsgId) {
+        // 先获得好友映射，更新完最新消息 ID 再持久化
+        UserGroup userGroup = getUserGroup(userId, groupId);
+        userGroup.setLastMsgId(latestMsgId);
+        userGroupMapper.updateById(userGroup);
     }
 }
