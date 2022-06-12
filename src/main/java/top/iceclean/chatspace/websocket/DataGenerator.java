@@ -97,18 +97,16 @@ public class DataGenerator {
         private final Integer userId;
         /** 是否在线 */
         private final Boolean online;
-        /** 用户相关的接收域 */
-        Map<Integer, Integer> friendKeyMap;
-        List<Integer> groupKeyList;
+        /** 用户相关的所有会话的 ID */
+        List<Integer> sessionIdList;
 
         public UserOnline(int userId, boolean online) {
             // 获得必要的元数据
             this.userId = userId;
             this.online = online;
 
-            // 找到所有的接收域
-            friendKeyMap = friendService.getFriendKeyMap(userId);
-            groupKeyList = groupService.getGroupKeyList(userId);
+            // 找到所有与用户相关的会话的 ID
+            sessionIdList = sessionService.getSessionIdList(userId);
         }
 
         @Override
@@ -116,7 +114,7 @@ public class DataGenerator {
             // 初始化目标集合，首先找到的是该用户所有的好友
             Set<Integer>  targetUserIdSet = new HashSet<>(friendService.getFriendIdList(userId));
             // 然后找到所有和该用户在同一个群聊中的用户 ID
-            for (Integer groupKey : groupKeyList) {
+            for (Integer groupKey : groupService.getGroupKeyList(userId)) {
                 targetUserIdSet.addAll(groupService.getGroupUserId(groupKey));
             }
             // 最后除去本身，即使所有需要通知的对象
@@ -126,7 +124,7 @@ public class DataGenerator {
 
         @Override
         public UserOnlineVO exec(int toUserId) {
-            return new UserOnlineVO(userId, online, friendKeyMap.get(toUserId), groupKeyList);
+            return new UserOnlineVO(userId, online, sessionIdList);
         }
     }
 }

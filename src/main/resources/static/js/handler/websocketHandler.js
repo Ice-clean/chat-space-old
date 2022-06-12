@@ -54,22 +54,24 @@ class WebsocketHandler {
     /** 处理用户在线状态改变 */
     #userOnlineHandle(userOnline) {
         // 处理消息列表的用户状态更变
-        console.log(this.#messageListHandler.userOnlineHandle)
-        this.#messageListHandler.userOnlineHandle(userOnline.online, userOnline.friend, userOnline.group)
+        console.log(userOnline.sessionIdList)
+        this.#messageListHandler.userOnlineHandle(userOnline.online, userOnline.sessionIdList)
         // TODO 处理好友列表的用户状态更变
         // TODO 处理群聊列表的用户状态更变
     }
 
     /** 处理消息接收 */
     #sendMessageHandle(msg) {
-        // 先更新消息列表
-        this.#messageListHandler.updateMessageList(msg)
+        // 先更新消息列表，并在群聊且非本省时，加上发送者昵称（深拷贝消息）
+        let msgTemp = $.extend(true, {}, msg)
+        if (!msg.self && msg.session.type === 1) msgTemp.content = msg.sender.nickName + "：" + msg.content
+        this.#messageListHandler.updateMessageList(msgTemp)
+
         // 获取当前聊天数据
         let data = this.#cc.getData(CHAT_SERVICE)
         // 判断是否在当前窗口
         if (data.sessionId === msg.session.sessionId) {
             // 在的话则添加消息，非用户本身的群聊消息需要将前面的昵称提示去掉
-            // if (!msg.self && msg.session.type === 1) msg.content = msg.content.split("：")[1]
             this.#messageHandler.appendMessage(msg);
         }
     }

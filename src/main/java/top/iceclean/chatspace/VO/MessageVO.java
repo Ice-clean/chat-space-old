@@ -49,20 +49,24 @@ public class MessageVO {
      * 如果是今天以内的，缩短为小时和分钟
      * 如果是今天之前的，缩短为月数和天数
      * 如果是今年之前的，缩短为年份和月份
+     * @param want 是否需要
      */
-    public MessageVO shortTime() {
-        // 重解析时间为数组
-        int[] times = DateUtils.reparseTime(sendTime);
-        // 获取年
-        int year = Integer.parseInt(DateUtils.getYear());
-        int day = Integer.parseInt(DateUtils.getDay());
-        // 精简日期
-        if (year > times[0]) {
-            sendTime = String.format("%d年%d月", times[0], times[1]);
-        } else if (day > times[2]) {
-            sendTime = String.format("%d月%d日", times[1], times[2]);
-        } else {
-            sendTime = String.format("%02d:%02d", times[3], times[4]);
+    public MessageVO shortTime(boolean want) {
+        // 在需要时精简
+        if (want) {
+            // 重解析时间为数组
+            int[] times = DateUtils.reparseTime(sendTime);
+            // 获取年
+            int year = Integer.parseInt(DateUtils.getYear());
+            int day = Integer.parseInt(DateUtils.getDay());
+            // 精简日期
+            if (year > times[0]) {
+                sendTime = String.format("%d年%d月", times[0], times[1]);
+            } else if (day > times[2]) {
+                sendTime = String.format("%d月%d日", times[1], times[2]);
+            } else {
+                sendTime = String.format("%02d:%02d", times[3], times[4]);
+            }
         }
         return this;
     }

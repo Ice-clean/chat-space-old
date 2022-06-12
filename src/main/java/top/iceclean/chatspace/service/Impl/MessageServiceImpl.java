@@ -91,16 +91,8 @@ public class MessageServiceImpl implements MessageService {
         UserVO userVO = userService.toUserVO(userService.getUserById(message.getSenderId()));
         MessageVO messageVO = new MessageVO(message, sessionVO, userVO, userId == message.getSenderId());
 
-        if (info) {
-            // 需要详细信息时，将时间格式精简
-            messageVO.shortTime();
-            // 是群聊且非用户本身发消息时，在消息预览区显示发送者昵称 TODO 有备注时应该显示备注的，这里还没有实现
-            if (message.getType() == SessionType.GROUP.value() && userId != message.getSenderId()) {
-                messageVO.setContent(userVO.getNickName() + "：" + message.getContent());
-            }
-        }
-
-        return messageVO;
+        // 需要详细信息时，将时间格式精简
+        return messageVO.shortTime(info);
     }
 
     @Override

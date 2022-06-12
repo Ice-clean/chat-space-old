@@ -43,21 +43,20 @@ class MessageListHandler {
     /**
      * 处理消息列表的用户状态改变事件
      * @param online 用户状态最新数据
-     * @param friend 用户与当前用户所处的私聊接收域 ID
-     * @param group 用户与当前用户共有的群聊接收域 ID 列表
+     * @param sessionIdList 与用户相关的会话的 ID
      */
-    userOnlineHandle(online, friend, group) {
+    userOnlineHandle(online, sessionIdList) {
         // 获取消息列表
         let data = this.#cc.getData(CHAT_LIST_SERVICE, "messageList")
         // 更改接收域状态
         for (let i = 0; i < data.length; i++) {
             let item = data[i]
-            if (item.type === 0 && item.receiveId === friend) {
-                item.online = online ? "1" : "0"
-            } else if (item.type === 1 && group.indexOf(item.receiveId) > -1) {
-                let onlineArr = item.onlineRecord.split(" / ")
-                let nowOnline = parseInt(onlineArr[0]) + (online ? 1 : -1)
-                item.onlineRecord = nowOnline + " / " + onlineArr[1]
+            if (sessionIdList.includes(item.session.sessionId)) {
+                if (item.session.type === 0) {
+                    item.session.online = online ? 1 : 0
+                } else if (item.session.type === 1) {
+                    item.session.online += online ? 1 : -1
+                }
             }
         }
         // 更新消息列表数据

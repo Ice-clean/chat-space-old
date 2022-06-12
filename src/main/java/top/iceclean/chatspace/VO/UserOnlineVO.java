@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 用户上线状态改变响应对象
@@ -17,8 +18,6 @@ public class UserOnlineVO {
     private Integer userId;
     /** 上线状态 */
     private Boolean online;
-    /** 发生状态变化的私聊接收域 */
-    private Integer friend;
-    /** 发生状态变化的群聊接收域 */
-    private List<Integer> group;
+    /** 发生状态变化的会话 */
+    private List<Integer> sessionIdList;
 }
