@@ -22,6 +22,7 @@ target/
 ### 忽略配置 ###
 src/main/resources/application.yml
 src/main/resources/application-config.yml
+src/main/resources/static/sdk/**
 
 ### NetBeans ###
 /nbproject/private/
