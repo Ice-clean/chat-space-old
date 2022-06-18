@@ -11,7 +11,7 @@ import top.iceclean.chatspace.utils.DateUtils;
  */
 @Data
 public class MessageVO {
-    /** 消息所属会话*/
+    /** 消息所属会话 */
     private SessionVO session;
     /** 消息发送者 */
     private UserVO sender;

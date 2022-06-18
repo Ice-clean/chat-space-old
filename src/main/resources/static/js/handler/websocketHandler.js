@@ -46,6 +46,7 @@ class WebsocketHandler {
 
     /** 发送 ws 消息 */
     sendMessage(wsType, wsContent) {
+        console.log(new WsMessage(wsType, wsContent).toJson())
         if (this.#ws !== undefined) {
             this.#ws.send(new WsMessage(wsType, wsContent).toJson());
         }

@@ -14,8 +14,12 @@ public class UserVO {
     private Integer userId;
     /** 用户名 */
     private String userName;
+    /** 用户性别 */
+    private String sex;
     /** 用户昵称 */
     private String nickName;
+    /** 用户邮箱 */
+    private String email;
     /** 用户头像 */
     private String avatar;
     /** 用户是否在线 */
@@ -24,8 +28,10 @@ public class UserVO {
     public UserVO(User user, boolean online) {
         this.userId = user.getUserId();
         this.userName = user.getUserName();
+        this.sex = user.getSex();
         this.nickName = user.getNickName();
         this.avatar = user.getAvatar();
+        this.email = user.getEmail();
         this.online = online;
     }
 }

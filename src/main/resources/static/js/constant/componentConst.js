@@ -10,6 +10,9 @@ const FRIEND_SERVICE = 6
 const HOST = "http://localhost:18012"
 const HOST_WS = "ws://localhost:18012"
 
+// const HOST = "http://chatspace.iceclean.top"
+// const HOST_WS = "ws://chatspace.iceclean.top"
+
 /** 同步执行 */
 const sc = (th, callback, ...param) => {
     setTimeout(() => callback.call(th, param), 0)

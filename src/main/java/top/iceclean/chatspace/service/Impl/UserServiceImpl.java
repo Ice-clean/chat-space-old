@@ -41,11 +41,13 @@ public class UserServiceImpl implements UserService {
     public Response login(String userName, String userPass) {
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUserName, userName));
         boolean success = user != null && userPass.equals(user.getUserPass());
-        Response response = new Response(ResponseStatusEnum.OK).addData("success", success);
+        Response response = new Response().addData("success", success);
         if (success) {
-            response.setMsg("登录成功").addData("user", toUserVO(user));
+            response.setStatus(ResponseStatusEnum.OK)
+                    .setMsg("登录成功").addData("user", toUserVO(user));
         } else {
-            response.setMsg("用户名或密码错误！");
+            response.setStatus(ResponseStatusEnum.LOGIN_FAILED)
+                    .setMsg("用户名或密码错误！");
         }
         return response;
 

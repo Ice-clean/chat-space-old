@@ -18,8 +18,10 @@ public class User {
     private Integer userId;
     private String userName;
     private String userPass;
+    private String sex;
     private String nickName;
     private String avatar;
+    private String email;
     private String freezeTime;
     private String deleteTime;
     private String createTime;
