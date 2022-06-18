@@ -11,7 +11,8 @@ public enum ResponseStatusEnum {
     INTERNAL_SERVER_ERROR(500, "服务器出错"),
 
     /** 错误码 */
-    LOGIN_FAILED(1001, "用户名或密码错误");
+    LOGIN_FAILED(1001, "用户名或密码错误"),
+    USER_NOT_EXIST(1002, "用户不存在");
 
     /** 状态码 */
     private final int value;

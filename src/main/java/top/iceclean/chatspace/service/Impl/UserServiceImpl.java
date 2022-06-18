@@ -59,6 +59,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getUserList(List<Integer> userIdList) {
+        return userMapper.selectList(new LambdaQueryWrapper<User>()
+                .isNull(User::getDeleteTime).in(User::getUserId, userIdList));
+    }
+
+    @Override
     public UserVO toUserVO(User user) {
         // 添加用户在线状态
         return new UserVO(user, isOnline(user.getUserId()));

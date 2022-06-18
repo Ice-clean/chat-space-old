@@ -30,4 +30,14 @@ public class GroupController {
     public Object getGroupList(int userId) {
         return groupService.getGroupList(userId);
     }
+
+    /**
+     * 获取群聊中的所有用户
+     * @param groupId 群聊 ID
+     * @return 所有用户集合
+     */
+    @GetMapping("/list/user")
+    public Object getUserList(int groupId) {
+        return groupService.getUserList(groupId);
+    }
 }

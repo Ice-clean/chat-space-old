@@ -21,6 +21,13 @@ public interface GroupService {
     Response getGroupList(int userId);
 
     /**
+     * 获取群聊中的所有用户
+     * @param groupId 群聊 ID
+     * @return 所有用户集合
+     */
+    Response getUserList(int groupId);
+
+    /**
      * 通过群聊 ID 获取群聊实体
      * @param groupId 群聊 ID
      * @return 群聊实体

@@ -4,6 +4,7 @@ import top.iceclean.chatspace.VO.UserVO;
 import top.iceclean.chatspace.po.Response;
 import top.iceclean.chatspace.po.User;
 
+import javax.swing.plaf.ListUI;
 import java.util.List;
 
 /**
@@ -26,6 +27,13 @@ public interface UserService {
      * @return 用户对象
      */
     User getUserById(int userId);
+
+    /**
+     * 根据用户 ID 列表获取所有用户
+     * @param userIdList 用户 ID 列表
+     * @return 用户集合
+     */
+    List<User> getUserList(List<Integer> userIdList);
 
     /**
      * 将用户对象转化成用户响应对象

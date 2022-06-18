@@ -2,8 +2,10 @@ package top.iceclean.chatspace.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import top.iceclean.chatspace.VO.GroupVO;
+import top.iceclean.chatspace.VO.UserVO;
 import top.iceclean.chatspace.constant.RedisKey;
 import top.iceclean.chatspace.constant.ResponseStatusEnum;
 import top.iceclean.chatspace.mapper.GroupMapper;
@@ -12,6 +14,7 @@ import top.iceclean.chatspace.po.Group;
 import top.iceclean.chatspace.po.Response;
 import top.iceclean.chatspace.po.UserGroup;
 import top.iceclean.chatspace.service.GroupService;
+import top.iceclean.chatspace.service.UserService;
 import top.iceclean.chatspace.utils.RedisCache;
 import top.iceclean.logtrace.annotation.EnableLogTrace;
 import top.iceclean.logtrace.bean.Logger;
@@ -31,6 +34,9 @@ public class GroupServiceImpl implements GroupService {
     private GroupMapper groupMapper;
     @Autowired
     private UserGroupMapper userGroupMapper;
+    @Lazy
+    @Autowired
+    private UserService userService;
     @Autowired
     private RedisCache redisCache;
     private Logger logTrace;
@@ -42,6 +48,21 @@ public class GroupServiceImpl implements GroupService {
         // 再拿到所有群聊并转化成响应对象
         List<GroupVO> groupList = groupKeyList.stream().map(groupId -> getGroupVO(groupId, userId)).collect(Collectors.toList());
         return new Response(ResponseStatusEnum.OK).addData("groupList", groupList);
+    }
+
+    @Override
+    public Response getUserList(int groupId) {
+        // 获取群聊中所有用户的 ID
+        List<Integer> userIdList = userGroupMapper.selectList(new LambdaQueryWrapper<UserGroup>()
+                .select(UserGroup::getUserId)
+                .isNull(UserGroup::getDeleteTime)
+                .eq(UserGroup::getGroupId, groupId))
+                .stream().map(UserGroup::getUserId).collect(Collectors.toList());
+        // 根据 ID 集合获取所有用户并转化为响应对象
+        List<UserVO> userList = userService.getUserList(userIdList)
+                .stream().map(user -> userService.toUserVO(user)).collect(Collectors.toList());
+        // 最后响应群聊用户列表
+        return new Response(ResponseStatusEnum.OK).addData("groupUserList", userList);
     }
 
     @Override
