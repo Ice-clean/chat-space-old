@@ -2,7 +2,7 @@ package top.iceclean.chatspace.service;
 
 import top.iceclean.chatspace.VO.GroupVO;
 import top.iceclean.chatspace.po.Group;
-import top.iceclean.chatspace.po.Response;
+import top.iceclean.chatspace.pojo.Response;
 import top.iceclean.chatspace.po.UserGroup;
 
 import java.util.List;

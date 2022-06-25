@@ -1,4 +1,4 @@
-package top.iceclean.chatspace.po;
+package top.iceclean.chatspace.pojo;
 
 import top.iceclean.chatspace.constant.ResponseStatusEnum;
 import lombok.*;

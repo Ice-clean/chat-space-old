@@ -8,7 +8,7 @@ import top.iceclean.chatspace.constant.ResponseStatusEnum;
 import top.iceclean.chatspace.constant.SessionType;
 import top.iceclean.chatspace.mapper.SessionRequestMapper;
 import top.iceclean.chatspace.po.Group;
-import top.iceclean.chatspace.po.Response;
+import top.iceclean.chatspace.pojo.Response;
 import top.iceclean.chatspace.po.SessionRequest;
 import top.iceclean.chatspace.service.FriendService;
 import top.iceclean.chatspace.service.GroupService;

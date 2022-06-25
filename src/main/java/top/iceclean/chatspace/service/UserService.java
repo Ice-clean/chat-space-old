@@ -1,10 +1,10 @@
 package top.iceclean.chatspace.service;
 
+import top.iceclean.chatspace.DTO.UserDTO;
 import top.iceclean.chatspace.VO.UserVO;
-import top.iceclean.chatspace.po.Response;
+import top.iceclean.chatspace.pojo.Response;
 import top.iceclean.chatspace.po.User;
 
-import javax.swing.plaf.ListUI;
 import java.util.List;
 
 /**
@@ -22,11 +22,25 @@ public interface UserService {
     Response login(String userName, String userPass);
 
     /**
+     * 用户注册
+     * @param userDTO 用户数据对象
+     * @return 是否注册成功
+     */
+    Response register(UserDTO userDTO);
+
+    /**
      * 通过用户 ID 获取用户对象
      * @param userId 用户 ID
      * @return 用户对象
      */
     User getUserById(int userId);
+
+    /**
+     * 根据用户名获取用户信息
+     * @param userName 用户名
+     * @return 用户信息
+     */
+    User getUserByUserName(String userName);
 
     /**
      * 根据用户 ID 列表获取所有用户

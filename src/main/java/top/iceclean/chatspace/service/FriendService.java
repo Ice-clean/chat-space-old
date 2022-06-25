@@ -2,8 +2,7 @@ package top.iceclean.chatspace.service;
 
 import top.iceclean.chatspace.VO.FriendVO;
 import top.iceclean.chatspace.po.Friend;
-import top.iceclean.chatspace.po.Response;
-import top.iceclean.chatspace.po.User;
+import top.iceclean.chatspace.pojo.Response;
 
 import java.util.List;
 import java.util.Map;

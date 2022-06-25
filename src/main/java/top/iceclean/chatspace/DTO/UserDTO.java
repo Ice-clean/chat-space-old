@@ -9,6 +9,12 @@ import lombok.Data;
  */
 @Data
 public class UserDTO {
+    /** 必要信息 */
     private String userName;
     private String userPass;
+
+    /** 注册需要的信息 */
+    private String sex;
+    private String email;
+    private String code;
 }

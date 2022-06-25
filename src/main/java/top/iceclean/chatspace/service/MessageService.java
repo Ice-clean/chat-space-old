@@ -3,7 +3,7 @@ package top.iceclean.chatspace.service;
 import top.iceclean.chatspace.DTO.MessageDTO;
 import top.iceclean.chatspace.VO.MessageVO;
 import top.iceclean.chatspace.po.Message;
-import top.iceclean.chatspace.po.Response;
+import top.iceclean.chatspace.pojo.Response;
 
 /**
  * @author : Ice'Clean

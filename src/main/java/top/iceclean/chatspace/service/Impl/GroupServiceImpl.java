@@ -11,7 +11,7 @@ import top.iceclean.chatspace.constant.ResponseStatusEnum;
 import top.iceclean.chatspace.mapper.GroupMapper;
 import top.iceclean.chatspace.mapper.UserGroupMapper;
 import top.iceclean.chatspace.po.Group;
-import top.iceclean.chatspace.po.Response;
+import top.iceclean.chatspace.pojo.Response;
 import top.iceclean.chatspace.po.UserGroup;
 import top.iceclean.chatspace.service.GroupService;
 import top.iceclean.chatspace.service.MessageService;
@@ -38,6 +38,7 @@ public class GroupServiceImpl implements GroupService {
     @Lazy
     @Autowired
     private UserService userService;
+    @Lazy
     @Autowired
     private MessageService messageService;
     @Autowired

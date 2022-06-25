@@ -2,7 +2,7 @@ package top.iceclean.chatspace.service;
 
 import top.iceclean.chatspace.VO.SessionRequestVO;
 import top.iceclean.chatspace.constant.SessionType;
-import top.iceclean.chatspace.po.Response;
+import top.iceclean.chatspace.pojo.Response;
 import top.iceclean.chatspace.po.SessionRequest;
 
 /**

@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import top.iceclean.chatspace.DTO.UserDTO;
 
 /**
  * 用户类
@@ -13,6 +15,7 @@ import lombok.Data;
  */
 @Data
 @TableName("t_user")
+@NoArgsConstructor
 public class User {
     @TableId(value = "user_id", type = IdType.AUTO)
     private Integer userId;
@@ -27,4 +30,12 @@ public class User {
     private String createTime;
     @TableField(update = "now()")
     private String updateTime;
+
+    public User(UserDTO userDTO) {
+        this.userName = userDTO.getUserName();
+        this.userPass = userDTO.getUserPass();
+        this.sex = userDTO.getSex();
+        this.nickName = userDTO.getUserName();
+        this.email = userDTO.getEmail();
+    }
 }

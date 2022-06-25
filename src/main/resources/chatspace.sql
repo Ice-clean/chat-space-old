@@ -3,7 +3,7 @@
 create table t_user (
     user_id     int       auto_increment comment '用户 ID' primary key,
     user_name   varchar(20)              comment '用户名',
-    user_pass   varchar(20)              comment '用户密码',
+    user_pass   varchar(255)              comment '用户密码',
     sex         varchar(10)              comment '用户性别',
     nick_name   varchar(20)              comment '用户昵称',
     avatar      varchar(20)              comment '用户头像',
