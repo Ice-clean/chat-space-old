@@ -10,6 +10,7 @@ import top.iceclean.chatspace.mapper.SessionRequestMapper;
 import top.iceclean.chatspace.po.Group;
 import top.iceclean.chatspace.po.Response;
 import top.iceclean.chatspace.po.SessionRequest;
+import top.iceclean.chatspace.service.FriendService;
 import top.iceclean.chatspace.service.GroupService;
 import top.iceclean.chatspace.service.SessionRequestService;
 import top.iceclean.chatspace.service.UserService;
@@ -33,6 +34,8 @@ public class SessionRequestServiceImpl implements SessionRequestService {
     private UserService userService;
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private FriendService friendService;
 
     @Override
     public Response sendRequest(SessionType type, int senderId, int targetId, String reqSrc, String reqRemark) {
@@ -42,16 +45,16 @@ public class SessionRequestServiceImpl implements SessionRequestService {
         requestMapper.insert(request);
         // 将添加消息实时推送
         messageSender.requestMsg(request);
-        // 获取接收者响应对象
-        UserVO user = userService.toUserVO(userService.getUserById(targetId));
-        // 群聊的话还需要获取群聊对象
-        GroupVO group = null;
-        if (type == SessionType.GROUP) {
-            group = new GroupVO(
-                    groupService.getGroupById(request.getTargetId()),
-                    groupService.getOnlineNum(request.getTargetId()));
-        }
-        return new Response(ResponseStatusEnum.OK).setData(new SessionRequestVO(request, 0).setUser(user).setGroup(group));
+//        // 获取接收者响应对象
+//        UserVO user = userService.toUserVO(userService.getUserById(targetId));
+//        // 群聊的话还需要获取群聊对象
+//        GroupVO group = null;
+//        if (type == SessionType.GROUP) {
+//            group = new GroupVO(
+//                    groupService.getGroupById(request.getTargetId()),
+//                    groupService.getOnlineNum(request.getTargetId()));
+//        }
+        return new Response(ResponseStatusEnum.OK);
     }
 
     @Override
@@ -106,7 +109,21 @@ public class SessionRequestServiceImpl implements SessionRequestService {
         SessionRequest request = requestMapper.selectById(reqId);
         request.setReqStatus(access ? 2 : 3);
         requestMapper.updateById(request);
-        return new Response(ResponseStatusEnum.OK);
+
+        // 同意申请后，需要建立相应的映射关系
+        boolean success = true;
+        if (access) {
+            if (request.getType() == SessionType.FRIEND.value()) {
+                success = friendService.becomeFriends(request.getSenderId(), request.getTargetId());
+            } else {
+                success = groupService.joinGroup(request.getSenderId(), request.getTargetId());
+            }
+        }
+
+        if (success) {
+            return new Response(ResponseStatusEnum.OK);
+        }
+        return new Response(ResponseStatusEnum.DATABASE_ERROR);
     }
 
     @Override

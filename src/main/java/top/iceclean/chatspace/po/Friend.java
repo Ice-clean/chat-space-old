@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author : Ice'Clean
@@ -12,6 +13,7 @@ import lombok.Data;
  */
 @Data
 @TableName("t_friend")
+@NoArgsConstructor
 public class Friend {
     @TableId(value = "map_id", type = IdType.AUTO)
     private Integer mapId;
@@ -22,4 +24,10 @@ public class Friend {
     private String markName;
     private String createTime;
     private String deleteTime;
+
+    public Friend(Integer friendId, Integer userId, Integer toUserId) {
+        this.friendId = friendId;
+        this.userId = userId;
+        this.toUserId = toUserId;
+    }
 }

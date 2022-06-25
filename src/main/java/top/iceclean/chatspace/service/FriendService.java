@@ -22,6 +22,14 @@ public interface FriendService {
     Response getFriendList(int userId);
 
     /**
+     * 绑定为朋友关系
+     * @param senderId 发送者用户 ID
+     * @param userId 目标用户 ID
+     * @return
+     */
+    boolean becomeFriends(int senderId, int userId);
+
+    /**
      * 获取用户指定好友 ID 的好友记录
      * @param userId 用户 ID
      * @param friendId 好友 ID

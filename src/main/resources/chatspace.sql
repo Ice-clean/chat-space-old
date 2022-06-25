@@ -22,7 +22,7 @@ create table t_friend (
     friend_id   int                      comment '好友 ID，唯一标识',
     user_id     int                      comment '用户 ID',
     to_user_id  int                      comment '好友用户 ID',
-    last_msg_id int                      comment '最后一次阅读的消息 ID',
+    last_msg_id int default 0            comment '最后一次阅读的消息 ID',
     mark_name   varchar(20)              comment '好友备注',
     delete_time timestamp null default null         comment '取消好友的时间',
     create_time timestamp default CURRENT_TIMESTAMP comment '成为好友的时间'
@@ -48,7 +48,7 @@ create table t_user_group (
     map_id      int       auto_increment comment '映射 ID' primary key,
     user_id     int                      comment '用户 ID',
     group_id    int                      comment '群聊 ID',
-    last_msg_id int                      comment '最后一条阅读的消息 ID',
+    last_msg_id int default 0            comment '最后一条阅读的消息 ID',
     mark_name   varchar(20)              comment '用户群聊备注',
     delete_time timestamp null default null         comment '用户退群时间',
     create_time timestamp default CURRENT_TIMESTAMP comment '用户进群时间'

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 用户群聊映射实体
@@ -12,6 +13,7 @@ import lombok.Data;
  */
 @Data
 @TableName("t_user_group")
+@NoArgsConstructor
 public class UserGroup {
     @TableId(value = "map_id", type = IdType.AUTO)
     private Integer mapId;
@@ -21,4 +23,10 @@ public class UserGroup {
     private String markName;
     private String deleteTime;
     private String createTime;
+
+    public UserGroup(Integer userId, Integer groupId, Integer lastMsgId) {
+        this.userId = userId;
+        this.groupId = groupId;
+        this.lastMsgId = lastMsgId;
+    }
 }

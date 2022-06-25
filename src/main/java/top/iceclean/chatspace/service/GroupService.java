@@ -28,6 +28,14 @@ public interface GroupService {
     Response getUserList(int groupId);
 
     /**
+     * 将用户添加到群聊中
+     * @param userId 用户 ID
+     * @param groupId 群聊 ID
+     * @return 是否添加成功
+     */
+    boolean joinGroup(int userId, int groupId);
+
+    /**
      * 通过群聊 ID 获取群聊实体
      * @param groupId 群聊 ID
      * @return 群聊实体

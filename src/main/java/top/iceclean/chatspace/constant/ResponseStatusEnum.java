@@ -10,6 +10,9 @@ public enum ResponseStatusEnum {
     BAD_REQUEST(400, "请求失败"),
     INTERNAL_SERVER_ERROR(500, "服务器出错"),
 
+    /** 系统错误码 */
+    DATABASE_ERROR(101, "数据库错误"),
+
     /** 错误码 */
     LOGIN_FAILED(1001, "用户名或密码错误"),
     USER_NOT_EXIST(1002, "用户不存在");

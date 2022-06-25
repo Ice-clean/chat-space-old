@@ -1,6 +1,7 @@
 package top.iceclean.chatspace.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,14 @@ public class FriendServiceImpl implements FriendService {
                 .map(friendId -> userService.toUserVO(userService.getUserById(friendId)))
                 .collect(Collectors.toList());
         return new Response(ResponseStatusEnum.OK).addData("friendList", friendList);
+    }
+
+    @Override
+    public boolean becomeFriends(int senderId, int userId) {
+        // 拿到最大的朋友 ID
+        Integer maxFriendId = friendMapper.selectOne(new QueryWrapper<Friend>().select("max(friend_id)")).getFriendId();
+        // 建立双向的映射关系，并返回是否执行成功
+        return friendMapper.insert(new Friend(maxFriendId + 1, senderId, userId)) == 1;
     }
 
     @Override

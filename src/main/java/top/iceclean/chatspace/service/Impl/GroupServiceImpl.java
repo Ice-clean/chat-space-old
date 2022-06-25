@@ -14,6 +14,7 @@ import top.iceclean.chatspace.po.Group;
 import top.iceclean.chatspace.po.Response;
 import top.iceclean.chatspace.po.UserGroup;
 import top.iceclean.chatspace.service.GroupService;
+import top.iceclean.chatspace.service.MessageService;
 import top.iceclean.chatspace.service.UserService;
 import top.iceclean.chatspace.utils.RedisCache;
 import top.iceclean.logtrace.annotation.EnableLogTrace;
@@ -37,6 +38,8 @@ public class GroupServiceImpl implements GroupService {
     @Lazy
     @Autowired
     private UserService userService;
+    @Autowired
+    private MessageService messageService;
     @Autowired
     private RedisCache redisCache;
     private Logger logTrace;
@@ -63,6 +66,12 @@ public class GroupServiceImpl implements GroupService {
                 .stream().map(user -> userService.toUserVO(user)).collect(Collectors.toList());
         // 最后响应群聊用户列表
         return new Response(ResponseStatusEnum.OK).addData("groupUserList", userList);
+    }
+
+    @Override
+    public boolean joinGroup(int groupId, int userId) {
+        // 获取群聊中最新的消息 ID，作为新用户的已阅 ID
+        return userGroupMapper.insert(new UserGroup(userId, groupId, messageService.getLastMsgId(groupId))) == 1;
     }
 
     @Override
