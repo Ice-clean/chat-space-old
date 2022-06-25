@@ -13,6 +13,9 @@ create table t_user (
     update_time timestamp default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '修改时间'
 );
 
+-- 用户表字段区分大小写
+ALTER TABLE t_user MODIFY COLUMN user_name VARCHAR(20) BINARY CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL;
+
 -- 好友表
 create table t_friend (
     map_id      int       auto_increment comment '映射 ID' primary key,
@@ -81,6 +84,18 @@ create table t_session_message (
 
 -- 会话聊天记录表索引
 create index session_id_index on t_session_message (session_id);
+
+-- 会话申请表
+create table t_session_request (
+    req_id      int       auto_increment comment '请求 ID' primary key,
+    type        int                      comment '会话类型',
+    sender_id   int                      comment '发送者用户 ID',
+    target_id   int                      comment '目标 ID（用户/群聊主键）',
+    req_src     varchar(255)             comment '请求来源',
+    req_remark  varchar(255)             comment '请求备注信息',
+    req_status  int default 0            comment '请求状态（0 未读，1 已读，2 接受，3 拒绝）',
+    create_time timestamp default CURRENT_TIMESTAMP comment '请求发送时间'
+);
 
 -- 日志头表
 create table t_log_head(

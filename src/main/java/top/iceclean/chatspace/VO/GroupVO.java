@@ -34,7 +34,7 @@ public class GroupVO {
     /** 用户最后一条已阅的消息 ID */
     private Integer lastMsgId;
 
-    public GroupVO(Group group, UserGroup userGroup, int onlineNum) {
+    public GroupVO(Group group, int onlineNum) {
         this.groupId = group.getGroupId();
         this.creatorId = group.getCreatorId();
         this.groupName = group.getGroupName();
@@ -44,9 +44,14 @@ public class GroupVO {
         // TODO 加上公告表时，该字段生效
         this.notice = "无";
         this.onlineNum = onlineNum;
+    }
 
+    /** 设置用户在这个群聊的详细信息 */
+    public GroupVO setUserGroup(UserGroup userGroup) {
         this.markName = userGroup.getMarkName();
         this.inTime = userGroup.getCreateTime();
         this.lastMsgId = userGroup.getLastMsgId();
+
+        return this;
     }
 }

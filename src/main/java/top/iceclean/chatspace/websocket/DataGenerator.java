@@ -3,10 +3,11 @@ package top.iceclean.chatspace.websocket;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import top.iceclean.chatspace.VO.MessageVO;
-import top.iceclean.chatspace.VO.UserOnlineVO;
+import top.iceclean.chatspace.VO.*;
+import top.iceclean.chatspace.constant.SessionType;
 import top.iceclean.chatspace.po.Message;
 import top.iceclean.chatspace.po.Session;
+import top.iceclean.chatspace.po.SessionRequest;
 import top.iceclean.chatspace.service.*;
 
 import java.util.HashSet;
@@ -125,6 +126,44 @@ public class DataGenerator {
         @Override
         public UserOnlineVO exec(int toUserId) {
             return new UserOnlineVO(userId, online, sessionIdList);
+        }
+    }
+
+    /** 会话请求消息生成器 */
+    static class RequestMessage implements Generator {
+        /** 会话请求实体 */
+        private final SessionRequest request;
+        /** 发送者响应对象 */
+        private final UserVO sender;
+        /** 发送者申请加入的群聊对象 */
+        private GroupVO group = null;
+
+        public RequestMessage(SessionRequest request) {
+            this.request = request;
+            // 拿到发送者响应对象
+            this.sender = userService.toUserVO(userService.getUserById(request.getSenderId()));
+            // 在群聊请求时，拿到发送者请求的群的响应对象
+            if (request.getType() == SessionType.GROUP.value()) {
+                this.group = new GroupVO(
+                        groupService.getGroupById(request.getTargetId()),
+                        groupService.getOnlineNum(request.getTargetId()));
+            }
+        }
+
+        @Override
+        public Set<Integer> target() {
+            Set<Integer> targetUserIdSet = new HashSet<>();
+            // 如果是群聊的话，需要发送给群主（或管理员，待增加）,否则，直接发送给指定的用户
+            targetUserIdSet.add(
+                    request.getType() == SessionType.GROUP.value() ?
+                    group.getCreatorId() : request.getTargetId());
+            return targetUserIdSet;
+        }
+
+        @Override
+        public Object exec(int toUserId) {
+            // 他人申请，附上发送者信息，不需要自己的信息
+            return new SessionRequestVO(request, toUserId).setUser(sender).setGroup(group);
         }
     }
 }

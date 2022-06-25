@@ -8,21 +8,15 @@ import top.iceclean.chatspace.DTO.WsMessageDTO;
 import top.iceclean.chatspace.constant.WsType;
 import top.iceclean.chatspace.po.Message;
 import top.iceclean.chatspace.DTO.MessageDTO;
+import top.iceclean.chatspace.po.SessionRequest;
 import top.iceclean.chatspace.po.User;
-import top.iceclean.chatspace.service.FriendService;
-import top.iceclean.chatspace.service.GroupService;
 import top.iceclean.chatspace.service.MessageService;
 import top.iceclean.chatspace.service.UserService;
-import top.iceclean.logtrace.annotation.EnableLogTrace;
-import top.iceclean.logtrace.bean.Logger;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -33,7 +27,7 @@ import java.util.concurrent.ConcurrentMap;
 @Component
 @ServerEndpoint("/ws/chat/{userId}")
 @Slf4j
-public class ChatEndpoint {
+public class ChatEndpoint implements MessageSender {
     /** 存放所有用户信息 */
     private static final ConcurrentMap<Integer, ChatEndpoint> USER_MAP = new ConcurrentHashMap<>();
 
@@ -149,5 +143,10 @@ public class ChatEndpoint {
     private static String getMessage(WsType wsType, Object wsContent) {
         System.out.println(JSONObject.toJSONString(new WsMessageDTO(wsType, wsContent)));
         return JSONObject.toJSONString(new WsMessageDTO(wsType, wsContent));
+    }
+
+    @Override
+    public void requestMsg(SessionRequest request) {
+        castMessage(WsType.SESSION_REQUEST, new DataGenerator.RequestMessage(request));
     }
 }

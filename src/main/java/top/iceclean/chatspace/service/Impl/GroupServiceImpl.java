@@ -71,6 +71,13 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public List<Group> getUserManageGroups(int userId) {
+        return groupMapper.selectList(new LambdaQueryWrapper<Group>()
+                .isNull(Group::getDeleteTime)
+                .eq(Group::getCreatorId, userId));
+    }
+
+    @Override
     public UserGroup getUserGroup(int userId, int groupId) {
         return userGroupMapper.selectOne(new LambdaQueryWrapper<UserGroup>()
                 .isNull(UserGroup::getDeleteTime)
@@ -83,7 +90,7 @@ public class GroupServiceImpl implements GroupService {
         Group group = getGroupById(groupId);
         // 找到用户群聊记录
         UserGroup userGroup = getUserGroup(userId, group.getGroupId());
-        return new GroupVO(group, userGroup, getOnlineNum(group.getGroupId()));
+        return new GroupVO(group, getOnlineNum(group.getGroupId())).setUserGroup(userGroup);
     }
 
     @Override

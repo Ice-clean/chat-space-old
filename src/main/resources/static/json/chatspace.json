@@ -847,7 +847,7 @@
                                                 "body": [
                                                   {
                                                     "type": "tpl",
-                                                    "tpl": "$name",
+                                                    "tpl": "$groupName",
                                                     "inline": true,
                                                     "id": "u:54c4a5c94d53",
                                                     "wrapperComponent": "div",
@@ -927,7 +927,7 @@
                                                     "id": "u:4eec8ab4c519",
                                                     "width": 35,
                                                     "height": 35,
-                                                    "src": "$userAvatar",
+                                                    "src": "$avatar",
                                                     "thumbMode": "cover",
                                                     "className": "r r-2x",
                                                     "shape": "square",
@@ -944,7 +944,7 @@
                                                 "body": [
                                                   {
                                                     "type": "tpl",
-                                                    "tpl": "$userNick",
+                                                    "tpl": "$nickName",
                                                     "inline": true,
                                                     "id": "u:54c4a5c94d53",
                                                     "wrapperComponent": "div",

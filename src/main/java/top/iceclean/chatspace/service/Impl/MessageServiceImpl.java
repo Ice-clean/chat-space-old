@@ -92,7 +92,7 @@ public class MessageServiceImpl implements MessageService {
         MessageVO messageVO = new MessageVO(message, sessionVO, userVO, userId == message.getSenderId());
 
         // 需要详细信息时，将时间格式精简
-        return messageVO.shortTime(info);
+        return messageVO.shortTime(false);
     }
 
     @Override

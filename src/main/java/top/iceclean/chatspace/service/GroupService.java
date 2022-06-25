@@ -35,6 +35,13 @@ public interface GroupService {
     Group getGroupById(int groupId);
 
     /**
+     * 获取所有用户管理的群聊
+     * @param userId 用户 ID
+     * @return 群聊列表
+     */
+    List<Group> getUserManageGroups(int userId);
+
+    /**
      * 获取用户某条群聊记录
      * @param userId 用户 ID
      * @param groupId 群聊 ID
