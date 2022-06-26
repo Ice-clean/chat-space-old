@@ -43,6 +43,10 @@ public class DateUtils {
         return formatter.format(LocalDateTime.now());
     }
 
+    public static String getTimeCompact() {
+        return DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(LocalDateTime.now());
+    }
+
     public static String getHourMinute() {
         return DateTimeFormatter.ofPattern("HH:mm").format(LocalDateTime.now());
     }

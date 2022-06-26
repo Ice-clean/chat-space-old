@@ -1,5 +1,6 @@
 package top.iceclean.chatspace.filter;
 
+import com.alibaba.fastjson.JSONObject;
 import jdk.nashorn.internal.parser.Token;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // 提取token
+        // 提取 token
         String token = request.getHeader("token");
-        // 如果token为空需要放行，因为在访问security的匿名接口时过滤器同样起作用，而此时 token 值为空
+        // 如果 token 为空需要放行，因为在访问security的匿名接口时过滤器同样起作用，而此时 token 值为空
         if (!StringUtils.hasText(token)) {
             filterChain.doFilter(request, response);
             return;
@@ -66,7 +67,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
         // 校验用户信息
         String redisKey = RedisKey.USER_LOGIN + userId;
-        UserAuthority userAuthority = redisCache.getCacheObject(redisKey);
+        UserAuthority userAuthority = JSONObject.parseObject(redisCache.getCacheObject(redisKey).toString(), UserAuthority.class);
         if (Objects.isNull(userAuthority)) {
 
             log.error("JWT 对应的用户不存在");

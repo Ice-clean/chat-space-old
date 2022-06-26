@@ -28,8 +28,6 @@ public class SessionServiceImpl implements SessionService {
     @Autowired
     private GroupService groupService;
     @Autowired
-    private UserService userService;
-    @Autowired
     private MessageService messageService;
 
 

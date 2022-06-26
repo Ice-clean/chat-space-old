@@ -1,16 +1,21 @@
 package top.iceclean.chatspace.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import top.iceclean.chatspace.constant.ResponseStatusEnum;
 import top.iceclean.chatspace.filter.JwtAuthenticationTokenFilter;
+import top.iceclean.chatspace.pojo.GlobalException;
 import top.iceclean.chatspace.utils.Md5Utils;
 
 /**
@@ -24,8 +29,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
+    @Autowired
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver resolver;
+
     /**
-     * 返回的密码暂时不加密
+     * 密码使用 MD5 加密
      * @return 密码加密解析器
      */
     @Bean
@@ -34,9 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new PasswordEncoder() {
             @Override
             public boolean matches(CharSequence rawPassword, String encodedPassword) {
-                System.out.println("匹配中");
-                System.out.println(Md5Utils.encode((String) rawPassword));
-                System.out.println(encodedPassword);
                 return encodedPassword.equals(Md5Utils.encode((String) rawPassword));
             }
 
@@ -61,8 +67,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 除上边以外的都需要认证
                 .anyRequest().authenticated();
 
-        //添加过滤器
+        // 添加过滤器
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        // 添加认证失败处理器
+        http.exceptionHandling().authenticationEntryPoint(
+                (request, response, authenticationException) -> {
+                    if (authenticationException instanceof InsufficientAuthenticationException){
+                        resolver.resolveException(request, response, null,
+                                new GlobalException(ResponseStatusEnum.AUTHENTICATION_ERROR, "Token 为空"));
+                        return;
+                    }
+                    resolver.resolveException(request, response, null, authenticationException);
+                }).accessDeniedHandler((request, response, accessDeniedException) -> {
+                    resolver.resolveException(request, response, null, accessDeniedException);
+                });
+
     }
 
     @Bean

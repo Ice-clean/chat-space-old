@@ -24,7 +24,7 @@ public class GlobalException extends RuntimeException{
      * @param message   具体异常描述
      */
     public GlobalException(ResponseStatusEnum status, String message){
-        super(status.msg() + message);
+        super(message);
         this.status = status;
         this.extraMessage = message;
     }

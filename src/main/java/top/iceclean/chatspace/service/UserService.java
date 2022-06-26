@@ -1,5 +1,6 @@
 package top.iceclean.chatspace.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import top.iceclean.chatspace.DTO.UserDTO;
 import top.iceclean.chatspace.VO.UserVO;
 import top.iceclean.chatspace.pojo.Response;
@@ -27,6 +28,14 @@ public interface UserService {
      * @return 是否注册成功
      */
     Response register(UserDTO userDTO);
+
+    /**
+     * 上传头像
+     * @param userId 用户 ID
+     * @param avatar 头像文件数据
+     * @return 上传的头像路径
+     */
+    Response uploadAvatar(int userId, MultipartFile avatar);
 
     /**
      * 通过用户 ID 获取用户对象

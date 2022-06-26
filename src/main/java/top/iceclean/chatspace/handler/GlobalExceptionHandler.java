@@ -2,6 +2,7 @@ package top.iceclean.chatspace.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -29,6 +30,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = GlobalException.class)
     public Response handleGlobalException(GlobalException exception){
         return new Response().setStatus(exception.getStatus())
+                .addData("success", false)
                 .setMsg(exception.getStatus().msg() + exception.getExtraMessage());
     }
 
@@ -41,11 +43,15 @@ public class GlobalExceptionHandler {
     public Response handleException(Exception exception) {
         log.error("全局异常处理器启动:捕获其他异常");
         log.error(exception.toString());
-
+        exception.printStackTrace();
         if (exception instanceof AuthenticationException) {
+            String extraMessage = exception.getMessage();
+            if (extraMessage.equals("Bad credentials")) {
+                extraMessage = "用户名或密码错误";
+            }
             // SpringSecurity 的剩余认证异常需要额外捕获
             return new Response().setStatus(ResponseStatusEnum.AUTHENTICATION_ERROR)
-                    .setMsg(ResponseStatusEnum.AUTHENTICATION_ERROR.msg() + exception.getMessage());
+                    .setMsg(ResponseStatusEnum.AUTHENTICATION_ERROR.msg() + extraMessage);
         } else if (exception instanceof AccessDeniedException) {
             // SpringSecurity 的剩余权限异常需要额外捕获
             return new Response().setStatus(ResponseStatusEnum.AUTHORITY_ERROR)

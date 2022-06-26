@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 public class FriendServiceImpl implements FriendService {
     @Autowired
     private FriendMapper friendMapper;
-    @Lazy
     @Autowired
     private UserService userService;
     private Logger logTrace;

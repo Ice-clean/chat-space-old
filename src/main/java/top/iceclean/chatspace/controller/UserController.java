@@ -3,6 +3,7 @@ package top.iceclean.chatspace.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import top.iceclean.chatspace.DTO.UserDTO;
 import top.iceclean.chatspace.constant.RedisKey;
 import top.iceclean.chatspace.constant.ResponseStatusEnum;
@@ -12,6 +13,7 @@ import top.iceclean.chatspace.service.UserService;
 import top.iceclean.chatspace.utils.MailUtils;
 import top.iceclean.chatspace.utils.RedisCache;
 import top.iceclean.logtrace.annotation.EnableLogTrace;
+import top.iceclean.logtrace.annotation.OutputValue;
 import top.iceclean.logtrace.bean.Logger;
 
 import javax.mail.MessagingException;
@@ -39,7 +41,8 @@ public class UserController {
 
     @PostMapping("/login")
     public Object login(UserDTO userDTO) {
-        return userService.login(userDTO.getUserName(), userDTO.getUserPass());
+        return userService.login(userDTO.getUserName() != null ?
+                userDTO.getUserName() : userDTO.getEmail(), userDTO.getUserPass());
     }
 
     /**
@@ -61,7 +64,7 @@ public class UserController {
         redisCache.hashSet(RedisKey.USER_CODE_HASH, userName, email + code, 5 * 60);
         // 发送邮件
         try {
-            mailUtils.sendHtmlMail("ChatSpace 注册码", "<h2>欢迎加入 ChatSpace !</h2>" +
+            mailUtils.sendHtmlMail("ChatSpace 注册码", "<h2>欢迎加入 ChatSpace ! </h2>" +
                     "您刚刚请求注册的用户 " + userName + "<br>" +
                     "验证码为：" + code + "，五分钟内有效", email);
             return new Response(ResponseStatusEnum.OK).setMsg("发送验证码成功");
@@ -88,5 +91,17 @@ public class UserController {
             return new Response(ResponseStatusEnum.OK).setData(userService.toUserVO(user));
         }
         return new Response(ResponseStatusEnum.USER_NOT_EXIST);
+    }
+
+    /**
+     * 上传头像
+     * @param userId 用户 ID
+     * @param avatar 头像文件数据
+     * @return 上传完毕的头像路径
+     */
+    @PostMapping("/avatar/{userId}")
+    public Object uploadAvatar(@PathVariable int userId,
+                               @OutputValue MultipartFile avatar) {
+        return userService.uploadAvatar(userId, avatar);
     }
 }

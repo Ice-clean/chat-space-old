@@ -9,8 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import top.iceclean.chatspace.DTO.UserDTO;
 import top.iceclean.chatspace.VO.UserVO;
+import top.iceclean.chatspace.constant.FileConst;
 import top.iceclean.chatspace.constant.RedisKey;
 import top.iceclean.chatspace.constant.ResponseStatusEnum;
 import top.iceclean.chatspace.mapper.UserMapper;
@@ -21,9 +23,7 @@ import top.iceclean.chatspace.pojo.UserAuthority;
 import top.iceclean.chatspace.service.FriendService;
 import top.iceclean.chatspace.service.GroupService;
 import top.iceclean.chatspace.service.UserService;
-import top.iceclean.chatspace.utils.JwtUtils;
-import top.iceclean.chatspace.utils.Md5Utils;
-import top.iceclean.chatspace.utils.RedisCache;
+import top.iceclean.chatspace.utils.*;
 import top.iceclean.logtrace.annotation.EnableLogTrace;
 import top.iceclean.logtrace.bean.Logger;
 
@@ -44,8 +44,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private UserMapper userMapper;
     @Autowired
     private RedisCache redisCache;
-    @Autowired
-    private FriendService friendService;
     @Autowired
     private GroupService groupService;
     private Logger logTrace;
@@ -99,7 +97,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = getUserByUserName(userDTO.getUserName());
         return new Response(ResponseStatusEnum.OK)
                 .setMsg("注册成功")
-                .setData(user);
+                .setData(toUserVO(user));
+    }
+
+    @Override
+    public Response uploadAvatar(int userId, MultipartFile avatar) {
+        // 将用户查询出来
+        User user = getUserById(userId);
+
+        // 上传头像（以用户ID-当前时间-头像大小命名）
+        String extentName = avatar.getOriginalFilename();
+        extentName = Objects.requireNonNull(extentName).substring(extentName.lastIndexOf("."));
+        String avatarName = String.format("%d_%s_%d%s", userId, DateUtils.getTimeCompact(),
+                avatar.getSize(), extentName);
+        FileConst.Code code = FileUtils.upload(avatar, FileConst.AVATAR_PATH, avatarName);
+
+        // 上传成功时修改头像
+        if (code == FileConst.Code.UPLOAD_SUCCESS) {
+            user.setAvatar("../" + FileConst.AVATAR_PATH + avatarName);
+            userMapper.updateById(user);
+            return new Response(ResponseStatusEnum.OK)
+                    .setMsg(code.getMsg())
+                    .addData("avatarName", avatarName);
+        }
+
+        // 上传失败时返回错误信息
+        return new Response(ResponseStatusEnum.INTERNAL_SERVER_ERROR).setMsg(code.getMsg());
     }
 
     @Override
