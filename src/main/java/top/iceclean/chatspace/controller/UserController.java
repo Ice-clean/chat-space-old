@@ -127,4 +127,17 @@ public class UserController {
     public Object updatePassword(@PathVariable int userId, String oldPassword, String newPassword) {
         return userService.updatePassword(userId, oldPassword, newPassword);
     }
+
+    /**
+     * 模糊搜索用户
+     * 搜索范围包括用户 ID、用户名、昵称和邮箱
+     * 用户 ID 和邮箱为精确搜索
+     * 用户名和昵称为模糊收缩
+     * @param key 搜索的关键字
+     * @return 符合条件的用户列表
+     */
+    @GetMapping("/search")
+    public Object searchUser(String key) {
+        return userService.searchUser(key);
+    }
 }

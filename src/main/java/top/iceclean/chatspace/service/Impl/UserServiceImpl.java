@@ -32,6 +32,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author : Ice'Clean
@@ -169,6 +171,28 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return new Response(ResponseStatusEnum.OK).setMsg("修改密码成功");
         }
         return new Response(ResponseStatusEnum.DATABASE_ERROR);
+    }
+
+    Pattern pattern = Pattern.compile("^\\d+$");
+    @Override
+    public Response searchUser(String key) {
+        // 判断是否为数值以启用 ID 的精确搜索
+        boolean searchId = pattern.matcher(key).matches();
+        System.out.println(searchId);
+        // 判断是否为邮箱以启用邮箱的精确搜索
+        boolean searchEmail = key.contains("@");
+        // 进行模糊搜素，并转化为响应对象
+        List<UserVO> collect = userMapper.selectList(new LambdaQueryWrapper<User>()
+                .isNull(User::getDeleteTime)
+                .eq(searchId, User::getUserId, key)
+                .eq(searchEmail, User::getEmail, key)
+                .or(searchId||searchEmail).like(User::getUserName, key)
+                .or().like(User::getNickName, key))
+                .stream().map(this::toUserVO).collect(Collectors.toList());
+        // 最后返回搜索出来的用户列表
+        return new Response(ResponseStatusEnum.OK)
+                .addData("total", collect.size())
+                .addData("result", collect);
     }
 
     @Override
