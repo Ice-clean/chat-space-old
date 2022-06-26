@@ -149,4 +149,15 @@ public class ChatEndpoint implements MessageSender {
     public void requestMsg(SessionRequest request) {
         castMessage(WsType.SESSION_REQUEST, new DataGenerator.RequestMessage(request));
     }
+
+    @Override
+    public void tokenExpiredMsg(int userId) {
+        // 发送 token 失效通知，并主动断开连接
+        castMessage(WsType.TOKEN_EXPIRED, new DataGenerator.TokenExpire(userId));
+        try {
+            USER_MAP.get(userId).session.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package top.iceclean.chatspace.websocket;
 
+import com.sun.tools.javah.Gen;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,10 +11,7 @@ import top.iceclean.chatspace.po.Session;
 import top.iceclean.chatspace.po.SessionRequest;
 import top.iceclean.chatspace.service.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 生成 websocket 所需的数据
@@ -164,6 +162,26 @@ public class DataGenerator {
         public Object exec(int toUserId) {
             // 他人申请，附上发送者信息，不需要自己的信息
             return new SessionRequestVO(request, toUserId).setUser(sender).setGroup(group);
+        }
+    }
+
+    /** token 过期消息生成器 */
+    @AllArgsConstructor
+    static class TokenExpire implements Generator {
+        /** token 过期的用户 ID */
+        private final Integer userId;
+
+        @Override
+        public Set<Integer> target() {
+            // 发送给用户自己
+            HashSet<Integer> targetId = new HashSet<>(1);
+            targetId.add(userId);
+            return targetId;
+        }
+
+        @Override
+        public Object exec(int toUserId) {
+            return "用户 ID=" + toUserId + " token 失效，断开连接";
         }
     }
 }

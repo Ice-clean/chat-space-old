@@ -10,5 +10,7 @@ public enum WsType {
     /** 发送消息 */
     SEND_MESSAGE,
     /** 会话请求 */
-    SESSION_REQUEST
+    SESSION_REQUEST,
+    /** token 失效 */
+    TOKEN_EXPIRED
 }

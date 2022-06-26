@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // 把完整的用户信息存入 redis，userId 作为 key
         UserAuthority userAuthority = (UserAuthority) authenticate.getPrincipal();
         String userId = userAuthority.getUser().getUserId().toString();
-        redisCache.setCacheObject(RedisKey.USER_LOGIN + userId, userAuthority, 3, TimeUnit.HOURS);
+        redisCache.setCacheObject(RedisKey.USER_LOGIN + userId, userAuthority, 30, TimeUnit.SECONDS);
 
         // 使用 userId 生成一个 JWT 返回
         return new Response().setStatus(ResponseStatusEnum.OK)

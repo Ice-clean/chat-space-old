@@ -14,4 +14,10 @@ public interface MessageSender {
      * @param sessionRequest 会话请求实体
      */
     void requestMsg(SessionRequest sessionRequest);
+
+    /**
+     * token 过期事件
+     * @param userId 用户 ID
+     */
+    void tokenExpiredMsg(int userId);
 }
