@@ -13,12 +13,14 @@ import top.iceclean.chatspace.mapper.GroupMapper;
 import top.iceclean.chatspace.mapper.SessionMapper;
 import top.iceclean.chatspace.mapper.UserGroupMapper;
 import top.iceclean.chatspace.po.Group;
+import top.iceclean.chatspace.po.Session;
 import top.iceclean.chatspace.pojo.Response;
 import top.iceclean.chatspace.po.UserGroup;
 import top.iceclean.chatspace.service.GroupService;
 import top.iceclean.chatspace.service.MessageService;
 import top.iceclean.chatspace.service.SessionService;
 import top.iceclean.chatspace.service.UserService;
+import top.iceclean.chatspace.utils.DateUtils;
 import top.iceclean.chatspace.utils.RedisCache;
 import top.iceclean.logtrace.annotation.EnableLogTrace;
 import top.iceclean.logtrace.bean.Logger;
@@ -76,6 +78,33 @@ public class GroupServiceImpl implements GroupService {
                 .stream().map(user -> userService.toUserVO(user)).collect(Collectors.toList());
         // 最后响应群聊用户列表
         return new Response(ResponseStatusEnum.OK).addData("groupUserList", userList);
+    }
+
+    @Override
+    public Response createGroup(int creatorId, String groupName) {
+        // 构造群对象并设置默认头像和初始化群人数
+        Group group = new Group(creatorId, groupName);
+        group.setAvatar("../img/avatar/default.png");
+        group.setNumber(1);
+        // 创建群聊
+        boolean success = groupMapper.insert(group) == 1;
+        // 为该用户建立群聊映射
+        UserGroup userGroup = new UserGroup(creatorId, group.getGroupId(), 0);
+        userGroup.setCreateTime(DateUtils.getTime());
+        success &= userGroupMapper.insert(userGroup) == 1;
+        // 为该群聊建立一个会话
+        Session session = sessionService.createSession(SessionType.GROUP, group.getGroupId());
+
+        // 封装群聊响应对象
+        GroupVO groupVO = new GroupVO(group, 1);
+        groupVO.setSessionId(session.getSessionId());
+        groupVO.setUserGroup(userGroup);
+        if (success) {
+            return new Response(ResponseStatusEnum.OK)
+                    .setMsg("创建群聊成功")
+                    .setData(groupVO);
+        }
+        return new Response(ResponseStatusEnum.DATABASE_ERROR);
     }
 
     @Override

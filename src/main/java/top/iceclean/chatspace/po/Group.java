@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 群聊实体
@@ -13,6 +14,7 @@ import lombok.Data;
  */
 @Data
 @TableName("t_group")
+@NoArgsConstructor
 public class Group {
     @TableId(value = "group_id", type = IdType.AUTO)
     private Integer groupId;
@@ -24,4 +26,9 @@ public class Group {
     private String createTime;
     @TableField(update = "now()")
     private String updateTime;
+
+    public Group(int creatorId, String groupName) {
+        this.creatorId = creatorId;
+        this.groupName = groupName;
+    }
 }

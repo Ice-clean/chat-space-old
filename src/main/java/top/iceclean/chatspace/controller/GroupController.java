@@ -40,4 +40,15 @@ public class GroupController {
     public Object getUserList(int groupId) {
         return groupService.getUserList(groupId);
     }
+
+    /**
+     * 创建群聊
+     * @param userId 用户 ID
+     * @param groupName 群聊名称
+     * @return 返回结果
+     */
+    @PostMapping("")
+    public Object createGroup(int userId, String groupName) {
+        return groupService.createGroup(userId, groupName);
+    }
 }

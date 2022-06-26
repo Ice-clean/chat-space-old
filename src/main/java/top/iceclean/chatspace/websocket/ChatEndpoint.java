@@ -147,6 +147,7 @@ public class ChatEndpoint implements MessageSender {
 
     @Override
     public void requestMsg(SessionRequest request) {
+        System.out.println("");
         castMessage(WsType.SESSION_REQUEST, new DataGenerator.RequestMessage(request));
     }
 

@@ -28,6 +28,14 @@ public interface GroupService {
     Response getUserList(int groupId);
 
     /**
+     * 新建群聊
+     * @param creatorId 创建者用户 ID
+     * @param groupName 群名
+     * @return 群聊响应对象
+     */
+    Response createGroup(int creatorId, String groupName);
+
+    /**
      * 将用户添加到群聊中
      * @param userId 用户 ID
      * @param groupId 群聊 ID
