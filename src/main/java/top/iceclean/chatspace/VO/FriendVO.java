@@ -33,4 +33,10 @@ public class FriendVO {
         this.startTime = friend.getCreateTime();
         this.lastMsgId = friend.getLastMsgId();
     }
+
+    /** 设置用户与好友的会话 ID */
+    public FriendVO setSessionId(Integer sessionId) {
+        this.sessionId = sessionId;
+        return this;
+    }
 }

@@ -41,6 +41,13 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
+    public Integer getSessionId(int type, int targetId) {
+        return sessionMapper.selectOne(new LambdaQueryWrapper<Session>()
+                .select(Session::getSessionId).isNull(Session::getDeleteTime)
+                .eq(Session::getType, type).eq(Session::getTargetId, targetId)).getSessionId();
+    }
+
+    @Override
     public List<Integer> getSessionIdList(int userId) {
         // 分别将好友和群聊 ID 转化为会话 ID
         return sessionMapper.selectList(new LambdaQueryWrapper<Session>()

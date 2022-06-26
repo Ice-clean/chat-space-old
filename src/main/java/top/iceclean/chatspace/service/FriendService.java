@@ -59,13 +59,6 @@ public interface FriendService {
     List<Integer> getFriendKeyList(int userId);
 
     /**
-     * 获取用户的好友主键映射（好友 ID，主键 ID）
-     * @param userId 用户 ID
-     * @return 好友主键映射
-     */
-    Map<Integer, Integer> getFriendKeyMap(int userId);
-
-    /**
      * 获取用户的好友 ID 列表
      * @param userId 用户 ID
      * @return 好友 ID 列表

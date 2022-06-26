@@ -27,6 +27,8 @@ public class GroupVO {
     /** 群聊在线人数 */
     private Integer onlineNum;
 
+    /** 该群聊的会话 ID */
+    private Integer sessionId;
     /** 用户群聊备注 */
     private String markName;
     /** 用户入群时间 */
@@ -52,6 +54,12 @@ public class GroupVO {
         this.inTime = userGroup.getCreateTime();
         this.lastMsgId = userGroup.getLastMsgId();
 
+        return this;
+    }
+
+    /** 设置群聊所属的会话 ID */
+    public GroupVO setSessionId(Integer sessionId) {
+        this.sessionId = sessionId;
         return this;
     }
 }

@@ -46,9 +46,21 @@ public class FriendServiceImpl implements FriendService {
         // 获取好友用户 ID 列表
         List<Integer> friendIdList = getFriendIdList(userId);
         // 然后拿到所有好友的用户响应对象并返回
-        List<UserVO> friendList = friendIdList.stream()
-                .map(friendId -> userService.toUserVO(userService.getUserById(friendId)))
-                .collect(Collectors.toList());
+        // 拿到每个好友的用户对象，封装成响应对象，再封装为好友响应对象
+        List<FriendVO> friendList = friendIdList.stream()
+                .map(friendId -> {
+                    // 获取好友映射
+                    Friend friend = friendMapper.selectOne(new LambdaQueryWrapper<Friend>()
+                            .isNull(Friend::getDeleteTime)
+                            .eq(Friend::getUserId, userId)
+                            .eq(Friend::getToUserId, friendId));
+                    // 获取好友映射对应的会话 ID
+                    Integer sessionId = sessionService.getSessionId(SessionType.FRIEND.value(), friend.getFriendId());
+                    // 将好友用户对象封装成响应对象
+                    UserVO userVO = userService.toUserVO(userService.getUserById(friendId));
+                    // 最后封装成好友响应对象
+                    return new FriendVO(userVO, friend).setSessionId(sessionId);
+                }).collect(Collectors.toList());
         return new Response(ResponseStatusEnum.OK).addData("friendList", friendList);
     }
 
@@ -96,15 +108,6 @@ public class FriendServiceImpl implements FriendService {
                 .select(Friend::getFriendId)
                 .eq(Friend::getUserId, userId).isNull(Friend::getDeleteTime))
                 .stream().map(Friend::getFriendId).collect(Collectors.toList());
-    }
-
-    @Override
-    public Map<Integer, Integer> getFriendKeyMap(int userId) {
-        // 拿到好友主键 ID 和好友用户 ID，将好友用户 ID 映射到好友主键 ID
-        return friendMapper.selectList(new LambdaQueryWrapper<Friend>()
-                .select(Friend::getFriendId, Friend::getToUserId)
-                .eq(Friend::getUserId, userId).isNull(Friend::getDeleteTime))
-                .stream().collect(Collectors.toMap(Friend::getToUserId, Friend::getFriendId));
     }
 
     @Override

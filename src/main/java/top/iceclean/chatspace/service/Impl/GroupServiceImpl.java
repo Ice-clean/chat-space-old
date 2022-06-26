@@ -8,13 +8,16 @@ import top.iceclean.chatspace.VO.GroupVO;
 import top.iceclean.chatspace.VO.UserVO;
 import top.iceclean.chatspace.constant.RedisKey;
 import top.iceclean.chatspace.constant.ResponseStatusEnum;
+import top.iceclean.chatspace.constant.SessionType;
 import top.iceclean.chatspace.mapper.GroupMapper;
+import top.iceclean.chatspace.mapper.SessionMapper;
 import top.iceclean.chatspace.mapper.UserGroupMapper;
 import top.iceclean.chatspace.po.Group;
 import top.iceclean.chatspace.pojo.Response;
 import top.iceclean.chatspace.po.UserGroup;
 import top.iceclean.chatspace.service.GroupService;
 import top.iceclean.chatspace.service.MessageService;
+import top.iceclean.chatspace.service.SessionService;
 import top.iceclean.chatspace.service.UserService;
 import top.iceclean.chatspace.utils.RedisCache;
 import top.iceclean.logtrace.annotation.EnableLogTrace;
@@ -41,6 +44,9 @@ public class GroupServiceImpl implements GroupService {
     @Lazy
     @Autowired
     private MessageService messageService;
+    @Lazy
+    @Autowired
+    private SessionService sessionService;
     @Autowired
     private RedisCache redisCache;
     private Logger logTrace;
@@ -50,7 +56,10 @@ public class GroupServiceImpl implements GroupService {
         // 先获取所有群聊主键
         List<Integer> groupKeyList = getGroupKeyList(userId);
         // 再拿到所有群聊并转化成响应对象
-        List<GroupVO> groupList = groupKeyList.stream().map(groupId -> getGroupVO(groupId, userId)).collect(Collectors.toList());
+        List<GroupVO> groupList = groupKeyList.stream().map(groupId ->
+                getGroupVO(groupId, userId).setSessionId(
+                        sessionService.getSessionId(SessionType.GROUP.value(), groupId))
+        ).collect(Collectors.toList());
         return new Response(ResponseStatusEnum.OK).addData("groupList", groupList);
     }
 

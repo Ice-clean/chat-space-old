@@ -21,6 +21,14 @@ public interface SessionService {
     Session createSession(SessionType type, int targetId);
 
     /**
+     * 通过类型和目标 ID 获取会话 ID
+     * @param type 会话类型
+     * @param targetId 目标 ID
+     * @return 会话 ID
+     */
+    Integer getSessionId(int type, int targetId);
+
+    /**
      * 获取用户所有的会话 ID
      * @param userId 用户 ID
      * @return 会话 ID 集合
