@@ -85,9 +85,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return new Response(ResponseStatusEnum.CODE_INVALID);
         }
 
-        // 将密码加密
+        // 将密码加密，并设置牧人头像
         userDTO.setUserPass(Md5Utils.encode(userDTO.getUserPass()));
-        System.out.println(userDTO.getUserPass());
+
         // 验证码有效则执行注册
         if (userMapper.insert(new User(userDTO)) != 1) {
             return new Response(ResponseStatusEnum.DATABASE_ERROR);
@@ -123,6 +123,52 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         // 上传失败时返回错误信息
         return new Response(ResponseStatusEnum.INTERNAL_SERVER_ERROR).setMsg(code.getMsg());
+    }
+
+    @Override
+    public Response updateInfo(int userId, UserDTO userDTO) {
+        // 拿到用户信息
+        User user = getUserById(userId);
+        if (user == null) {
+            return new Response(ResponseStatusEnum.USER_NOT_EXIST);
+        }
+
+        // 修改性别
+        if (userDTO.getSex() != null) {
+            user.setSex(userDTO.getSex());
+        }
+
+        // 修改昵称
+        if (userDTO.getNickName() != null) {
+            user.setNickName(userDTO.getNickName());
+        }
+
+        // 执行修改并返回结果
+        if (userMapper.updateById(user) == 1) {
+            return new Response(ResponseStatusEnum.OK).setMsg("更新信息成功");
+        }
+        return new Response(ResponseStatusEnum.DATABASE_ERROR);
+    }
+
+    @Override
+    public Response updatePassword(int userId, String oldPassword, String newPassword) {
+        // 拿到用户
+        User user = getUserById(userId);
+        if (user == null) {
+            return new Response(ResponseStatusEnum.USER_NOT_EXIST);
+        }
+
+        // 匹配旧密码
+        if (!user.getUserPass().equals(Md5Utils.encode(oldPassword))) {
+            return new Response(ResponseStatusEnum.PASSWORD_INVALID);
+        }
+
+        // 匹配成功，则给予修改
+        user.setUserPass(Md5Utils.encode(newPassword));
+        if (userMapper.updateById(user) == 1) {
+            return new Response(ResponseStatusEnum.OK).setMsg("修改密码成功");
+        }
+        return new Response(ResponseStatusEnum.DATABASE_ERROR);
     }
 
     @Override

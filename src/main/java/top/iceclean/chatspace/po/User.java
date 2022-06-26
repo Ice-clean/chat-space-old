@@ -37,5 +37,8 @@ public class User {
         this.sex = userDTO.getSex();
         this.nickName = userDTO.getUserName();
         this.email = userDTO.getEmail();
+
+        // 设置默认头像
+        this.avatar = "../img/avatar/default.png";
     }
 }

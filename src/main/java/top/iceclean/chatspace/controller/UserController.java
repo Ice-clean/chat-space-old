@@ -104,4 +104,27 @@ public class UserController {
                                @OutputValue MultipartFile avatar) {
         return userService.uploadAvatar(userId, avatar);
     }
+
+    /**
+     * 修改用户信息
+     * @param userId 用户 ID
+     * @param userDTO 有效字段：性别、昵称
+     * @return 是否修改成功
+     */
+    @PatchMapping("/info/{userId}")
+    public Object updateInfo(@PathVariable int userId, UserDTO userDTO) {
+        return userService.updateInfo(userId, userDTO);
+    }
+
+    /**
+     * 更改密码
+     * @param userId 用户 ID
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     * @return 是否更改成功
+     */
+    @PatchMapping("/password/{userId}")
+    public Object updatePassword(@PathVariable int userId, String oldPassword, String newPassword) {
+        return userService.updatePassword(userId, oldPassword, newPassword);
+    }
 }

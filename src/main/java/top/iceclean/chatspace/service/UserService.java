@@ -38,6 +38,23 @@ public interface UserService {
     Response uploadAvatar(int userId, MultipartFile avatar);
 
     /**
+     * 修改用户信息
+     * @param userId 用户 ID
+     * @param userDTO 有效字段：性别、昵称
+     * @return 是否修改成功
+     */
+    Response updateInfo(int userId, UserDTO userDTO);
+
+    /**
+     * 更改密码
+     * @param userId 用户 ID
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     * @return 是否更改成功
+     */
+    Response updatePassword(int userId, String oldPassword, String newPassword);
+
+    /**
      * 通过用户 ID 获取用户对象
      * @param userId 用户 ID
      * @return 用户对象

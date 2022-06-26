@@ -9,7 +9,7 @@ import lombok.Data;
  */
 @Data
 public class UserDTO {
-    /** 必要信息 */
+    /** 登录需要的信息 */
     private String userName;
     private String userPass;
 
@@ -17,4 +17,7 @@ public class UserDTO {
     private String sex;
     private String email;
     private String code;
+
+    /** 可修改昵称 */
+    private String nickName;
 }

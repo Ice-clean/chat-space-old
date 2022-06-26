@@ -21,7 +21,8 @@ public enum ResponseStatusEnum {
     LOGIN_FAILED(1001, "用户名或密码错误"),
     USER_NOT_EXIST(1002, "用户不存在"),
     USERNAME_INVALID(1003, "用户名已被占用"),
-    CODE_INVALID(1004, "验证码无效");
+    CODE_INVALID(1004, "验证码无效"),
+    PASSWORD_INVALID(1005, "旧密码不匹配");
 
 
     /** 状态码 */
