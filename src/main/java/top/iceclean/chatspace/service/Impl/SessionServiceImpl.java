@@ -32,6 +32,15 @@ public class SessionServiceImpl implements SessionService {
 
 
     @Override
+    public Session createSession(SessionType type, int targetId) {
+        // 新建一个会话并创建
+        Session session = new Session(type.value(), targetId);
+        sessionMapper.insert(session);
+        // 拿到最新的会话并返回
+        return sessionMapper.selectById(session.getSessionId());
+    }
+
+    @Override
     public List<Integer> getSessionIdList(int userId) {
         // 分别将好友和群聊 ID 转化为会话 ID
         return sessionMapper.selectList(new LambdaQueryWrapper<Session>()

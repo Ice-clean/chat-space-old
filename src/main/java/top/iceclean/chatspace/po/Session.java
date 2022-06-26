@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 会话类
@@ -13,6 +14,7 @@ import lombok.Data;
  */
 @Data
 @TableName("t_session")
+@NoArgsConstructor
 public class Session {
     @TableId(value = "session_id", type = IdType.AUTO)
     private Integer sessionId;
@@ -22,4 +24,9 @@ public class Session {
     private String createTime;
     @TableField(update = "now()")
     private String updateTime;
+
+    public Session(int type, int targetId) {
+        this.type = type;
+        this.targetId = targetId;
+    }
 }

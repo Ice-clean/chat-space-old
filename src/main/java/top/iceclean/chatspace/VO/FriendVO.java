@@ -13,6 +13,8 @@ public class FriendVO {
     /** 朋友的用户信息 */
     private UserVO user;
 
+    /** 当前用户和该用户的好友会话 ID */
+    private Integer sessionId;
     /** 当前用户对该朋友的备注 */
     private String markName;
     /** 开始成为朋友的时间 */

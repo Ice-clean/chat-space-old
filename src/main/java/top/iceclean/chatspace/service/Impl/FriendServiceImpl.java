@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service;
 import top.iceclean.chatspace.VO.FriendVO;
 import top.iceclean.chatspace.VO.UserVO;
 import top.iceclean.chatspace.constant.ResponseStatusEnum;
+import top.iceclean.chatspace.constant.SessionType;
 import top.iceclean.chatspace.mapper.FriendMapper;
 import top.iceclean.chatspace.po.Friend;
+import top.iceclean.chatspace.po.Session;
 import top.iceclean.chatspace.pojo.Response;
 import top.iceclean.chatspace.po.User;
 import top.iceclean.chatspace.service.FriendService;
+import top.iceclean.chatspace.service.SessionService;
 import top.iceclean.chatspace.service.UserService;
 import top.iceclean.logtrace.annotation.EnableLogTrace;
 import top.iceclean.logtrace.bean.Logger;
@@ -33,6 +36,9 @@ public class FriendServiceImpl implements FriendService {
     private FriendMapper friendMapper;
     @Autowired
     private UserService userService;
+    @Lazy
+    @Autowired
+    private SessionService sessionService;
     private Logger logTrace;
 
     @Override
@@ -49,9 +55,14 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public boolean becomeFriends(int senderId, int userId) {
         // 拿到最大的朋友 ID
-        Integer maxFriendId = friendMapper.selectOne(new QueryWrapper<Friend>().select("max(friend_id)")).getFriendId();
+        int maxFriendId = 1 + friendMapper.selectOne(new QueryWrapper<Friend>().select("max(friend_id) as friendId")).getFriendId();
         // 建立双向的映射关系，并返回是否执行成功
-        return friendMapper.insert(new Friend(maxFriendId + 1, senderId, userId)) == 1;
+        boolean success = friendMapper.insert(new Friend(maxFriendId, senderId, userId)) == 1;
+        success &= friendMapper.insert(new Friend(maxFriendId, userId, senderId)) == 1;
+        // 最后为他们分配独立的会话
+        Session session = sessionService.createSession(SessionType.FRIEND, maxFriendId);
+        // 判断是否全部正确
+        return success && session != null && session.getSessionId() != null;
     }
 
     @Override

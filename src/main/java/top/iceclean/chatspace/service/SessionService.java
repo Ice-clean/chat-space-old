@@ -1,6 +1,8 @@
 package top.iceclean.chatspace.service;
 
 import top.iceclean.chatspace.VO.SessionVO;
+import top.iceclean.chatspace.constant.SessionType;
+import top.iceclean.chatspace.po.Session;
 
 import java.util.List;
 
@@ -9,6 +11,14 @@ import java.util.List;
  * @date : 2022-06-11
  */
 public interface SessionService {
+
+    /**
+     * 创建会话
+     * @param type 会话类型
+     * @param targetId 会话的目标 ID
+     * @return 新建会话对象
+     */
+    Session createSession(SessionType type, int targetId);
 
     /**
      * 获取用户所有的会话 ID
