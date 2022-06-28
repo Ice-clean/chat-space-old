@@ -24,8 +24,10 @@ public class SessionRequestListVO {
     /** 通过收集初始化数据 */
     public SessionRequestListVO(Map<Integer, Map<Integer, List<SessionRequestVO>>> collect) {
         this.friendRequest = collect.get(0) != null ? collect.get(0).get(0) : null;
-        this.groupRequest = collect.get(1) != null ? collect.get(1).get(0) : null;
+//        this.groupRequest = collect.get(1) != null ? collect.get(1).get(0) : null;
+        this.requestGroup = collect.get(1) != null ? collect.get(1).get(0) : null;
         this.requestFriend = collect.get(0) != null ? collect.get(0).get(1) : null;
-        this.requestGroup = collect.get(1) != null ? collect.get(1).get(1) : null;
+//        this.requestGroup = collect.get(1) != null ? collect.get(1).get(1) : null;
+        this.groupRequest = collect.get(1) != null ? collect.get(1).get(1) : null;
     }
 }

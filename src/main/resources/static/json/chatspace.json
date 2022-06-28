@@ -56,9 +56,11 @@
                                     {
                                       "type": "button",
                                       "label": "搜索",
-                                      "level": "link",
-                                      "block": true,
-                                      "className": "bg-dark"
+                                      "dialog": {
+                                        "title": "搜索结果",
+                                        "body": "2333"
+                                      },
+                                      "actionType": "dialog"
                                     }
                                   ]
                                 }
@@ -167,10 +169,9 @@
                                                   "mode": "text",
                                                   "text": "$session.badgeNum",
                                                   "style": {
-                                                    "background": "#c12222",
+                                                    "background": "#da3939",
                                                     "fontSize": "5px"
-                                                  },
-                                                  "visibleOn": "this.session.badgeNum > 0"
+                                                  }
                                                 },
                                                 "shape": "square",
                                                 "size": 40,
@@ -289,9 +290,8 @@
                               "itemAction": {
                                 "type": "action",
                                 "actionType": "reload",
-                                "target": "chatListService?sessionId=${session.sessionId}&name=${session.name}&aaa=1&activeKey=${activeKey}"
-                              },
-                              "id": "messageList"
+                                "target": "chatListService?sessionId=${session.sessionId}&name=${name}"
+                              }
                             }
                           ],
                           "type": "service",
@@ -483,18 +483,8 @@
                           "type": "container",
                           "body": [
                             {
-                              "type": "textarea",
-                              "name": "messageInput",
-                              "id": "messageInput",
-                              "className": "h-full p messageInput",
-                              "labelClassName": "",
-                              "maxRows": "6",
-                              "minRows": "6",
-                              "inputClassName": "",
-                              "style": {
-                                "color": "#FF0000"
-                              },
-                              "validateOnChange": false
+                              "type": "tpl",
+                              "tpl": "<div contenteditable='true' class='messageInput' id='messageInput' style='height: 100%; padding: 10px; outline: none; overflow-y: scroll'>这里可以编辑</div>"
                             }
                           ],
                           "style": {
@@ -624,21 +614,98 @@
                                   "body": [
                                     {
                                       "type": "input-text",
-                                      "name": "input-group",
-                                      "placeholder": "输入搜索内容",
-                                      "className": ""
+                                      "name": "requestInput",
+                                      "placeholder": "输入搜索内容"
                                     },
                                     {
                                       "type": "button",
                                       "label": "搜索",
-                                      "level": "link",
-                                      "block": true,
-                                      "className": "bg-dark"
+                                      "id": "requestSearch",
+                                      "className": "requestSearch",
+                                      "dialog": {
+                                        "title": "搜索结果",
+                                        "body": {
+                                          "type": "list",
+                                          "className": "result",
+                                          "source": "$result",
+                                          "listItem": {
+                                            "body": [
+                                              {
+                                                "type": "container",
+                                                "body": [
+                                                  {
+                                                    "type": "grid",
+                                                    "columns": [
+                                                      {
+                                                        "md": "auto",
+                                                        "body": [
+                                                          {
+                                                            "type": "avatar",
+                                                            "id": "u:4eec8ab4c519",
+                                                            "width": 35,
+                                                            "height": 35,
+                                                            "src": "$avatar",
+                                                            "thumbMode": "cover",
+                                                            "className": "r r-2x",
+                                                            "shape": "square",
+                                                            "size": 40,
+                                                            "style": {
+                                                            }
+                                                          }
+                                                        ],
+                                                        "shape": "circle",
+                                                        "size": 40,
+                                                        "columnClassName": "p-sm"
+                                                      },
+                                                      {
+                                                        "body": [
+                                                          {
+                                                            "type": "tpl",
+                                                            "tpl": "$userName（$nickName）",
+                                                            "inline": true,
+                                                            "id": "u:54c4a5c94d53",
+                                                            "wrapperComponent": "div",
+                                                            "style": {
+                                                              "fontSize": "15px",
+                                                              "fontWeight": "bold"
+                                                            }
+                                                          }
+                                                        ],
+                                                        "md": "",
+                                                        "valign": "middle"
+                                                      },
+                                                      {
+                                                        "body": [
+                                                          {
+                                                            "type": "button",
+                                                            "label": "加为好友"
+                                                          }
+                                                        ],
+                                                        "md": "auto",
+                                                        "valign": "middle"
+                                                      }
+                                                    ]
+                                                  }
+                                                ],
+                                                "style": {
+                                                },
+                                                "className": "p-l-sm p-r-sm"
+                                              }
+                                            ],
+                                            "actions": [
+                                            ]
+                                          },
+                                          "showHeader": true,
+                                          "showFooter": true
+                                        }
+                                      },
+                                      "actionType": "dialog"
                                     }
-                                  ]
+                                  ],
+                                  "id": "requestInput"
                                 }
                               ],
-                              "id": "searchService"
+                              "id": "requestSearchService"
                             }
                           ],
                           "id": "u:dd139501de80",
@@ -718,7 +785,7 @@
                           "body": [
                             {
                               "type": "list",
-                              "className": "",
+                              "className": "funcList",
                               "source": "$funcList",
                               "listItem": {
                                 "body": [
@@ -768,6 +835,33 @@
                                             "valign": "middle",
                                             "shape": "circle",
                                             "size": 40
+                                          },
+                                          {
+                                            "body": [
+                                              {
+                                                "type": "tpl",
+                                                "inline": true,
+                                                "id": "u:54c4a5c94d53",
+                                                "wrapperComponent": "div",
+                                                "style": {
+                                                  "fontSize": "15px",
+                                                  "fontWeight": "bold"
+                                                },
+                                                "badge": {
+                                                  "mode": "text",
+                                                  "text": "$badge",
+                                                  "style": {
+                                                    "background": "#da3939",
+                                                    "fontSize": "5px"
+                                                  }
+                                                }
+                                              }
+                                            ],
+                                            "md": "auto",
+                                            "valign": "middle",
+                                            "shape": "circle",
+                                            "size": 40,
+                                            "columnClassName": "p-r-lg"
                                           }
                                         ]
                                       }
@@ -784,7 +878,8 @@
                               "showFooter": true,
                               "itemAction": {
                                 "type": "action",
-                                "actionType": "reload"
+                                "actionType": "reload",
+                                "target": "funcService?displayName=${displayName},displayService"
                               }
                             }
                           ],
@@ -793,11 +888,15 @@
                             "funcList": [
                               {
                                 "image": "../icon/newFriend.png",
-                                "title": "新的朋友"
+                                "title": "新的朋友",
+                                "badge": "$friend",
+                                "displayName": "friend_request"
                               },
                               {
                                 "image": "../icon/newGroup.png",
-                                "title": "新的群组"
+                                "title": "新的群组",
+                                "badge": "$group",
+                                "displayName": "group_request"
                               }
                             ]
                           }
@@ -868,7 +967,8 @@
                                                     "inline": false,
                                                     "style": {
                                                       "text-align": "right"
-                                                    }
+                                                    },
+                                                    "className": "text-success"
                                                   }
                                                 ],
                                                 "md": "auto",
@@ -889,7 +989,8 @@
                                   "showFooter": true,
                                   "itemAction": {
                                     "type": "action",
-                                    "actionType": "reload"
+                                    "actionType": "reload",
+                                    "target": "groupService?groupId=${groupId}"
                                   }
                                 }
                               ],
@@ -927,7 +1028,7 @@
                                                     "id": "u:4eec8ab4c519",
                                                     "width": 35,
                                                     "height": 35,
-                                                    "src": "$avatar",
+                                                    "src": "$user.avatar",
                                                     "thumbMode": "cover",
                                                     "className": "r r-2x",
                                                     "shape": "square",
@@ -944,7 +1045,7 @@
                                                 "body": [
                                                   {
                                                     "type": "tpl",
-                                                    "tpl": "$nickName",
+                                                    "tpl": "$user.nickName",
                                                     "inline": true,
                                                     "id": "u:54c4a5c94d53",
                                                     "wrapperComponent": "div",
@@ -962,9 +1063,8 @@
                                                   {
                                                     "type": "mapping",
                                                     "className": {
-                                                      "text-success": "online == 1",
-                                                      "text-danger": "online == 0",
-                                                      "text-warning": "online == -1"
+                                                      "text-success": "user.online == 1",
+                                                      "text-danger": "user.online == 0"
                                                     },
                                                     "label": "状态展示",
                                                     "map": {
@@ -985,7 +1085,7 @@
                                                         }
                                                       }
                                                     },
-                                                    "name": "online"
+                                                    "name": "user.online"
                                                   }
                                                 ],
                                                 "md": "auto",
@@ -1006,7 +1106,8 @@
                                   "showFooter": true,
                                   "itemAction": {
                                     "type": "action",
-                                    "actionType": "reload"
+                                    "actionType": "reload",
+                                    "target": "friendService?sessionId=${sessionId}"
                                   }
                                 }
                               ],
@@ -1025,21 +1126,1166 @@
                       "type": "container",
                       "id": "u:e1ea5904887f",
                       "body": [
+                        {
+                          "type": "service",
+                          "body": [
+                            {
+                              "type": "mapping",
+                              "map": {
+                                "friend_request": {
+                                  "type": "container",
+                                  "body": [
+                                    {
+                                      "type": "collapse",
+                                      "style": {
+                                        "backgroundColor": "#323333"
+                                      },
+                                      "header": "我收到的申请",
+                                      "body": [
+                                        {
+                                          "type": "list",
+                                          "source": "$friendRequest",
+                                          "listItem": {
+                                            "body": [
+                                              {
+                                                "type": "container",
+                                                "body": [
+                                                  {
+                                                    "type": "grid",
+                                                    "columns": [
+                                                      {
+                                                        "md": "auto",
+                                                        "body": [
+                                                          {
+                                                            "type": "avatar",
+                                                            "id": "u:4eec8ab4c519",
+                                                            "width": 40,
+                                                            "height": 40,
+                                                            "src": "$user.avatar",
+                                                            "thumbMode": "cover",
+                                                            "className": "r r-2x",
+                                                            "shape": "square",
+                                                            "size": 40,
+                                                            "style": {
+                                                            },
+                                                            "text": ""
+                                                          }
+                                                        ],
+                                                        "shape": "circle",
+                                                        "size": 40,
+                                                        "columnClassName": "p-sm"
+                                                      },
+                                                      {
+                                                        "body": [
+                                                          {
+                                                            "type": "tpl",
+                                                            "tpl": "$user.nickName",
+                                                            "inline": true,
+                                                            "id": "u:54c4a5c94d53",
+                                                            "wrapperComponent": "div",
+                                                            "style": {
+                                                              "fontSize": "15px",
+                                                              "fontWeight": "bold"
+                                                            }
+                                                          },
+                                                          {
+                                                            "type": "tpl",
+                                                            "tpl": "<font color='#cccccc'>$reqRemark</font> <font color='#aaaaaa'>[ 来源：$reqSrc ]</font>",
+                                                            "inline": true,
+                                                            "style": {
+                                                              "fontSize": "9px"
+                                                            }
+                                                          }
+                                                        ],
+                                                        "md": "",
+                                                        "valign": "middle"
+                                                      },
+                                                      {
+                                                        "body": [
+                                                          {
+                                                            "type": "mapping",
+                                                            "map": {
+                                                              "0": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "className": "text-success p-xs p-r p-l",
+                                                                    "tpl": "接受"
+                                                                  },
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "className": "text-danger p-xs p-r p-l",
+                                                                    "tpl": "拒绝"
+                                                                  }
+                                                                ],
+                                                                "align": "right"
+                                                              },
+                                                              "1": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "className": "text-success p-xs p-l-xs p-r-xs",
+                                                                    "tpl": "接受",
+                                                                    "text-align": "right"
+                                                                  },
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "className": "text-danger p-xs p-l-xs p-r-xs",
+                                                                    "tpl": "拒绝",
+                                                                    "text-align": "right"
+                                                                  }
+                                                                ],
+                                                                "style": {
+                                                                  "textAlign": "right"
+                                                                }
+                                                              },
+                                                              "2": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "tpl": "已接受",
+                                                                    "inline": false,
+                                                                    "style": {
+                                                                      "color": "#2c5e3b",
+                                                                      "text-align": "right"
+                                                                    }
+                                                                  }
+                                                                ],
+                                                                "align": "right"
+                                                              },
+                                                              "3": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "tpl": "已拒绝",
+                                                                    "inline": false,
+                                                                    "style": {
+                                                                      "color": "#7b3333",
+                                                                      "text-align": "right"
+                                                                    }
+                                                                  }
+                                                                ],
+                                                                "align": "right"
+                                                              }
+                                                            },
+                                                            "name": "reqStatus"
+                                                          },
+                                                          {
+                                                            "type": "tpl",
+                                                            "tpl": "$sendTime",
+                                                            "inline": false,
+                                                            "id": "u:bc0661d32688",
+                                                            "align": "right",
+                                                            "style": {
+                                                              "color": "#9b9b9b",
+                                                              "text-align": "right"
+                                                            },
+                                                            "className": "r"
+                                                          }
+                                                        ],
+                                                        "md": "auto",
+                                                        "valign": "middle"
+                                                      }
+                                                    ]
+                                                  }
+                                                ],
+                                                "className": "p-l-sm p-r-sm"
+                                              }
+                                            ],
+                                            "actions": [
+                                            ]
+                                          },
+                                          "showHeader": true,
+                                          "showFooter": true,
+                                          "itemAction": {
+                                            "type": "action",
+                                            "actionType": "reload"
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "collapse",
+                                      "style": {
+                                        "backgroundColor": "#323333"
+                                      },
+                                      "header": "我申请的",
+                                      "body": [
+                                        {
+                                          "type": "list",
+                                          "source": "$requestFriend",
+                                          "listItem": {
+                                            "body": [
+                                              {
+                                                "type": "container",
+                                                "body": [
+                                                  {
+                                                    "type": "grid",
+                                                    "columns": [
+                                                      {
+                                                        "md": "auto",
+                                                        "body": [
+                                                          {
+                                                            "type": "avatar",
+                                                            "id": "u:4eec8ab4c519",
+                                                            "width": 40,
+                                                            "height": 40,
+                                                            "src": "$user.avatar",
+                                                            "thumbMode": "cover",
+                                                            "className": "r r-2x",
+                                                            "shape": "square",
+                                                            "size": 40,
+                                                            "style": {
+                                                            },
+                                                            "text": ""
+                                                          }
+                                                        ],
+                                                        "shape": "circle",
+                                                        "size": 40,
+                                                        "columnClassName": "p-sm"
+                                                      },
+                                                      {
+                                                        "body": [
+                                                          {
+                                                            "type": "tpl",
+                                                            "tpl": "$user.nickName",
+                                                            "inline": true,
+                                                            "id": "u:54c4a5c94d53",
+                                                            "wrapperComponent": "div",
+                                                            "style": {
+                                                              "fontSize": "15px",
+                                                              "fontWeight": "bold"
+                                                            }
+                                                          },
+                                                          {
+                                                            "type": "tpl",
+                                                            "tpl": "$reqRemark",
+                                                            "inline": true,
+                                                            "id": "u:ddccd99b2cc3",
+                                                            "style": {
+                                                              "fontSize": "9px",
+                                                              "paddingTop": "",
+                                                              "color": "#9b9b9b"
+                                                            }
+                                                          }
+                                                        ],
+                                                        "md": "",
+                                                        "valign": "middle"
+                                                      },
+                                                      {
+                                                        "body": [
+                                                          {
+                                                            "type": "mapping",
+                                                            "map": {
+                                                              "0": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "tpl": "等待接收",
+                                                                    "inline": true,
+                                                                    "style": {
+                                                                      "color": "#dddddd"
+                                                                    },
+                                                                    "align": "right"
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "1": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "tpl": "等待处理",
+                                                                    "inline": true,
+                                                                    "style": {
+                                                                      "color": "#dddddd"
+                                                                    },
+                                                                    "align": "right"
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "2": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "tpl": "已接受",
+                                                                    "inline": false,
+                                                                    "style": {
+                                                                      "color": "#2c5e3b"
+                                                                    },
+                                                                    "align": "right"
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "3": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "tpl": "已拒绝",
+                                                                    "inline": false,
+                                                                    "style": {
+                                                                      "color": "#7b3333"
+                                                                    },
+                                                                    "align": "right"
+                                                                  }
+                                                                ]
+                                                              }
+                                                            },
+                                                            "name": "reqStatus"
+                                                          },
+                                                          {
+                                                            "type": "tpl",
+                                                            "tpl": "$sendTime",
+                                                            "inline": false,
+                                                            "id": "u:bc0661d32688",
+                                                            "align": "right",
+                                                            "style": {
+                                                              "color": "#9b9b9b",
+                                                              "text-align": "right"
+                                                            },
+                                                            "className": "r"
+                                                          }
+                                                        ],
+                                                        "md": "auto",
+                                                        "valign": "middle"
+                                                      }
+                                                    ]
+                                                  }
+                                                ],
+                                                "className": "p-l-sm p-r-sm"
+                                              }
+                                            ],
+                                            "actions": [
+                                            ]
+                                          },
+                                          "showHeader": true,
+                                          "showFooter": true,
+                                          "itemAction": {
+                                            "type": "action",
+                                            "actionType": "reload"
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "group_request": {
+                                  "type": "container",
+                                  "body": [
+                                    {
+                                      "type": "collapse",
+                                      "style": {
+                                        "backgroundColor": "#323333"
+                                      },
+                                      "header": "我收到的申请",
+                                      "body": [
+                                        {
+                                          "type": "list",
+                                          "source": "$groupRequest",
+                                          "listItem": {
+                                            "body": [
+                                              {
+                                                "type": "container",
+                                                "body": [
+                                                  {
+                                                    "type": "grid",
+                                                    "columns": [
+                                                      {
+                                                        "md": "auto",
+                                                        "body": [
+                                                          {
+                                                            "type": "avatar",
+                                                            "id": "u:4eec8ab4c519",
+                                                            "width": 40,
+                                                            "height": 40,
+                                                            "src": "$user.avatar",
+                                                            "thumbMode": "cover",
+                                                            "className": "r r-2x",
+                                                            "shape": "square",
+                                                            "size": 40,
+                                                            "style": {
+                                                            },
+                                                            "text": ""
+                                                          }
+                                                        ],
+                                                        "shape": "circle",
+                                                        "size": 40,
+                                                        "columnClassName": "p-sm"
+                                                      },
+                                                      {
+                                                        "body": [
+                                                          {
+                                                            "type": "tpl",
+                                                            "tpl": "$user.nickName",
+                                                            "inline": true,
+                                                            "wrapperComponent": "div",
+                                                            "style": {
+                                                              "fontSize": "15px",
+                                                              "fontWeight": "bold"
+                                                            }
+                                                          },
+                                                          {
+                                                            "type": "tpl",
+                                                            "tpl": "<font color='#087cfa'>申请加入群聊：$group.groupName</font> <font color='#cccccc'> | $reqRemark </font> <font color='#aaaaaa'>[ 来源：$reqSrc ]</font>",
+                                                            "inline": true,
+                                                            "style": {
+                                                              "fontSize": "9px"
+                                                            }
+                                                          }
+                                                        ],
+                                                        "md": "",
+                                                        "valign": "middle"
+                                                      },
+                                                      {
+                                                        "body": [
+                                                          {
+                                                            "type": "mapping",
+                                                            "map": {
+                                                              "0": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "className": "text-success p-xs p-r p-l",
+                                                                    "tpl": "接受"
+                                                                  },
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "className": "text-danger p-xs p-r p-l",
+                                                                    "tpl": "拒绝"
+                                                                  }
+                                                                ],
+                                                                "align": "right"
+                                                              },
+                                                              "1": {
+                                                                "type": "container",
+                                                                "style": {
+                                                                  "textAlign": "right"
+                                                                },
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "className": "text-success p-xs p-l-xs p-r-xs",
+                                                                    "tpl": "接受",
+                                                                    "text-align": "right"
+                                                                  },
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "className": "text-danger p-xs p-l-xs p-r-xs",
+                                                                    "tpl": "拒绝",
+                                                                    "text-align": "right"
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "2": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "tpl": "已接受",
+                                                                    "inline": false,
+                                                                    "style": {
+                                                                      "color": "#2c5e3b",
+                                                                      "text-align": "right"
+                                                                    }
+                                                                  }
+                                                                ],
+                                                                "align": "right"
+                                                              },
+                                                              "3": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "tpl": "已拒绝",
+                                                                    "inline": false,
+                                                                    "style": {
+                                                                      "color": "#7b3333",
+                                                                      "text-align": "right"
+                                                                    }
+                                                                  }
+                                                                ],
+                                                                "align": "right"
+                                                              }
+                                                            },
+                                                            "name": "reqStatus"
+                                                          },
+                                                          {
+                                                            "type": "tpl",
+                                                            "tpl": "$sendTime",
+                                                            "inline": false,
+                                                            "id": "u:bc0661d32688",
+                                                            "align": "right",
+                                                            "style": {
+                                                              "color": "#9b9b9b",
+                                                              "text-align": "right"
+                                                            },
+                                                            "className": "r"
+                                                          }
+                                                        ],
+                                                        "md": "auto",
+                                                        "valign": "middle"
+                                                      }
+                                                    ]
+                                                  }
+                                                ],
+                                                "className": "p-l-sm p-r-sm"
+                                              }
+                                            ],
+                                            "actions": [
+                                            ]
+                                          },
+                                          "showHeader": true,
+                                          "showFooter": true,
+                                          "itemAction": {
+                                            "type": "action",
+                                            "actionType": "reload"
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "collapse",
+                                      "style": {
+                                        "backgroundColor": "#323333"
+                                      },
+                                      "header": "我申请的",
+                                      "body": [
+                                        {
+                                          "type": "list",
+                                          "source": "$requestGroup",
+                                          "listItem": {
+                                            "body": [
+                                              {
+                                                "type": "container",
+                                                "body": [
+                                                  {
+                                                    "type": "grid",
+                                                    "columns": [
+                                                      {
+                                                        "md": "auto",
+                                                        "body": [
+                                                          {
+                                                            "type": "avatar",
+                                                            "id": "u:4eec8ab4c519",
+                                                            "width": 40,
+                                                            "height": 40,
+                                                            "src": "$group.avatar",
+                                                            "thumbMode": "cover",
+                                                            "className": "r r-2x",
+                                                            "shape": "square",
+                                                            "size": 40,
+                                                            "style": {
+                                                            },
+                                                            "text": ""
+                                                          }
+                                                        ],
+                                                        "shape": "circle",
+                                                        "size": 40,
+                                                        "columnClassName": "p-sm"
+                                                      },
+                                                      {
+                                                        "body": [
+                                                          {
+                                                            "type": "tpl",
+                                                            "tpl": "$group.groupName",
+                                                            "inline": true,
+                                                            "id": "u:54c4a5c94d53",
+                                                            "wrapperComponent": "div",
+                                                            "style": {
+                                                              "fontSize": "15px",
+                                                              "fontWeight": "bold"
+                                                            }
+                                                          },
+                                                          {
+                                                            "type": "tpl",
+                                                            "tpl": "$reqRemark",
+                                                            "inline": true,
+                                                            "id": "u:ddccd99b2cc3",
+                                                            "style": {
+                                                              "fontSize": "9px",
+                                                              "paddingTop": "",
+                                                              "color": "#9b9b9b"
+                                                            }
+                                                          }
+                                                        ],
+                                                        "md": "",
+                                                        "valign": "middle"
+                                                      },
+                                                      {
+                                                        "body": [
+                                                          {
+                                                            "type": "mapping",
+                                                            "map": {
+                                                              "0": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "tpl": "等待接收",
+                                                                    "inline": true,
+                                                                    "style": {
+                                                                      "color": "#dddddd"
+                                                                    },
+                                                                    "align": "right"
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "1": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "tpl": "等待处理",
+                                                                    "inline": true,
+                                                                    "style": {
+                                                                      "color": "#dddddd"
+                                                                    },
+                                                                    "align": "right"
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "2": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "tpl": "已接受",
+                                                                    "inline": false,
+                                                                    "style": {
+                                                                      "color": "#2c5e3b"
+                                                                    },
+                                                                    "align": "right"
+                                                                  }
+                                                                ]
+                                                              },
+                                                              "3": {
+                                                                "type": "container",
+                                                                "body": [
+                                                                  {
+                                                                    "type": "tpl",
+                                                                    "tpl": "已拒绝",
+                                                                    "inline": false,
+                                                                    "style": {
+                                                                      "color": "#7b3333"
+                                                                    },
+                                                                    "align": "right"
+                                                                  }
+                                                                ]
+                                                              }
+                                                            },
+                                                            "name": "reqStatus"
+                                                          },
+                                                          {
+                                                            "type": "tpl",
+                                                            "tpl": "$sendTime",
+                                                            "inline": false,
+                                                            "id": "u:bc0661d32688",
+                                                            "align": "right",
+                                                            "style": {
+                                                              "color": "#9b9b9b",
+                                                              "text-align": "right"
+                                                            },
+                                                            "className": "r"
+                                                          }
+                                                        ],
+                                                        "md": "auto",
+                                                        "valign": "middle"
+                                                      }
+                                                    ]
+                                                  }
+                                                ],
+                                                "className": "p-l-sm p-r-sm"
+                                              }
+                                            ],
+                                            "actions": [
+                                            ]
+                                          },
+                                          "showHeader": true,
+                                          "showFooter": true,
+                                          "itemAction": {
+                                            "type": "action",
+                                            "actionType": "reload"
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "friend": {
+                                  "type": "container",
+                                  "body": [
+                                    {
+                                      "type": "grid",
+                                      "columns": [
+                                        {
+                                          "body": [
+                                            {
+                                              "type": "grid",
+                                              "columns": [
+                                                {
+                                                  "body": [
+                                                    {
+                                                      "type": "container",
+                                                      "body": [
+                                                        {
+                                                          "type": "grid",
+                                                          "columns": [
+                                                            {
+                                                              "body": [
+                                                                {
+                                                                  "type": "avatar",
+                                                                  "src": "$friend.user.avatar",
+                                                                  "thumbMode": "cover",
+                                                                  "className": "r r-2x",
+                                                                  "shape": "square",
+                                                                  "size": 70
+                                                                }
+                                                              ],
+                                                              "shape": "circle",
+                                                              "size": 40,
+                                                              "md": "auto"
+                                                            }
+                                                          ],
+                                                          "id": "u:b8ba545960e3",
+                                                          "align": "right"
+                                                        }
+                                                      ],
+                                                      "style": {
+                                                        "textAlign": "right"
+                                                      }
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "body": [
+                                                    {
+                                                      "type": "container",
+                                                      "body": [
+                                                        {
+                                                          "type": "tpl",
+                                                          "tpl": "<strong>好友：$friend.user.nickName</strong>$friend.markName",
+                                                          "wrapperComponent": "div",
+                                                          "style": {
+                                                            "fontSize": "15px"
+                                                          }
+                                                        },
+                                                        {
+                                                          "type": "tpl",
+                                                          "tpl": "<strong>性别：</strong>$friend.user.sex",
+                                                          "wrapperComponent": "div",
+                                                          "style": {
+                                                            "fontSize": "15px"
+                                                          }
+                                                        },
+                                                        {
+                                                          "type": "tpl",
+                                                          "tpl": "<strong>成为好友：</strong>$friend.startTime",
+                                                          "wrapperComponent": "div",
+                                                          "style": {
+                                                            "fontSize": "15px"
+                                                          }
+                                                        }
+                                                      ],
+                                                      "style": {
+                                                        "textAlign": "left"
+                                                      }
+                                                    }
+                                                  ],
+                                                  "valign": "middle"
+                                                }
+                                              ],
+                                              "id": "u:af5262729d5d"
+                                            },
+                                            {
+                                              "type": "grid",
+                                              "columns": [
+                                                {
+                                                  "body": [
+                                                    {
+                                                      "type": "button",
+                                                      "label": "进入聊天"
+                                                    }
+                                                  ],
+                                                  "columnClassName": "p-t-sm m-t-lg"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "type": "grid",
+                                              "columns": [
+                                                {
+                                                  "body": [
+                                                    {
+                                                      "type": "button",
+                                                      "label": "删除好友",
+                                                      "style": {
+                                                        "color": "#FF0000"
+                                                      }
+                                                    }
+                                                  ],
+                                                  "columnClassName": "p-t-sm"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "className": "m-t-lg",
+                                  "style": {
+                                    "textAlign": "center"
+                                  }
+                                },
+                                "group": {
+                                  "type": "container",
+                                  "body": [
+                                    {
+                                      "type": "grid",
+                                      "columns": [
+                                        {
+                                          "body": [
+                                            {
+                                              "type": "grid",
+                                              "columns": [
+                                                {
+                                                  "body": [
+                                                    {
+                                                      "type": "container",
+                                                      "body": [
+                                                        {
+                                                          "type": "grid",
+                                                          "columns": [
+                                                            {
+                                                              "body": [
+                                                                {
+                                                                  "type": "avatar",
+                                                                  "src": "$group.avatar",
+                                                                  "thumbMode": "cover",
+                                                                  "className": "r r-2x",
+                                                                  "shape": "square",
+                                                                  "size": 70
+                                                                }
+                                                              ],
+                                                              "shape": "circle",
+                                                              "size": 40,
+                                                              "md": "auto"
+                                                            }
+                                                          ],
+                                                          "id": "u:b8ba545960e3",
+                                                          "align": "right"
+                                                        }
+                                                      ],
+                                                      "style": {
+                                                        "textAlign": "right"
+                                                      }
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "body": [
+                                                    {
+                                                      "type": "container",
+                                                      "body": [
+                                                        {
+                                                          "type": "tpl",
+                                                          "tpl": "<strong>群名：$group.groupName</strong>$group.markName",
+                                                          "wrapperComponent": "div",
+                                                          "style": {
+                                                            "fontSize": "15px"
+                                                          }
+                                                        },
+                                                        {
+                                                          "type": "tpl",
+                                                          "tpl": "<strong>群人数：$group.number</strong><font color='#22a340'>（在线：$group.onlineNum）</font>",
+                                                          "wrapperComponent": "div",
+                                                          "style": {
+                                                            "fontSize": "15px"
+                                                          }
+                                                        },
+                                                        {
+                                                          "type": "tpl",
+                                                          "tpl": "<strong>加群时间：</strong>$group.inTime",
+                                                          "wrapperComponent": "div",
+                                                          "style": {
+                                                            "fontSize": "15px"
+                                                          }
+                                                        }
+                                                      ],
+                                                      "style": {
+                                                        "textAlign": "left"
+                                                      }
+                                                    }
+                                                  ],
+                                                  "valign": "middle"
+                                                }
+                                              ],
+                                              "id": "u:af5262729d5d"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "grid",
+                                      "columns": [
+                                        {
+                                          "body": [
+                                            {
+                                              "type": "container",
+                                              "body": [
+                                                {
+                                                  "type": "grid",
+                                                  "columns": [
+                                                    {
+                                                      "body": [
+                                                        {
+                                                          "type": "container",
+                                                          "body": [
+                                                            {
+                                                              "type": "list",
+                                                              "className": "groupUserList",
+                                                              "source": "$groupUserList",
+                                                              "listItem": {
+                                                                "body": [
+                                                                  {
+                                                                    "type": "container",
+                                                                    "body": [
+                                                                      {
+                                                                        "type": "grid",
+                                                                        "columns": [
+                                                                          {
+                                                                            "md": "auto",
+                                                                            "body": [
+                                                                              {
+                                                                                "type": "avatar",
+                                                                                "id": "u:4eec8ab4c519",
+                                                                                "width": 35,
+                                                                                "height": 35,
+                                                                                "src": "$avatar",
+                                                                                "thumbMode": "cover",
+                                                                                "className": "r r-2x",
+                                                                                "shape": "square",
+                                                                                "size": 40,
+                                                                                "style": {
+                                                                                }
+                                                                              }
+                                                                            ],
+                                                                            "shape": "circle",
+                                                                            "size": 40,
+                                                                            "columnClassName": "p-sm"
+                                                                          },
+                                                                          {
+                                                                            "body": [
+                                                                              {
+                                                                                "type": "tpl",
+                                                                                "tpl": "$nickName",
+                                                                                "inline": true,
+                                                                                "id": "u:54c4a5c94d53",
+                                                                                "wrapperComponent": "div",
+                                                                                "style": {
+                                                                                  "fontSize": "15px",
+                                                                                  "fontWeight": "bold",
+                                                                                  "textAlign": "left"
+                                                                                }
+                                                                              }
+                                                                            ],
+                                                                            "md": "",
+                                                                            "valign": "middle"
+                                                                          },
+                                                                          {
+                                                                            "body": [
+                                                                              {
+                                                                                "type": "mapping",
+                                                                                "className": {
+                                                                                  "text-success": "user.online == 1",
+                                                                                  "text-danger": "user.online == 0"
+                                                                                },
+                                                                                "label": "状态展示",
+                                                                                "map": {
+                                                                                  "0": {
+                                                                                    "type": "tpl",
+                                                                                    "tpl": "离线",
+                                                                                    "inline": false,
+                                                                                    "style": {
+                                                                                      "text-align": "right"
+                                                                                    }
+                                                                                  },
+                                                                                  "1": {
+                                                                                    "type": "tpl",
+                                                                                    "tpl": "在线",
+                                                                                    "inline": false,
+                                                                                    "style": {
+                                                                                      "text-align": "right"
+                                                                                    }
+                                                                                  }
+                                                                                },
+                                                                                "name": "user.online"
+                                                                              }
+                                                                            ],
+                                                                            "md": "auto",
+                                                                            "valign": "middle"
+                                                                          }
+                                                                        ]
+                                                                      }
+                                                                    ],
+                                                                    "style": {
+                                                                    },
+                                                                    "className": "p-l-sm p-r-sm"
+                                                                  }
+                                                                ],
+                                                                "actions": [
+                                                                ]
+                                                              },
+                                                              "showHeader": true,
+                                                              "showFooter": true,
+                                                              "itemAction": {
+                                                                "type": "action",
+                                                                "actionType": "reload"
+                                                              }
+                                                            }
+                                                          ],
+                                                          "style": {
+                                                            "border-top": "1px solid #58595a",
+                                                            "height": "200px"
+                                                          },
+                                                          "className": "overflow-y-auto"
+                                                        }
+                                                      ]
+                                                    }
+                                                  ],
+                                                  "id": "u:5d68d4890eec",
+                                                  "style": {
+                                                    "height": "50%"
+                                                  }
+                                                },
+                                                {
+                                                  "type": "grid",
+                                                  "columns": [
+                                                    {
+                                                      "body": [
+                                                        {
+                                                          "type": "container",
+                                                          "style": {
+                                                            "border-top": "1px solid #58595a",
+                                                            "fontSize": ""
+                                                          },
+                                                          "body": [
+                                                            {
+                                                              "type": "tpl",
+                                                              "tpl": "群公告：",
+                                                              "style": {
+                                                                "textAlign": "left"
+                                                              },
+                                                              "inline": false,
+                                                              "className": "p-xs"
+                                                            },
+                                                            {
+                                                              "type": "tpl",
+                                                              "tpl": "<p>$group.notice</p>",
+                                                              "style": {
+                                                                "textAlign": "left",
+                                                                "fontSize": "14px"
+                                                              },
+                                                              "inline": false,
+                                                              "className": "p-xs"
+                                                            }
+                                                          ]
+                                                        }
+                                                      ]
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "grid",
+                                                  "columns": [
+                                                    {
+                                                      "body": [
+                                                      ]
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "grid",
+                                                  "columns": [
+                                                    {
+                                                      "body": [
+                                                        {
+                                                          "type": "button",
+                                                          "label": "进入群聊"
+                                                        }
+                                                      ],
+                                                      "columnClassName": "p-t-sm"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "grid",
+                                                  "columns": [
+                                                    {
+                                                      "body": [
+                                                        {
+                                                          "type": "button",
+                                                          "label": "退出群聊",
+                                                          "style": {
+                                                            "color": "#FF0000"
+                                                          }
+                                                        }
+                                                      ],
+                                                      "columnClassName": "p-t-sm"
+                                                    }
+                                                  ]
+                                                }
+                                              ],
+                                              "style": {
+                                                "textAlign": "center"
+                                              },
+                                              "className": ""
+                                            }
+                                          ],
+                                          "valign": "",
+                                          "md": "",
+                                          "columnClassName": ""
+                                        }
+                                      ],
+                                      "className": "p"
+                                    },
+                                    {
+                                      "type": "grid",
+                                      "columns": [
+                                      ]
+                                    }
+                                  ],
+                                  "shape": "circle",
+                                  "size": 40,
+                                  "style": {
+                                    "textAlign": "center"
+                                  },
+                                  "className": "m-t-lg"
+                                }
+                              },
+                              "name": "displayName",
+                              "value": "friend"
+                            }
+                          ],
+                          "id": "displayService"
+                        }
                       ],
                       "style": {
                         "height": "100%",
-                        "marginTop": "",
-                        "paddingRight": "",
                         "marginRight": "-0.05em",
-                        "paddingTop": "",
                         "opacity": 1,
-                        "marginBottom": "",
-                        "marginLeft": "",
-                        "paddingBottom": "",
-                        "backgroundColor": "",
                         "border-right": "1px solid #58595a"
                       },
-                      "className": "h-full"
+                      "className": "h-full p-xs"
                     }
                   ],
                   "className": "h-full my-class",
@@ -1110,7 +2356,12 @@
     "--Collapse-border": "",
     "--Collapse-content-padding": "",
     "--ListItem-paddingY": "0",
-    "--ListMenu-item--onHover-color": "#FFF689"
+    "--ListMenu-item--onHover-color": "#FFF689",
+    "--Modal-bg": "#21252b",
+    "--Modal-content-borderWidth": "0.5",
+    "--Button--primary-bg": "",
+    "--Modal-widthBase": "40rem",
+    "--Button--primary-onHover-bg": ""
   },
   "toolbar": [
     {
@@ -1182,7 +2433,7 @@
                           "id": "userAvatar",
                           "width": 35,
                           "height": 35,
-                          "src": "$user.avatar",
+                          "src": "$user.userAvatar",
                           "showDimensions": false,
                           "className": "r r-2x",
                           "thumbMode": "cover",

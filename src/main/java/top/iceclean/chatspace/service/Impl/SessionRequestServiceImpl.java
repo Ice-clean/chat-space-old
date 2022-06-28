@@ -143,7 +143,8 @@ public class SessionRequestServiceImpl implements SessionRequestService {
                 break;
             case "10":
                 requestVO.setUser(userService.toUserVO(userService.getUserById(request.getSenderId())));
-                requestVO.setGroup(groupService.getGroupVO(request.getTargetId(), request.getSenderId()));
+                Group group = groupService.getGroupById(request.getTargetId());
+                requestVO.setGroup(new GroupVO(group, groupService.getOnlineNum(group.getGroupId())));
                 break;
             case "01":
                 requestVO.setUser(userService.toUserVO(userService.getUserById(request.getTargetId())));

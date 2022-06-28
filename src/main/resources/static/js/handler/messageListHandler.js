@@ -15,23 +15,21 @@ class MessageListHandler {
 
     /** 初始化消息列表 */
     #initChatList() {
-        $.get(HOST + "/space/session/list", {userId: user.userId},
-            (data) => {
-                // 获取消息列表并格式化时间
-                let messageList = data.data.messageList
-                MessageListHandler.#shortTimeMessageList(messageList)
-                // 将消息列表设置到消息列表服务中
-                this.#cc.setData(CHAT_LIST_SERVICE, "messageList", [...messageList])
+        getSessionList(this.#user.userId, (data) => {
+            // 获取消息列表并格式化时间
+            let messageList = data.data.messageList
+            MessageListHandler.#shortTimeMessageList(messageList)
+            // 将消息列表设置到消息列表服务中
+            this.#cc.setData(CHAT_LIST_SERVICE, "messageList", [...messageList])
 
-                // 将消息列表第一列信息设置到消息列表服务中（默认显示第一列消息，至少也会显示自己的聊天框）
-                let firstChat = messageList[0]
-                this.#cc.setData(CHAT_LIST_SERVICE, "sessionId", firstChat.session.sessionId)
-                this.#cc.setData(CHAT_LIST_SERVICE, "name", firstChat.session.name)
+            // 将消息列表第一列信息设置到消息列表服务中（默认显示第一列消息，至少也会显示自己的聊天框）
+            let firstChat = messageList[0]
+            this.#cc.setData(CHAT_LIST_SERVICE, "sessionId", firstChat.session.sessionId)
+            this.#cc.setData(CHAT_LIST_SERVICE, "name", firstChat.session.name)
 
-                // 然后触发聊天项数据更新
-                sc(this.#cc, this.#cc.changeChatItem)
-            }, "json"
-        );
+            // 然后触发聊天项数据更新
+            sc(this.#cc, this.#cc.changeChatItem)
+        })
     }
 
     /** 为列表绑定点击监听事件 */

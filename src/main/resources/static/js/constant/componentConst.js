@@ -5,6 +5,10 @@ const CHAT_NAME = 3
 const CHAT_SERVICE = 4
 const GROUP_SERVICE = 5
 const FRIEND_SERVICE = 6
+const FUNC_SERVICE = 7
+const DISPLAY_SERVICE = 8
+const REQUEST_SEARCH_SERVICE = 9
+const REQUEST_INPUT = 10
 
 /** 域名 */
 const HOST = "http://localhost:18012"

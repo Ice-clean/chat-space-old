@@ -15,7 +15,9 @@ class MessageHandler {
         this.#messageInput = messageInput
         this.#messageOutput = messageOutput
         this.#cc = controlCenter
+    }
 
+    start() {
         // 为消息输入对象绑定按键监听
         this.#bindKeypress()
         // 为消息输入对象绑定监听滚动条事件
@@ -43,19 +45,15 @@ class MessageHandler {
 
     /** 初始化聊天消息 */
     initChatMessage() {
-        $.get(HOST + "/space/session/history", {
-                userId: user.userId,
-                sessionId: this.#cc.getData(CHAT_SERVICE, "sessionId"),
-                page: 1
-            }, (data) => {
-                // 将历史聊天记录设置到聊天服务中
-                this.#cc.setData(CHAT_SERVICE, "historyList", [...data.data.historyList])
-                // 重置页数
-                this.#page = 1
-                // 滚动条到最下方
-                this.scrollBottom()
-            }, "json"
-        );
+        let sessionId = this.#cc.getData(CHAT_SERVICE, "sessionId")
+        getSessionHistory(this.#user.userId, sessionId, 1, (data) => {
+            // 将历史聊天记录设置到聊天服务中
+            this.#cc.setData(CHAT_SERVICE, "historyList", [...data.data.historyList])
+            // 重置页数
+            this.#page = 1
+            // 滚动条到最下方
+            this.scrollBottom()
+        })
     }
 
     /** 滚动条滑到底部 */
@@ -81,7 +79,8 @@ class MessageHandler {
                 // 禁止回车的默认换行
                 event.preventDefault();
             }
-        });
+        })
+
     }
 
     /** 监听按钮（上传图片、发送按钮） */
@@ -99,22 +98,18 @@ class MessageHandler {
             //获取距离页面顶部的距离
             if (this.#messageOutput.scrollTop === 0) {
                 // 到达顶部后，再请求一次数据
-                $.get(HOST + "/space/session/history", {
-                        userId: user.userId,
-                        sessionId: this.#cc.getData(CHAT_SERVICE, "sessionId"),
-                        page: ++this.#page
-                    }, (data) => {
-                        let list = data.data.historyList
-                        if (list.length > 0){
-                            this.#num += list.length
-                            // 将历史聊天记录数组拼接到前边
-                            let top = this.#messageOutput.scrollTop
-                            let height = this.#messageOutput.scrollHeight
-                            this.#prependMessageList(list);
-                            sc(this, () => this.#messageOutput.scrollTop = top + this.#messageOutput.scrollHeight - height)
-                        }
-                    }, "json"
-                );
+                let sessionId = this.#cc.getData(CHAT_SERVICE, "sessionId")
+                getSessionHistory(this.#user.userId, sessionId, ++this.#page, (data) => {
+                    let list = data.data.historyList
+                    if (list.length > 0){
+                        this.#num += list.length
+                        // 将历史聊天记录数组拼接到前边
+                        let top = this.#messageOutput.scrollTop
+                        let height = this.#messageOutput.scrollHeight
+                        this.#prependMessageList(list);
+                        sc(this, () => this.#messageOutput.scrollTop = top + this.#messageOutput.scrollHeight - height)
+                    }
+                })
             }
         }
     }

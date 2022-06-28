@@ -24,7 +24,7 @@ class WebsocketHandler {
     /** 连接 websocket */
     #connectWebsocket() {
         // 构建连接
-        this.#ws = new WebSocket(HOST_WS + "/space/ws/chat/" + this.#user.userId);
+        this.#ws = connectWebsocket(this.#user.userId);
 
         // 消息分发
         this.#ws.onmessage = (event) => {
@@ -40,7 +40,13 @@ class WebsocketHandler {
 
         // 断线重连
         this.#ws.onclose = (event) => {
+            console.log("断开", event)
             scTime(this, this.#connectWebsocket, 100)
+        }
+
+        // 错误排查
+        this.#ws.onerror = (event) => {
+            console.log("出错", event)
         }
     }
 

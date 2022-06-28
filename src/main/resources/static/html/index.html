@@ -102,6 +102,7 @@
 
 <script src="../sdk/sdk.js"></script>
 <script src="../js/controlCenter.js"></script>
+<script src="../js/requestCenter.js"></script>
 
 <script src="../js/constant/componentConst.js"></script>
 <script src="../js/constant/wsType.js"></script>
@@ -113,7 +114,8 @@
 <script src="../js/handler/messageHandler.js"></script>
 <script src="../js/handler/messageListHandler.js"></script>
 <script src="../js/handler/websocketHandler.js"></script>
-<script src="../js/handler/addressHandler.js    "></script>
+<script src="../js/handler/addressHandler.js"></script>
+<script src="../js/handler/searchHandler.js"></script>
 
 <script type="text/javascript">
     // 读取用于渲染界面的 JSON 文件
@@ -132,6 +134,7 @@
     // 将配置文件渲染为页面
     let amisScoped;
     let user;
+    let token;
 
     /** 首先渲染登录界面 */
     login()
@@ -165,6 +168,7 @@
                 if (data.data.success) {
                     // 登录成功时，保存用户信息，并切换页面
                     user = data.data.user;
+                    token = data.data.token;
                     amisScoped.unmount();
                     document.onkeydown = null;
                     chat();
@@ -206,7 +210,7 @@
         let messageListHandler = new MessageListHandler(user, controlCenter)
 
         // 新建一个消息处理器，处理聊天消息
-        let messageInput = $(".cxd-TextareaControl-input")
+        let messageInput = $(".messageInput")
         let messageOutput = document.querySelector(`.messageOutput`)
         let messageHandler = new MessageHandler(user, messageInput, messageOutput, controlCenter)
         messageHandler.bindButton($(".imageUpload"), $(".messageSend"))
@@ -217,6 +221,9 @@
         // 新建一个通讯录处理器
         let addressHandler = new AddressHandler(user, controlCenter)
 
+        // 新增查询处理器
+        let searchHandler = new SearchHandler(controlCenter)
+
         // 给消息列表处理器和消息处理器配置 websocket 处理器
         messageHandler.setWsHandler(websocketHandler)
 
@@ -224,15 +231,28 @@
         controlCenter.setChatHandler(messageListHandler, messageHandler, websocketHandler)
         controlCenter.setAddressHandler(addressHandler)
 
+        messageHandler.start()
+
         // 一次性，监听选项卡选中通讯录
         let tabList = amisScoped.getComponentById("tabList")
         $(".cxd-Tabs-links").bind("click", () => {
             sc(this, () => {
                 if (tabList._reactInternals.memoizedState.activeKey === 1) {
+                    let funcService = amisScoped.getComponentById("funcService")
                     let groupService = amisScoped.getComponentById("groupService")
                     let friendService = amisScoped.getComponentById("friendService")
-                    controlCenter.setAddressComponent(groupService, friendService)
-                    addressHandler.start(addressHandler);
+                    let displayService = amisScoped.getComponentById("displayService")
+                    controlCenter.setAddressComponent(funcService, groupService, friendService, displayService)
+                    addressHandler.start();
+
+                    // 请求查询
+                    let requestSearchService = amisScoped.getComponentById("requestSearchService")
+                    let requestInput = amisScoped.getComponentById("requestInput")
+                    let requestSearch = $(".requestSearch")
+                    searchHandler.initRequestComponent(requestInput, requestSearch)
+                    controlCenter.setSearchComponent(requestSearchService, requestInput)
+
+
                     $(".cxd-Tabs-links")[0].onclick = null
                 }
             })

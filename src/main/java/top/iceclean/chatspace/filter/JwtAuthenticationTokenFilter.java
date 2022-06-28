@@ -1,6 +1,7 @@
 package top.iceclean.chatspace.filter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sun.tools.internal.ws.wsdl.document.soap.SOAPUse;
 import jdk.nashorn.internal.parser.Token;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 提取 token
         String token = request.getHeader("token");
+
+        // 提取可能来自 websocket 的 token
+        if (token == null) {
+            System.out.println("提取来自 websocket 的token");
+            String header = request.getHeader("Sec-WebSocket-Protocol");
+            response.setHeader("Sec-WebSocket-Protocol", header);
+            System.out.println(header);
+            token = header;
+        }
         // 如果 token 为空需要放行，因为在访问security的匿名接口时过滤器同样起作用，而此时 token 值为空
         if (!StringUtils.hasText(token)) {
             filterChain.doFilter(request, response);
