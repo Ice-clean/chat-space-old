@@ -16,8 +16,6 @@ import top.iceclean.chatspace.po.Message;
 import top.iceclean.chatspace.pojo.Response;
 import top.iceclean.chatspace.service.*;
 import top.iceclean.chatspace.utils.DateUtils;
-import top.iceclean.logtrace.annotation.EnableLogTrace;
-import top.iceclean.logtrace.bean.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +27,6 @@ import java.util.stream.Collectors;
  * @date : 2022-05-25
  */
 @Service
-@EnableLogTrace
 public class MessageServiceImpl implements MessageService {
     @Autowired
     private MessageMapper messageMapper;
@@ -38,7 +35,6 @@ public class MessageServiceImpl implements MessageService {
     @Lazy
     @Autowired
     private SessionService sessionService;
-    private Logger logTrace;
 
 
     @Override

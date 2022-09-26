@@ -20,15 +20,11 @@ import top.iceclean.chatspace.pojo.GlobalException;
 import top.iceclean.chatspace.pojo.Response;
 import top.iceclean.chatspace.po.User;
 import top.iceclean.chatspace.pojo.UserAuthority;
-import top.iceclean.chatspace.service.FriendService;
 import top.iceclean.chatspace.service.GroupService;
 import top.iceclean.chatspace.service.UserService;
 import top.iceclean.chatspace.utils.*;
-import top.iceclean.logtrace.annotation.EnableLogTrace;
-import top.iceclean.logtrace.bean.Logger;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -40,7 +36,6 @@ import java.util.stream.Collectors;
  * @date : 2022-05-25
  */
 @Service
-@EnableLogTrace
 public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private UserMapper userMapper;
@@ -48,7 +43,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private RedisCache redisCache;
     @Autowired
     private GroupService groupService;
-    private Logger logTrace;
 
     @Autowired
     private AuthenticationManager authenticationManager;

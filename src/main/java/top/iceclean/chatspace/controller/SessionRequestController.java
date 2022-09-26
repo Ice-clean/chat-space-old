@@ -1,10 +1,15 @@
 package top.iceclean.chatspace.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import top.iceclean.chatspace.DTO.RequestDTO;
 import top.iceclean.chatspace.constant.SessionType;
 import top.iceclean.chatspace.service.SessionRequestService;
-import top.iceclean.logtrace.annotation.EnableLogTrace;
+import top.iceclean.chatspace.validation.annotation.NotSelf;
+
+import javax.validation.Valid;
+import java.util.Deque;
 
 /**
  * 会话加入请求
@@ -13,7 +18,7 @@ import top.iceclean.logtrace.annotation.EnableLogTrace;
  */
 @RestController
 @RequestMapping("/request")
-@EnableLogTrace
+@Validated
 public class SessionRequestController {
 
     @Autowired
@@ -21,28 +26,22 @@ public class SessionRequestController {
 
     /**
      * 好友申请
-     * @param senderId 申请者用户 ID
-     * @param userId 目标用户 ID
-     * @param reqSrc 请求来源
-     * @param reqRemark 请求备注
      * @return 申请反馈
      */
     @PostMapping("/friend")
-    public Object friendRequest(int senderId, int userId, String reqSrc, String reqRemark) {
-        return requestService.sendRequest(SessionType.FRIEND, senderId, userId, reqSrc, reqRemark);
+    public Object friendRequest(@RequestBody @Valid @NotSelf RequestDTO requestDTO) {
+        requestDTO.setType(SessionType.FRIEND);
+        return requestService.sendRequest(requestDTO);
     }
 
     /**
      * 群聊申请
-     * @param senderId 申请者用户 ID
-     * @param groupId 目标群聊 ID
-     * @param reqSrc 请求来源
-     * @param reqRemark 请求备注
      * @return 申请反馈
      */
     @PostMapping("/group")
-    public Object groupRequest(int senderId, int groupId, String reqSrc, String reqRemark) {
-        return requestService.sendRequest(SessionType.GROUP, senderId, groupId, reqSrc, reqRemark);
+    public Object groupRequest(@RequestBody @NotSelf RequestDTO requestDTO) {
+        requestDTO.setType(SessionType.GROUP);
+        return requestService.sendRequest(requestDTO);
     }
 
     /**

@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import top.iceclean.chatspace.DTO.UserDTO;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 用户类
  * @author : Ice'Clean
@@ -21,6 +23,7 @@ public class User {
     private Integer userId;
     private String userName;
     private String userPass;
+    @NotNull
     private String sex;
     private String nickName;
     private String avatar;

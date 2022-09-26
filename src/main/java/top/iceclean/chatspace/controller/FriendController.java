@@ -3,8 +3,6 @@ package top.iceclean.chatspace.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.iceclean.chatspace.service.FriendService;
-import top.iceclean.logtrace.annotation.EnableLogTrace;
-import top.iceclean.logtrace.bean.Logger;
 
 /**
  * @author : Ice'Clean
@@ -12,13 +10,10 @@ import top.iceclean.logtrace.bean.Logger;
  */
 @RestController
 @RequestMapping("/friend")
-@EnableLogTrace
 public class FriendController {
 
     @Autowired
     private FriendService friendService;
-
-    private Logger logTrace;
 
     /**
      * 获取用户的好友列表

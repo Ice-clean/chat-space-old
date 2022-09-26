@@ -17,8 +17,6 @@ import top.iceclean.chatspace.po.User;
 import top.iceclean.chatspace.service.FriendService;
 import top.iceclean.chatspace.service.SessionService;
 import top.iceclean.chatspace.service.UserService;
-import top.iceclean.logtrace.annotation.EnableLogTrace;
-import top.iceclean.logtrace.bean.Logger;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +28,6 @@ import java.util.stream.Collectors;
  * @date : 2022-05-25
  */
 @Service
-@EnableLogTrace
 public class FriendServiceImpl implements FriendService {
     @Autowired
     private FriendMapper friendMapper;
@@ -39,7 +36,6 @@ public class FriendServiceImpl implements FriendService {
     @Lazy
     @Autowired
     private SessionService sessionService;
-    private Logger logTrace;
 
     @Override
     public Response getFriendList(int userId) {

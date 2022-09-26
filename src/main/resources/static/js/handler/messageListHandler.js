@@ -66,7 +66,7 @@ class MessageListHandler {
     updateMessageList(message) {
         // 获取消息列表，并简化时间
         let data = this.#cc.getData(CHAT_LIST_SERVICE, "messageList")
-        data.sendTime = MessageListHandler.#shortTime(data.sendTime)
+        message.sendTime = MessageListHandler.#shortTime(message.sendTime)
         for (let i = 0; i < data.length; i++) {
             let item = data[i]
             // 找到该条消息，删除原消息并将最新消息插入到第一位
@@ -107,6 +107,7 @@ class MessageListHandler {
     }
 
     static #reparseTime(sendTime) {
+        console.log(sendTime)
         let reparse = [0, 0, 0, 0, 0, 0];
         let dateTime = sendTime.split(" ");
         let date = dateTime[0].split("-");

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import top.iceclean.chatspace.DTO.RequestDTO;
 
 /**
  * @author : Ice'Clean
@@ -24,11 +25,11 @@ public class SessionRequest {
     private Integer reqStatus;
     private String createTime;
 
-    public SessionRequest(Integer type, Integer senderId, Integer targetId, String reqSrc, String reqRemark) {
-        this.type = type;
-        this.senderId = senderId;
-        this.targetId = targetId;
-        this.reqSrc = reqSrc;
-        this.reqRemark = reqRemark;
+    public SessionRequest(RequestDTO requestDTO) {
+        this.type = requestDTO.getType().value();
+        this.senderId = requestDTO.getSenderId();
+        this.targetId = requestDTO.getTargetId();
+        this.reqSrc = requestDTO.getReqSrc();
+        this.reqRemark = requestDTO.getReqRemark();
     }
 }

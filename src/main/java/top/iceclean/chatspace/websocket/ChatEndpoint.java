@@ -69,7 +69,6 @@ public class ChatEndpoint implements MessageSender {
         // 转化为 ws 消息对象
         WsMessageDTO wsMessageDTO = JSONObject.parseObject(msg, WsMessageDTO.class);
         String wsContent = wsMessageDTO.getWsContent().toString();
-        System.out.println("收到消息：" + wsContent);
         // 对不同消息类型作出不同处理
         switch (wsMessageDTO.getWsType()) {
             case SEND_MESSAGE: sendMessageHandle(wsContent); break;

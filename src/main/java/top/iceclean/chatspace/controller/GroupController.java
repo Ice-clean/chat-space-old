@@ -2,11 +2,7 @@ package top.iceclean.chatspace.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import top.iceclean.chatspace.constant.SessionType;
 import top.iceclean.chatspace.service.GroupService;
-import top.iceclean.chatspace.service.SessionRequestService;
-import top.iceclean.logtrace.annotation.EnableLogTrace;
-import top.iceclean.logtrace.bean.Logger;
 
 /**
  * @author : Ice'Clean
@@ -14,12 +10,10 @@ import top.iceclean.logtrace.bean.Logger;
  */
 @RestController
 @RequestMapping("/group")
-@EnableLogTrace
 public class GroupController {
 
     @Autowired
     private GroupService groupService;
-    private Logger logTrace;
 
     /**
      * 获取群聊列表

@@ -1,13 +1,10 @@
 package top.iceclean.chatspace.filter;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sun.tools.internal.ws.wsdl.document.soap.SOAPUse;
-import jdk.nashorn.internal.parser.Token;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -19,8 +16,6 @@ import top.iceclean.chatspace.pojo.GlobalException;
 import top.iceclean.chatspace.pojo.UserAuthority;
 import top.iceclean.chatspace.utils.JwtUtils;
 import top.iceclean.chatspace.utils.RedisCache;
-import top.iceclean.logtrace.annotation.EnableLogTrace;
-import top.iceclean.logtrace.bean.Logger;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

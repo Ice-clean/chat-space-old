@@ -12,14 +12,10 @@ import top.iceclean.chatspace.po.User;
 import top.iceclean.chatspace.service.UserService;
 import top.iceclean.chatspace.utils.MailUtils;
 import top.iceclean.chatspace.utils.RedisCache;
-import top.iceclean.logtrace.annotation.EnableLogTrace;
-import top.iceclean.logtrace.annotation.OutputValue;
-import top.iceclean.logtrace.bean.Logger;
 
 import javax.mail.MessagingException;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @author : Ice'Clean
@@ -28,7 +24,6 @@ import java.util.Random;
 @RestController
 @RequestMapping("user")
 @EnableAsync
-@EnableLogTrace
 public class UserController {
 
     @Autowired
@@ -37,7 +32,6 @@ public class UserController {
     private RedisCache redisCache;
     @Autowired
     private MailUtils mailUtils;
-    private Logger logTrace;
 
     @PostMapping("/login")
     public Object login(UserDTO userDTO) {
@@ -100,8 +94,7 @@ public class UserController {
      * @return 上传完毕的头像路径
      */
     @PostMapping("/avatar/{userId}")
-    public Object uploadAvatar(@PathVariable int userId,
-                               @OutputValue MultipartFile avatar) {
+    public Object uploadAvatar(@PathVariable int userId, MultipartFile avatar) {
         return userService.uploadAvatar(userId, avatar);
     }
 

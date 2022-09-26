@@ -2,11 +2,13 @@ package top.iceclean.chatspace.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.iceclean.chatspace.constant.ResponseStatusEnum;
+import top.iceclean.chatspace.pojo.Response;
 import top.iceclean.chatspace.service.MessageService;
-import top.iceclean.logtrace.annotation.EnableLogTrace;
-import top.iceclean.logtrace.bean.Logger;
+import top.iceclean.chatspace.service.SessionService;
 
 /**
  * @author : Ice'Clean
@@ -14,12 +16,12 @@ import top.iceclean.logtrace.bean.Logger;
  */
 @RestController
 @RequestMapping("session")
-@EnableLogTrace
 public class SessionController {
 
     @Autowired
     private MessageService messageService;
-    private Logger logTrace;
+    @Autowired
+    private SessionService sessionService;
 
     /**
      * 获取会话列表
@@ -41,5 +43,17 @@ public class SessionController {
     @GetMapping("/history")
     public Object getChatHistory(int userId, int sessionId, int page) {
         return messageService.getChatHistory(userId, sessionId, page);
+    }
+
+    /**
+     * 通过会话 ID 和当前用户 ID 获取会话详情
+     * @param sessionId 会话 ID
+     * @param userId 用户 ID
+     * @return 会话响应对象
+     */
+    @GetMapping("/{sessionId}")
+    public Object getSession(@PathVariable int sessionId, int userId) {
+        return new Response(ResponseStatusEnum.OK)
+                .addData("session", sessionService.getSessionVO(sessionId, userId));
     }
 }

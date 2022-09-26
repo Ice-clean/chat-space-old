@@ -3,6 +3,7 @@ package top.iceclean.chatspace.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.iceclean.chatspace.DTO.RequestDTO;
 import top.iceclean.chatspace.VO.*;
 import top.iceclean.chatspace.constant.ResponseStatusEnum;
 import top.iceclean.chatspace.constant.SessionType;
@@ -14,8 +15,10 @@ import top.iceclean.chatspace.service.FriendService;
 import top.iceclean.chatspace.service.GroupService;
 import top.iceclean.chatspace.service.SessionRequestService;
 import top.iceclean.chatspace.service.UserService;
+import top.iceclean.chatspace.validation.annotation.NotSelf;
 import top.iceclean.chatspace.websocket.MessageSender;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,9 +41,9 @@ public class SessionRequestServiceImpl implements SessionRequestService {
     private FriendService friendService;
 
     @Override
-    public Response sendRequest(SessionType type, int senderId, int targetId, String reqSrc, String reqRemark) {
+    public Response sendRequest(@Valid @NotSelf RequestDTO requestDTO) {
         // 构造请求消息
-        SessionRequest request = new SessionRequest(type.value(), senderId, targetId, reqSrc, reqRemark);
+        SessionRequest request = new SessionRequest(requestDTO);
         // 直接添加请求记录
         requestMapper.insert(request);
         // 将添加消息实时推送

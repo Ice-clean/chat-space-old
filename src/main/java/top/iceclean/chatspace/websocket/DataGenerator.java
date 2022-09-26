@@ -1,6 +1,5 @@
 package top.iceclean.chatspace.websocket;
 
-import com.sun.tools.javah.Gen;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -10,7 +10,6 @@ import top.iceclean.chatspace.constant.RedisKey;
 import top.iceclean.chatspace.constant.ResponseStatusEnum;
 import top.iceclean.chatspace.constant.SessionType;
 import top.iceclean.chatspace.mapper.GroupMapper;
-import top.iceclean.chatspace.mapper.SessionMapper;
 import top.iceclean.chatspace.mapper.UserGroupMapper;
 import top.iceclean.chatspace.po.Group;
 import top.iceclean.chatspace.po.Session;
@@ -22,8 +21,6 @@ import top.iceclean.chatspace.service.SessionService;
 import top.iceclean.chatspace.service.UserService;
 import top.iceclean.chatspace.utils.DateUtils;
 import top.iceclean.chatspace.utils.RedisCache;
-import top.iceclean.logtrace.annotation.EnableLogTrace;
-import top.iceclean.logtrace.bean.Logger;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +30,6 @@ import java.util.stream.Collectors;
  * @date : 2022-05-29
  */
 @Service
-@EnableLogTrace
 public class GroupServiceImpl implements GroupService {
 
     @Autowired
@@ -51,7 +47,6 @@ public class GroupServiceImpl implements GroupService {
     private SessionService sessionService;
     @Autowired
     private RedisCache redisCache;
-    private Logger logTrace;
 
     @Override
     public Response getGroupList(int userId) {

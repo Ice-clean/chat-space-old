@@ -17,7 +17,7 @@ class WebsocketHandler {
         this.#connectWebsocket()
         // 心跳包，每 5 分钟一次
         tryDo((success) => {
-            this.#sendMessageHandle(HEART_BEAT, "heart beat of " + this.#user.userId)
+            this.sendMessage(HEART_BEAT, "heart beat of " + this.#user.userId)
         }, 5 * 60 * 1000)
     }
 

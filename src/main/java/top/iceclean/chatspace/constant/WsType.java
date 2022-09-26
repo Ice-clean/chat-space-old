@@ -6,6 +6,8 @@ package top.iceclean.chatspace.constant;
  */
 public enum WsType {
     /** 用户上下线信息 */
+    HEART_BEAT,
+    /** 用户上下线信息 */
     USER_ONLINE,
     /** 发送消息 */
     SEND_MESSAGE,

@@ -1,15 +1,23 @@
 package top.iceclean.chatspace.handler;
 
+import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import top.iceclean.chatspace.constant.ResponseStatusEnum;
 import top.iceclean.chatspace.pojo.GlobalException;
 import top.iceclean.chatspace.pojo.Response;
-import top.iceclean.logtrace.bean.LogTrace;
+
+import javax.validation.ConstraintViolationException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 自定义全局异常处理器
@@ -20,8 +28,6 @@ import top.iceclean.logtrace.bean.LogTrace;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private LogTrace logTrace;
-
     /**
      * 捕获所有用户自定义异常
      * @param exception 用户自定义异常
@@ -29,9 +35,26 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = GlobalException.class)
     public Response handleGlobalException(GlobalException exception){
-        return new Response().setStatus(exception.getStatus())
+        return new Response(exception.getStatus())
                 .addData("success", false)
                 .setMsg(exception.getStatus().msg() + exception.getExtraMessage());
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public Response handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        Response response = new Response(ResponseStatusEnum.REQUEST_PARAM_ILLEGAL);
+        List<Pair<String, String>> errList = ex.getBindingResult().getFieldErrors().stream().map(fieldError ->
+                new Pair<>(fieldError.getField(), fieldError.getDefaultMessage())).collect(Collectors.toList());
+        return response.addData("total", errList.size()).addData("list", errList);
+    }
+
+    @ExceptionHandler({ConstraintViolationException.class})
+    public Response handleConstraintViolationException(ConstraintViolationException ex) {
+        Response response = new Response(ResponseStatusEnum.REQUEST_PARAM_ILLEGAL);
+        List<Pair<String, String>> errList = ex.getConstraintViolations().stream().map(constraintViolation ->
+                new Pair<>(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage()))
+                .collect(Collectors.toList());
+        return response.addData("total", errList.size()).addData("list", errList);
     }
 
     /**
