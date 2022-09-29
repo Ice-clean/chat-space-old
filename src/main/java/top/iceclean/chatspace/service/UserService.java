@@ -30,29 +30,26 @@ public interface UserService {
     Response register(UserDTO userDTO);
 
     /**
-     * 上传头像
-     * @param userId 用户 ID
+     * 修改当前用户的头像
      * @param avatar 头像文件数据
      * @return 上传的头像路径
      */
-    Response uploadAvatar(int userId, MultipartFile avatar);
+    Response uploadAvatar(MultipartFile avatar);
 
     /**
      * 修改用户信息
-     * @param userId 用户 ID
      * @param userDTO 有效字段：性别、昵称
      * @return 是否修改成功
      */
-    Response updateInfo(int userId, UserDTO userDTO);
+    Response updateInfo(UserDTO userDTO);
 
     /**
      * 更改密码
-     * @param userId 用户 ID
      * @param oldPassword 旧密码
      * @param newPassword 新密码
      * @return 是否更改成功
      */
-    Response updatePassword(int userId, String oldPassword, String newPassword);
+    Response updatePassword(String oldPassword, String newPassword);
 
     /**
      * 模糊搜索用户
@@ -63,6 +60,12 @@ public interface UserService {
      * @return 符合条件的用户列表
      */
     Response searchUser(String key);
+
+    /**
+     * 获取当前用户信息
+     * @return 当前用户信息实体
+     */
+    User getCurrentUser();
 
     /**
      * 通过用户 ID 获取用户对象

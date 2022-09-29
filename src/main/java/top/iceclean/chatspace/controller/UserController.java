@@ -2,6 +2,7 @@ package top.iceclean.chatspace.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.iceclean.chatspace.DTO.UserDTO;
@@ -14,6 +15,9 @@ import top.iceclean.chatspace.utils.MailUtils;
 import top.iceclean.chatspace.utils.RedisCache;
 
 import javax.mail.MessagingException;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.time.Instant;
 import java.util.*;
 
@@ -24,6 +28,7 @@ import java.util.*;
 @RestController
 @RequestMapping("user")
 @EnableAsync
+@Validated
 public class UserController {
 
     @Autowired
@@ -34,42 +39,32 @@ public class UserController {
     private MailUtils mailUtils;
 
     @PostMapping("/login")
-    public Object login(UserDTO userDTO) {
+    public Object login(@Validated(UserDTO.Login.class) UserDTO userDTO) {
         return userService.login(userDTO.getUserName() != null ?
                 userDTO.getUserName() : userDTO.getEmail(), userDTO.getUserPass());
     }
 
     /**
      * 通过邮箱发送验证码
-     * @param userName 用户名
-     * @param email 邮箱（只支持 QQ 邮箱）
+     * @param userDTO 用户请求体（用户名 + 邮箱）
      * @return 验证码
+     * @exception MessagingException 邮件发送异常，交给全局处理器
      */
     @PostMapping("/code")
-    public Object sendCode(String userName, String email) {
-        // 先检查用户名是否存在，已存在则返回非法
-        if (userService.getUserByUserName(userName) != null) {
-            return new Response(ResponseStatusEnum.USERNAME_INVALID);
-        }
-
+    public Object sendCode(@Validated(UserDTO.Register.class) UserDTO userDTO) throws MessagingException {
         // 随机生成六位数验证码
         int code = new Random(Instant.now().toEpochMilli()).nextInt(899999) + 100000;
         // 将验证码保存到缓存中（用户名、邮箱以及验证码一起校验，不允许其中一个有改动，全都放入缓存等待检验），五分钟内有效
-        redisCache.hashSet(RedisKey.USER_CODE_HASH, userName, email + code, 5 * 60);
+        redisCache.hashSet(RedisKey.USER_CODE_HASH, userDTO.getUserName(), userDTO.getEmail() + code, 5 * 60);
         // 发送邮件
-        try {
-            mailUtils.sendHtmlMail("ChatSpace 注册码", "<h2>欢迎加入 ChatSpace ! </h2>" +
-                    "您刚刚请求注册的用户 " + userName + "<br>" +
-                    "验证码为：" + code + "，五分钟内有效", email);
-            return new Response(ResponseStatusEnum.OK).setMsg("发送验证码成功");
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            return new Response(ResponseStatusEnum.INTERNAL_SERVER_ERROR);
-        }
+        mailUtils.sendHtmlMail("ChatSpace 注册码", "<h2>欢迎加入 ChatSpace ! </h2>" +
+                "请求注册的用户 " + userDTO.getUserName() + "<br>" +
+                "验证码为：" + code + "，五分钟内有效", userDTO.getEmail());
+        return new Response(ResponseStatusEnum.OK).setMsg("发送验证码成功");
     }
 
     @PostMapping("/register")
-    public Object register(UserDTO userDTO) {
+    public Object register(@Validated(UserDTO.Login.class) UserDTO userDTO) {
         return userService.register(userDTO);
     }
 
@@ -89,36 +84,33 @@ public class UserController {
 
     /**
      * 上传头像
-     * @param userId 用户 ID
      * @param avatar 头像文件数据
      * @return 上传完毕的头像路径
      */
-    @PostMapping("/avatar/{userId}")
-    public Object uploadAvatar(@PathVariable int userId, MultipartFile avatar) {
-        return userService.uploadAvatar(userId, avatar);
+    @PostMapping("/avatar")
+    public Object uploadAvatar(MultipartFile avatar) {
+        return userService.uploadAvatar(avatar);
     }
 
     /**
      * 修改用户信息
-     * @param userId 用户 ID
      * @param userDTO 有效字段：性别、昵称
      * @return 是否修改成功
      */
-    @PatchMapping("/info/{userId}")
-    public Object updateInfo(@PathVariable int userId, UserDTO userDTO) {
-        return userService.updateInfo(userId, userDTO);
+    @PatchMapping("/info")
+    public Object updateInfo(@Validated UserDTO userDTO) {
+        return userService.updateInfo(userDTO);
     }
 
     /**
      * 更改密码
-     * @param userId 用户 ID
      * @param oldPassword 旧密码
      * @param newPassword 新密码
      * @return 是否更改成功
      */
-    @PatchMapping("/password/{userId}")
-    public Object updatePassword(@PathVariable int userId, String oldPassword, String newPassword) {
-        return userService.updatePassword(userId, oldPassword, newPassword);
+    @PatchMapping("/password")
+    public Object updatePassword(String oldPassword, String newPassword) {
+        return userService.updatePassword(oldPassword, newPassword);
     }
 
     /**

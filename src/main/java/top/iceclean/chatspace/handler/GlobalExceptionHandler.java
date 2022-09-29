@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,14 +41,21 @@ public class GlobalExceptionHandler {
                 .setMsg(exception.getStatus().msg() + exception.getExtraMessage());
     }
 
-    @ExceptionHandler({MethodArgumentNotValidException.class})
-    public Response handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    /**
+     * 对象绑定时出错
+     * 或者 对象已绑定完成，但是内部属性校验不通过
+     */
+    @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
+    public Response handleMethodArgumentNotValidException(BindException ex) {
         Response response = new Response(ResponseStatusEnum.REQUEST_PARAM_ILLEGAL);
         List<Pair<String, String>> errList = ex.getBindingResult().getFieldErrors().stream().map(fieldError ->
                 new Pair<>(fieldError.getField(), fieldError.getDefaultMessage())).collect(Collectors.toList());
         return response.addData("total", errList.size()).addData("list", errList);
     }
 
+    /**
+     * 对象已绑定完成，但是整体对象校验不通过
+     */
     @ExceptionHandler({ConstraintViolationException.class})
     public Response handleConstraintViolationException(ConstraintViolationException ex) {
         Response response = new Response(ResponseStatusEnum.REQUEST_PARAM_ILLEGAL);
@@ -64,12 +72,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = Exception.class)
     public Response handleException(Exception exception) {
-        log.error("全局异常处理器启动:捕获其他异常");
-        log.error(exception.toString());
-        exception.printStackTrace();
         if (exception instanceof AuthenticationException) {
             String extraMessage = exception.getMessage();
-            if (extraMessage.equals("Bad credentials")) {
+            if ("Bad credentials".equals(extraMessage)) {
                 extraMessage = "用户名或密码错误";
             }
             // SpringSecurity 的剩余认证异常需要额外捕获
@@ -79,6 +84,9 @@ public class GlobalExceptionHandler {
             // SpringSecurity 的剩余权限异常需要额外捕获
             return new Response().setStatus(ResponseStatusEnum.AUTHORITY_ERROR)
                     .setMsg(ResponseStatusEnum.AUTHENTICATION_ERROR.msg() + exception.getMessage());
+        } else {
+            log.error("系统出现未知异常！");
+            exception.printStackTrace();
         }
 
         //系统未知异常（剩余异常）捕获

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -97,14 +98,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Response uploadAvatar(int userId, MultipartFile avatar) {
+    public Response uploadAvatar(MultipartFile avatar) {
         // 将用户查询出来
-        User user = getUserById(userId);
+        User user = getCurrentUser();
 
         // 上传头像（以用户ID-当前时间-头像大小命名）
         String extentName = avatar.getOriginalFilename();
         extentName = Objects.requireNonNull(extentName).substring(extentName.lastIndexOf("."));
-        String avatarName = String.format("%d_%s_%d%s", userId, DateUtils.getTimeCompact(),
+        String avatarName = String.format("%d_%s_%d%s", user.getUserId(), DateUtils.getTimeCompact(),
                 avatar.getSize(), extentName);
         FileConst.Code code = FileUtils.upload(avatar, FileConst.AVATAR_PATH, avatarName);
 
@@ -122,12 +123,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Response updateInfo(int userId, UserDTO userDTO) {
+    public Response updateInfo(UserDTO userDTO) {
         // 拿到用户信息
-        User user = getUserById(userId);
-        if (user == null) {
-            return new Response(ResponseStatusEnum.USER_NOT_EXIST);
-        }
+        User user = getCurrentUser();
 
         // 修改性别
         if (userDTO.getSex() != null) {
@@ -147,12 +145,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Response updatePassword(int userId, String oldPassword, String newPassword) {
+    public Response updatePassword(String oldPassword, String newPassword) {
         // 拿到用户
-        User user = getUserById(userId);
-        if (user == null) {
-            return new Response(ResponseStatusEnum.USER_NOT_EXIST);
-        }
+        User user = getCurrentUser();
 
         // 匹配旧密码
         if (!user.getUserPass().equals(Md5Utils.encode(oldPassword))) {
@@ -187,6 +182,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return new Response(ResponseStatusEnum.OK)
                 .addData("total", collect.size())
                 .addData("result", collect);
+    }
+
+    @Override
+    public User getCurrentUser() {
+        // 拿到用户上下文并返回
+        return ((UserAuthority) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
     }
 
     @Override
