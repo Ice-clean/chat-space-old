@@ -48,8 +48,8 @@ public class AuthHandler {
 
             // 解析 token，校验用户信息
             String userId = JwtUtils.parseJWT(token).getSubject();
-            String userObject = redisCache.getCacheObject(RedisKey.USER_LOGIN + userId);
-            UserAuthority userAuthority = JSONObject.parseObject(userObject, UserAuthority.class);
+            Object userObject = redisCache.getCacheObject(RedisKey.USER_LOGIN + userId);
+            UserAuthority userAuthority = JSONObject.parseObject(userObject.toString(), UserAuthority.class);
             if (Objects.isNull(userAuthority)) {
                 System.out.println("用户不存在");
                 return;

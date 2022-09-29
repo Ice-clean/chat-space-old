@@ -16,7 +16,7 @@ public class ServerSession {
     /** 保存所有的用户连接（ID -> Session） */
     private static final ConcurrentMap<Integer, ServerSession> USER_MAP = new ConcurrentHashMap<>();
     /** 通过通道获取会话的 KEY */
-    public static final AttributeKey<ServerSession> SESSION_KEY = AttributeKey.valueOf("SESSION_KEY");
+    private static final AttributeKey<ServerSession> SESSION_KEY = AttributeKey.valueOf("SESSION_KEY");
 
     /** 用户对象 */
     private final User user;
@@ -51,4 +51,6 @@ public class ServerSession {
     public Channel getChannel() {
         return channel;
     }
+
+
 }

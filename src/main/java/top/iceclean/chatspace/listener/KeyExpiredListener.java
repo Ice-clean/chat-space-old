@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 public class KeyExpiredListener extends KeyExpirationEventMessageListener {
 
     @Autowired
-    @Qualifier("chatHandler")
+    @Qualifier("messageHandler")
     private MessageSender messageSender;
 
     public KeyExpiredListener(RedisMessageListenerContainer listenerContainer) {
