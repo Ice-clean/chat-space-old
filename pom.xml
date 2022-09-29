@@ -119,6 +119,12 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.73.Final</version>
+        </dependency>
+
         <!-- 邮件任务 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

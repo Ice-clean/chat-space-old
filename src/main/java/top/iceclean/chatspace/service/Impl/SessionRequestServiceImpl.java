@@ -16,7 +16,7 @@ import top.iceclean.chatspace.service.GroupService;
 import top.iceclean.chatspace.service.SessionRequestService;
 import top.iceclean.chatspace.service.UserService;
 import top.iceclean.chatspace.validation.annotation.NotSelf;
-import top.iceclean.chatspace.websocket.MessageSender;
+import top.iceclean.chatspace.websocket.common.MessageSender;
 
 import javax.validation.Valid;
 import java.util.List;

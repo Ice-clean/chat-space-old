@@ -1,4 +1,4 @@
-package top.iceclean.chatspace.websocket;
+package top.iceclean.chatspace.websocket.common;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import top.iceclean.chatspace.VO.*;
 import top.iceclean.chatspace.constant.SessionType;
 import top.iceclean.chatspace.po.Message;
-import top.iceclean.chatspace.po.Session;
 import top.iceclean.chatspace.po.SessionRequest;
 import top.iceclean.chatspace.service.*;
 
@@ -20,7 +19,7 @@ import java.util.*;
 @Component
 public class DataGenerator {
     /** 内部函数式接口，用于生成相应消息 */
-    interface Generator {
+    public interface Generator {
         /**
          * 获取该消息的目标用户 ID
          * @return 用户 ID 集合
@@ -73,7 +72,7 @@ public class DataGenerator {
 
     /** 聊天消息生成器 */
     @AllArgsConstructor
-    static class ChatMessage implements Generator {
+    public static class ChatMessage implements Generator {
         /** 所需的消息 */
         private final Message message;
 
@@ -90,7 +89,7 @@ public class DataGenerator {
     }
 
     /** 用户上线状态消息生成器 */
-    static class UserOnline implements Generator {
+    public static class UserOnline implements Generator {
         /** 用户的 ID */
         private final Integer userId;
         /** 是否在线 */
@@ -127,7 +126,7 @@ public class DataGenerator {
     }
 
     /** 会话请求消息生成器 */
-    static class RequestMessage implements Generator {
+    public static class RequestMessage implements Generator {
         /** 会话请求实体 */
         private final SessionRequest request;
         /** 发送者响应对象 */
@@ -166,7 +165,7 @@ public class DataGenerator {
 
     /** token 过期消息生成器 */
     @AllArgsConstructor
-    static class TokenExpire implements Generator {
+    public static class TokenExpire implements Generator {
         /** token 过期的用户 ID */
         private final Integer userId;
 

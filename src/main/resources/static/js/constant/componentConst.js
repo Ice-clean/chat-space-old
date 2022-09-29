@@ -12,7 +12,7 @@ const REQUEST_INPUT = 10
 
 /** 域名 */
 const HOST = "http://localhost:18012"
-const HOST_WS = "ws://localhost:18012"
+const HOST_WS = "ws://localhost:18013"
 
 // const HOST = "http://chatspace.iceclean.top"
 // const HOST_WS = "ws://chatspace.iceclean.top"

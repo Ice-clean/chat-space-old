@@ -1,12 +1,13 @@
 package top.iceclean.chatspace.listener;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.listener.KeyExpirationEventMessageListener;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Component;
 import top.iceclean.chatspace.constant.RedisKey;
-import top.iceclean.chatspace.websocket.MessageSender;
+import top.iceclean.chatspace.websocket.common.MessageSender;
 
 import java.nio.charset.StandardCharsets;
 
@@ -19,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 public class KeyExpiredListener extends KeyExpirationEventMessageListener {
 
     @Autowired
+    @Qualifier("chatHandler")
     private MessageSender messageSender;
 
     public KeyExpiredListener(RedisMessageListenerContainer listenerContainer) {

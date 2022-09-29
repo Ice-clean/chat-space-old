@@ -2,7 +2,7 @@
 
 /** 连接 websocket */
 function connectWebsocket(userId) {
-    return new WebSocket(HOST_WS + "/space/ws/chat/" + userId, [token]);
+    return new WebSocket(HOST_WS + "/space/ws/chat", [token]);
 }
 
 /** 请求聊天消息列表 */

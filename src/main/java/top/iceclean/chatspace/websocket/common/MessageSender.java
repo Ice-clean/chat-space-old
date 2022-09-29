@@ -1,4 +1,4 @@
-package top.iceclean.chatspace.websocket;
+package top.iceclean.chatspace.websocket.common;
 
 import top.iceclean.chatspace.po.SessionRequest;
 

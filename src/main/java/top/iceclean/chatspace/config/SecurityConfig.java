@@ -72,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 添加认证失败处理器
         http.exceptionHandling().authenticationEntryPoint(
                 (request, response, authenticationException) -> {
-                    if (authenticationException instanceof InsufficientAuthenticationException){
+                    if (authenticationException instanceof InsufficientAuthenticationException) {
                         resolver.resolveException(request, response, null,
                                 new GlobalException(ResponseStatusEnum.AUTHENTICATION_ERROR, "Token 为空"));
                         return;
