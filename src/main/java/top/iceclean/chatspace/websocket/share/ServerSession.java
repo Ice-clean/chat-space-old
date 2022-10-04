@@ -1,9 +1,13 @@
-package top.iceclean.chatspace.websocket.session;
+package top.iceclean.chatspace.websocket.share;
 
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
+import top.iceclean.chatspace.VO.SiteVO;
+import top.iceclean.chatspace.VO.UserVO;
+import top.iceclean.chatspace.po.Site;
 import top.iceclean.chatspace.po.User;
 
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -19,17 +23,29 @@ public class ServerSession {
     private static final AttributeKey<ServerSession> SESSION_KEY = AttributeKey.valueOf("SESSION_KEY");
 
     /** 用户对象 */
-    private final User user;
+    private final UserVO user;
     /** 用户通道 */
     private final Channel channel;
 
+    /** 用户位置信息 */
+    private SiteVO site;
+    /** 用户能见集合 */
+    private Set<SiteVO> otherSiteSet;
+
     public ServerSession(User user, Channel channel) {
         System.out.println("绑定用户：" + user);
-        this.user = user;
+
+        this.user = new UserVO(user, true);
         this.channel = channel;
+
         // 将会话绑定到用户 ID 和通道上
         USER_MAP.put(user.getUserId(), this);
         channel.attr(SESSION_KEY).set(this);
+    }
+
+    public void initSite(Site site, Set<SiteVO> otherSiteSet) {
+        this.site = new SiteVO(site, user);
+        this.otherSiteSet = otherSiteSet;
     }
 
     public static ServerSession getSession(Channel channel) {
@@ -44,7 +60,7 @@ public class ServerSession {
         USER_MAP.remove(userId);
     }
 
-    public User getUser() {
+    public UserVO getUser() {
         return user;
     }
 

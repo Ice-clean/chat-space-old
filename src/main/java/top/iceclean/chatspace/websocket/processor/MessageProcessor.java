@@ -1,4 +1,4 @@
-package top.iceclean.chatspace.websocket.handler;
+package top.iceclean.chatspace.websocket.processor;
 
 import com.alibaba.fastjson.JSONObject;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -13,7 +13,9 @@ import top.iceclean.chatspace.service.MessageService;
 import top.iceclean.chatspace.service.UserService;
 import top.iceclean.chatspace.websocket.common.DataGenerator;
 import top.iceclean.chatspace.websocket.common.MessageSender;
-import top.iceclean.chatspace.websocket.session.ServerSession;
+import top.iceclean.chatspace.websocket.share.ServerSession;
+
+import java.util.Set;
 
 /**
  * 消息处理器，一个普通的类
@@ -21,16 +23,16 @@ import top.iceclean.chatspace.websocket.session.ServerSession;
  * @date : 2022-09-29
  */
 @Component
-public class MessageHandler implements MessageSender {
+public class MessageProcessor implements MessageSender {
 
     /** 用户服务，消息服务 */
     private static UserService userService;
     private static MessageService messageService;
 
     @Autowired
-    public MessageHandler(UserService userService, MessageService messageService) {
-        MessageHandler.userService = userService;
-        MessageHandler.messageService = messageService;
+    public MessageProcessor(UserService userService, MessageService messageService) {
+        MessageProcessor.userService = userService;
+        MessageProcessor.messageService = messageService;
     }
 
     /**
@@ -54,6 +56,30 @@ public class MessageHandler implements MessageSender {
         userService.setOnline(userId, online);
         // 向所有好友发送用户在线状态改变通知
         castMessage(WsType.USER_ONLINE, new DataGenerator.UserOnline(userId, online));
+    }
+
+    /**
+     * 向一个用户发送一连串的用户位置更改消息
+     * @param userId 消息接收者（一个用户）
+     * @param wsType 消息类型（发现 / 消失）
+     * @param userIdSet 发生更改的用户（一连串用户）
+     */
+    public static void changeSiteState(int userId, WsType wsType, Set<Integer> userIdSet) {
+        if (userIdSet.size() > 0) {
+            castMessage(wsType, new DataGenerator.SiteChange(userId, userIdSet));
+        }
+    }
+
+    /**
+     * 向一连串用户发送一个用户的位置更改消息
+     * @param userIdSet 消息接收者（一连串用户）
+     * @param wsType 消息类型（发现 / 消失 / 更改）
+     * @param userId 发生更改的用户（一个用户）
+     */
+    public static void changeSiteState(Set<Integer> userIdSet, WsType wsType, int userId) {
+        if (userIdSet.size() > 0) {
+            castMessage(wsType, new DataGenerator.SiteChange(userIdSet, userId));
+        }
     }
 
     /**

@@ -47,6 +47,10 @@ public class AuthHandler {
             ctx.channel().attr(AttributeKey.valueOf("token")).set(token);
 
             // 解析 token，校验用户信息
+            if (token == null) {
+                ctx.channel().writeAndFlush("token 为空！");
+                return;
+            }
             String userId = JwtUtils.parseJWT(token).getSubject();
             Object userObject = redisCache.getCacheObject(RedisKey.USER_LOGIN + userId);
             UserAuthority userAuthority = JSONObject.parseObject(userObject.toString(), UserAuthority.class);

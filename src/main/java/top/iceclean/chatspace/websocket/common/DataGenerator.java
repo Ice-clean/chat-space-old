@@ -1,5 +1,6 @@
 package top.iceclean.chatspace.websocket.common;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import top.iceclean.chatspace.constant.SessionType;
 import top.iceclean.chatspace.po.Message;
 import top.iceclean.chatspace.po.SessionRequest;
 import top.iceclean.chatspace.service.*;
+import top.iceclean.chatspace.websocket.share.SpaceUnit;
 
 import java.util.*;
 
@@ -180,6 +182,43 @@ public class DataGenerator {
         @Override
         public Object exec(int toUserId) {
             return "用户 ID=" + toUserId + " token 失效，断开连接";
+        }
+    }
+
+    /** 位置状态更改消息生成器（用户的发现、消失和更新） */
+    public static class SiteChange implements Generator {
+        /** 消息的目标用户集合 */
+        private final Set<Integer> targetSet;
+        /** 消息内容中的用户 */
+        private final Set<SiteVO> infoSet;
+
+        public SiteChange(int userId, Set<Integer> userIdSet) {
+            // 当前用户单独为目标用户
+            targetSet = new HashSet<>(1);
+            targetSet.add(userId);
+
+            // 而消息的内容是集合中用户对位置信息
+            infoSet = new HashSet<>(userIdSet.size());
+            userIdSet.forEach(uId -> infoSet.add(SpaceUnit.getSite(uId)));
+        }
+
+        public SiteChange(Set<Integer> userIdSet, int userId) {
+            // 消息的目标用户是集合中的每一个用户
+            targetSet = userIdSet;
+
+            // 而消息的内容则是当前用户的位置信息
+            infoSet = new HashSet<>(1);
+            infoSet.add(SpaceUnit.getSite(userId));
+        }
+
+        @Override
+        public Set<Integer> target() {
+            return targetSet;
+        }
+
+        @Override
+        public Object exec(int toUserId) {
+            return infoSet;
         }
     }
 }
